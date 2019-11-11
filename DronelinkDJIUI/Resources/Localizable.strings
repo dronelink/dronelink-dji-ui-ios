@@ -5,8 +5,6 @@
 //  Created by Jim McAndrew on 1/21/19.
 //  Copyright © 2019 Dronelink. All rights reserved.
 //
-"MissionDisengageReason.user.disengaged" = "Mission Paused";
-
 "DJIDashboardViewController.menu" = "MENU";
 "DJIDashboardViewController.settings.camera" = "Camera Settings";
 "DJIDashboardViewController.settings.exposure" = "Exposure Settings";

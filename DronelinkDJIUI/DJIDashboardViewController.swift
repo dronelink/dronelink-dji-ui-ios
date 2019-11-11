@@ -707,17 +707,6 @@ extension DJIDashboardViewController: MissionExecutorDelegate {
     public func onMissionExecuted(executor: MissionExecutor, engagement: MissionExecutor.Engagement) {}
     
     public func onMissionDisengaged(executor: MissionExecutor, engagement: MissionExecutor.Engagement, reason: Mission.Message) {
-        if (reason.title != "MissionDisengageReason.user.disengaged".localized) {
-            DronelinkUI.shared.showDialog(title: reason.title, details: reason.details)
-        }
-        
-        if let status = executor.status {
-            if status.completed {
-                Dronelink.shared.unloadMission()
-                return
-            }
-        }
-        
         DispatchQueue.main.async {
             self.view.setNeedsUpdateConstraints()
         }

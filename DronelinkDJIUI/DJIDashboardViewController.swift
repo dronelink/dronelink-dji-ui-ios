@@ -13,6 +13,7 @@ import SnapKit
 import JavaScriptCore
 import DronelinkCore
 import DronelinkCoreUI
+import DronelinkDJI
 import DJIUXSDK
 import MaterialComponents.MaterialPalettes
 
@@ -21,7 +22,7 @@ public protocol DJIDashboardViewControllerDelegate {
 }
 
 public class DJIDashboardViewController: UIViewController {
-    public static func create(droneSessionManager: DroneSessionManager, delegate: DJIDashboardViewControllerDelegate? = nil) -> DJIDashboardViewController {
+    public static func create(droneSessionManager: DJIDroneSessionManager, delegate: DJIDashboardViewControllerDelegate? = nil) -> DJIDashboardViewController {
         let dashboardViewController = DJIDashboardViewController()
         dashboardViewController.modalPresentationStyle = .fullScreen
         dashboardViewController.droneSessionManager = droneSessionManager
@@ -30,7 +31,7 @@ public class DJIDashboardViewController: UIViewController {
     }
     
     private var delegate: DJIDashboardViewControllerDelegate?
-    private var droneSessionManager: DroneSessionManager!
+    private var droneSessionManager: DJIDroneSessionManager!
     private var session: DroneSession?
     private var missionExecutor: MissionExecutor?
     private var overlayViewController: UIViewController?
@@ -63,22 +64,8 @@ public class DJIDashboardViewController: UIViewController {
     private let captureWidget = DUXCaptureWidget()
     private let captureBackgroundView = UIView()
     private let compassWidget = DUXCompassWidget()
-    private let telemetryView = UIView()
-    private let distanceLabel = UILabel()
-    private let altitudeLabel = UILabel()
-    private let horizontalSpeedLabel = UILabel()
-    private let verticalSpeedLabel = UILabel()
-    private let telemetryUpdateInterval: TimeInterval = 0.5
-    private var telemetryTimer: Timer?
-    private let distancePrefix = "DJIDashboardViewController.telemetry.distance.prefix".localized
-    private let distanceSuffix = "DJIDashboardViewController.telemetry.unit.distance.\(Dronelink.UnitSystem)".localized
-    private let altitudePrefix = "DJIDashboardViewController.telemetry.altitude.prefix".localized
-    private let altitudeSuffix = "DJIDashboardViewController.telemetry.unit.distance.\(Dronelink.UnitSystem)".localized
-    private let horizontalSpeedPrefix = "DJIDashboardViewController.telemetry.horizontalSpeed.prefix".localized
-    private let horizontalSpeedSuffix = "DJIDashboardViewController.telemetry.unit.horizontalSpeed.\(Dronelink.UnitSystem)".localized
-    private let verticalSpeedPrefix = "DJIDashboardViewController.telemetry.verticalSpeed.prefix".localized
-    private let verticalSpeedSuffix = "DJIDashboardViewController.telemetry.unit.verticalSpeed.\(Dronelink.UnitSystem)".localized
     
+    private var telemetryViewController: TelemetryViewController?
     private var missionViewController: MissionViewController?
     private var missionExpanded = false
     private var videoPreviewerPrimary = true
@@ -176,36 +163,21 @@ public class DJIDashboardViewController: UIViewController {
         primaryViewToggleButton.addTarget(self, action: #selector(onPrimaryViewToggle(sender:)), for: .touchUpInside)
         view.addSubview(primaryViewToggleButton)
         
-        telemetryView.addShadow()
-        telemetryView.layer.cornerRadius = DronelinkUI.Constants.cornerRadius
-        telemetryView.backgroundColor = DronelinkUI.Constants.overlayColor
-        distanceLabel.textColor = UIColor.white
-        distanceLabel.font = UIFont.systemFont(ofSize: tablet ? 32 : 24, weight: .semibold)
-        altitudeLabel.textColor = distanceLabel.textColor
-        altitudeLabel.font = distanceLabel.font
-        horizontalSpeedLabel.textColor = distanceLabel.textColor
-        horizontalSpeedLabel.font = UIFont.systemFont(ofSize: tablet ? 22 : 16, weight: .semibold)
-        verticalSpeedLabel.textColor = distanceLabel.textColor
-        verticalSpeedLabel.font = horizontalSpeedLabel.font
-        telemetryView.addSubview(distanceLabel)
-        telemetryView.addSubview(altitudeLabel)
-        telemetryView.addSubview(horizontalSpeedLabel)
-        telemetryView.addSubview(verticalSpeedLabel)
-        view.addSubview(telemetryView)
-        updateTelemetry()
+        let telemetryViewController = TelemetryViewController.create(droneSessionManager: self.droneSessionManager)
+        addChild(telemetryViewController)
+        view.addSubview(telemetryViewController.view)
+        telemetryViewController.didMove(toParent: self)
+        self.telemetryViewController = telemetryViewController
     }
     
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        telemetryTimer = Timer.scheduledTimer(timeInterval: telemetryUpdateInterval, target: self, selector: #selector(updateTelemetry), userInfo: nil, repeats: true)
         Dronelink.shared.add(delegate: self)
         droneSessionManager?.add(delegate: self)
     }
     
     public override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        telemetryTimer?.invalidate()
-        telemetryTimer = nil
         Dronelink.shared.remove(delegate: self)
         droneSessionManager?.remove(delegate: self)
     }
@@ -230,7 +202,9 @@ public class DJIDashboardViewController: UIViewController {
         view.bringSubviewToFront(secondaryView)
         view.bringSubviewToFront(primaryViewToggleButton)
         view.bringSubviewToFront(compassWidget)
-        view.bringSubviewToFront(telemetryView)
+        if let telemetryView = telemetryViewController?.view {
+            view.bringSubviewToFront(telemetryView)
+        }
         
         videoPreviewerViewController.isHUDInteractionEnabled = primaryView == videoPreviewerView
         videoPreviewerViewController.isRadarWidgetVisible = primaryView == videoPreviewerView
@@ -445,7 +419,7 @@ public class DJIDashboardViewController: UIViewController {
             make.width.equalTo(compassWidget.snp.height)
         }
         
-        telemetryView.snp.remakeConstraints { make in
+        telemetryViewController?.view.snp.remakeConstraints { make in
             if (portrait) {
                 make.bottom.equalTo(secondaryView.snp.top).offset(tablet ? -defaultPadding : -2)
                 make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(defaultPadding)
@@ -456,34 +430,6 @@ public class DJIDashboardViewController: UIViewController {
             }
             make.height.equalTo(tablet ? 85 : 75)
             make.width.equalTo(tablet ? 350 : 275)
-        }
-        
-        distanceLabel.snp.remakeConstraints { make in
-            make.top.equalToSuperview().offset(defaultPadding)
-            make.left.equalToSuperview().offset(defaultPadding)
-            make.width.equalToSuperview().multipliedBy(0.45)
-            make.height.equalTo(tablet ? 30 : 25)
-        }
-        
-        altitudeLabel.snp.remakeConstraints { make in
-            make.top.equalTo(distanceLabel.snp.top)
-            make.right.equalToSuperview().offset(-defaultPadding)
-            make.width.equalTo(distanceLabel.snp.width)
-            make.height.equalTo(distanceLabel.snp.height)
-        }
-        
-        horizontalSpeedLabel.snp.remakeConstraints { make in
-            make.bottom.equalToSuperview().offset(-defaultPadding)
-            make.left.equalTo(distanceLabel.snp.left)
-            make.width.equalTo(distanceLabel.snp.width)
-            make.height.equalTo(distanceLabel.snp.height)
-        }
-        
-        verticalSpeedLabel.snp.remakeConstraints { make in
-            make.bottom.equalTo(horizontalSpeedLabel.snp.bottom)
-            make.right.equalTo(altitudeLabel.snp.right)
-            make.width.equalTo(horizontalSpeedLabel.snp.width)
-            make.height.equalTo(horizontalSpeedLabel.snp.height)
         }
         
         updateConstraintsMission()
@@ -597,54 +543,6 @@ public class DJIDashboardViewController: UIViewController {
     @objc func onDismiss(sender: Any) {
         delegate?.onDashboardDismissed()
         dismiss(animated: true)
-    }
-    
-    @objc func updateTelemetry() {
-        var distance = 0.0
-        var altitude = 0.0
-        var horizontalSpeed = 0.0
-        var verticalSpeed = 0.0
-        if let state = session?.state?.value {
-            if let droneLocation = state.location {
-                if let userLocation = Dronelink.shared.locationManager.location {
-                    distance = userLocation.distance(from: droneLocation)
-                }
-                else if let homeLocation = state.homeLocation {
-                    distance = homeLocation.distance(from: droneLocation)
-                }
-                
-                if (distance > 10000) {
-                    distance = 0
-                }
-            }
-            
-            altitude = state.altitude
-            horizontalSpeed = state.horizontalSpeed
-            verticalSpeed = state.verticalSpeed
-        }
-        
-        switch Dronelink.UnitSystem {
-        case .imperial:
-            distance = distance.convertMetersToFeet
-            altitude = altitude.convertMetersToFeet
-            horizontalSpeed = horizontalSpeed.convertMetersPerSecondToMilesPerHour
-            verticalSpeed = verticalSpeed.convertMetersToFeet
-            break
-            
-        case .metric:
-            horizontalSpeed = horizontalSpeed.convertMetersPerSecondToKilometersPerHour
-            break
-        }
-        
-        distance = distance.rounded(toPlaces: distance > 10 ? 0 : 1)
-        altitude = altitude.rounded(toPlaces: altitude > 10 ? 0 : 1)
-        horizontalSpeed = horizontalSpeed.rounded(toPlaces: horizontalSpeed > 10 ? 0 : 1)
-        verticalSpeed = verticalSpeed.rounded(toPlaces: verticalSpeed > 10 ? 0 : 1)
-        
-        distanceLabel.text = "\(distancePrefix) \(NumberFormatter.localizedString(from: distance as NSNumber, number: .decimal)) \(distanceSuffix)"
-        altitudeLabel.text = "\(altitudePrefix) \(NumberFormatter.localizedString(from: altitude as NSNumber, number: .decimal)) \(altitudeSuffix)"
-        horizontalSpeedLabel.text = "\(horizontalSpeedPrefix) \(NumberFormatter.localizedString(from: horizontalSpeed as NSNumber, number: .decimal)) \(horizontalSpeedSuffix)"
-        verticalSpeedLabel.text = "\(verticalSpeedPrefix) \(NumberFormatter.localizedString(from: verticalSpeed as NSNumber, number: .decimal)) \(verticalSpeedSuffix)"
     }
 }
 

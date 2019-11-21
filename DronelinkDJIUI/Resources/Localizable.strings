@@ -10,13 +10,3 @@
 "DJIDashboardViewController.settings.exposure" = "Exposure Settings";
 "DJIDashboardViewController.settings.histogram" = "Histogram";
 "DJIDashboardViewController.settings.cancel" = "Cancel";
-"DJIDashboardViewController.telemetry.distance.prefix" = "D";
-"DJIDashboardViewController.telemetry.altitude.prefix" = "A";
-"DJIDashboardViewController.telemetry.horizontalSpeed.prefix" = "H/S";
-"DJIDashboardViewController.telemetry.verticalSpeed.prefix" = "V/S";
-"DJIDashboardViewController.telemetry.unit.distance.metric" = "m";
-"DJIDashboardViewController.telemetry.unit.distance.imperial" = "ft";
-"DJIDashboardViewController.telemetry.unit.horizontalSpeed.metric" = "km/h";
-"DJIDashboardViewController.telemetry.unit.horizontalSpeed.imperial" = "mph";
-"DJIDashboardViewController.telemetry.unit.verticalSpeed.metric" = "m/s";
-"DJIDashboardViewController.telemetry.unit.verticalSpeed.imperial" = "fps";

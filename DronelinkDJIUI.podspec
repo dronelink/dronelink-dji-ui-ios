@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = "DronelinkDJIUI"
-  s.version = "1.0.2"
+  s.version = "1.0.3"
   s.summary = "Dronelink DJI UI components"
   s.homepage = "https://dronelink.com/"
   s.license = { :type => "MIT", :file => "LICENSE" }
@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
   s.resources = "DronelinkDJIUI/**/*.{strings,xcassets}"
 
   s.dependency "DronelinkCore", "~> 1.1.0"
-  s.dependency "DronelinkCoreUI", "~> 1.0.2"
+  s.dependency "DronelinkCoreUI", "~> 1.0.3"
   s.dependency "DronelinkDJI", "~> 1.1.0"
   s.dependency "DJI-SDK-iOS", "~> 4.11"
   s.dependency "DJIWidget", "~> 1.6.1"

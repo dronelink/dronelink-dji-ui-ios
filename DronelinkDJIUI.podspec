@@ -19,6 +19,6 @@ Pod::Spec.new do |s|
   s.dependency "DJIWidget", "~> 1.6.1"
   s.dependency "DJI-UXSDK-iOS", "~> 4.11"
   s.dependency "SnapKit", "~> 5.0.0"
-  s.dependency "MaterialComponents/Palettes", "~> 92.5.0"
+  s.dependency "MaterialComponents/Palettes", "~> 97.0.1"
 end
 

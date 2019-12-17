@@ -176,7 +176,7 @@ public class DJIDashboardViewController: UIViewController {
         droneSessionManager?.add(delegate: self)
     }
     
-    public override func viewDidDisappear(_ animated: Bool) {
+    override public func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         Dronelink.shared.remove(delegate: self)
         droneSessionManager?.remove(delegate: self)

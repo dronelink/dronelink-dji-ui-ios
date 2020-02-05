@@ -34,6 +34,7 @@ public class DJIDashboardViewController: UIViewController {
     private var droneSessionManager: DJIDroneSessionManager!
     private var session: DroneSession?
     private var missionExecutor: MissionExecutor?
+    private var funcExecutor: FuncExecutor?
     private var overlayViewController: UIViewController?
     private let hideOverlayButton = UIButton(type: .custom)
     private var mapViewController: MapViewController!
@@ -68,6 +69,7 @@ public class DJIDashboardViewController: UIViewController {
     private var telemetryViewController: TelemetryViewController?
     private var missionViewController: MissionViewController?
     private var missionExpanded = false
+    private var funcViewController: FuncViewController?
     private var videoPreviewerPrimary = true
     private let defaultPadding = 10
     private var primaryView: UIView { return videoPreviewerPrimary || portrait ? videoPreviewerView : mapViewController.view }
@@ -433,6 +435,7 @@ public class DJIDashboardViewController: UIViewController {
         }
         
         updateConstraintsMission()
+        updateConstraintsFunc()
         updateConstraintsOverlay()
     }
     
@@ -480,6 +483,33 @@ public class DJIDashboardViewController: UIViewController {
                 else {
                     make.height.equalTo(80)
                 }
+            }
+        }
+    }
+    
+    func updateConstraintsFunc() {
+        if let funcViewController = funcViewController {
+            view.bringSubviewToFront(funcViewController.view)
+            funcViewController.view.snp.remakeConstraints { make in
+                make.height.equalTo(200)
+                
+                if (portrait && tablet) {
+                    make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-defaultPadding)
+                    make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(defaultPadding)
+                    make.width.equalTo(350)
+                    return
+                }
+                
+                if (portrait) {
+                    make.right.equalToSuperview()
+                    make.left.equalToSuperview()
+                    make.bottom.equalToSuperview()
+                    return
+                }
+                
+                make.top.equalTo(topBarBackgroundView.snp.bottom).offset(defaultPadding)
+                make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(defaultPadding)
+                make.width.equalTo(350)
             }
         }
     }
@@ -572,6 +602,30 @@ extension DJIDashboardViewController: DronelinkDelegate {
                 self.missionViewController = nil
             }
             executor.remove(delegate: self)
+            self.view.setNeedsUpdateConstraints()
+        }
+    }
+    
+    public func onFuncLoaded(executor: FuncExecutor) {
+        DispatchQueue.main.async {
+            self.funcExecutor = executor
+            let funcViewController = FuncViewController.create(droneSessionManager: self.droneSessionManager)
+            self.addChild(funcViewController)
+            self.view.addSubview(funcViewController.view)
+            funcViewController.didMove(toParent: self)
+            self.funcViewController = funcViewController
+            self.view.setNeedsUpdateConstraints()
+        }
+    }
+    
+    public func onFuncUnloaded(executor: FuncExecutor) {
+        DispatchQueue.main.async {
+            self.funcExecutor = nil
+            if let funcViewController = self.funcViewController {
+                funcViewController.view.removeFromSuperview()
+                funcViewController.removeFromParent()
+                self.funcViewController = nil
+            }
             self.view.setNeedsUpdateConstraints()
         }
     }

@@ -1,7 +1,7 @@
 PODS:
   - DJI-SDK-iOS (4.11)
   - DJI-UXSDK-iOS (4.11)
-  - DJIWidget (1.6.1)
+  - DJIWidget (1.6.2)
   - DronelinkCore (1.1.1)
   - DronelinkCoreUI (1.0.4):
     - DronelinkCore (~> 1.1.1)
@@ -171,7 +171,7 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   DJI-SDK-iOS: dde922e22db39e270816fd7b077eccd362d61e4f
   DJI-UXSDK-iOS: cc2b32807572b0c1c84b182c9743c6d0a26c84f2
-  DJIWidget: 93d449c4ef9cad1292b400e39da80ade4c538ee4
+  DJIWidget: cc635356515eaac7e9698eb9b1b8c5764728e3c5
   DronelinkCore: 98b1c615d8204414a4676111a609a211c64911fe
   DronelinkCoreUI: 6a1e6b411d37ed6c243f22f4fbc0f72fcfab599b
   DronelinkDJI: f62b615f4c8b92e5cdc6f2783911f080ce0972c9

@@ -56,6 +56,7 @@ public class DJIDashboardViewController: UIViewController {
     ]
     private let menuButton = UIButton(type: .custom)
     private let exposureButton = UIButton(type: .custom)
+    private let offsetsButton = UIButton(type: .custom)
     private let autoExposureSwitchWidget = DUXAutoExposureSwitchWidget()
     private let exposureFocusSwitchWidget = DUXExposureFocusSwitchWidget()
     private let focusModeWidget = DUXFocusModeWidget()
@@ -67,6 +68,7 @@ public class DJIDashboardViewController: UIViewController {
     private let compassWidget = DUXCompassWidget()
     
     private var telemetryViewController: TelemetryViewController?
+    private var missionExecutorOffsetsViewController: MissionExecutorOffsetsViewController?
     private var missionViewController: MissionViewController?
     private var missionExpanded = false
     private var funcViewController: FuncViewController?
@@ -84,6 +86,10 @@ public class DJIDashboardViewController: UIViewController {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if #available(iOS 13.0, *) {
+            overrideUserInterfaceStyle = .dark
+        }
         
         view.backgroundColor = UIColor.black
         
@@ -144,6 +150,10 @@ public class DJIDashboardViewController: UIViewController {
         exposureButton.setImage(DronelinkDJIUI.loadImage(named: "baseline_tune_white_36pt"), for: .normal)
         exposureButton.addTarget(self, action: #selector(onExposureSettings(sender:)), for: .touchUpInside)
         view.addSubview(exposureButton)
+        
+        offsetsButton.setImage(DronelinkDJIUI.loadImage(named: "baseline_control_camera_white_36pt"), for: .normal)
+        offsetsButton.addTarget(self, action: #selector(onOffsets(sender:)), for: .touchUpInside)
+        view.addSubview(offsetsButton)
         
         view.addSubview(compassWidget)
         
@@ -362,15 +372,15 @@ public class DJIDashboardViewController: UIViewController {
             make.top.equalTo(menuButton.snp.top)
             make.right.equalTo(primaryView.safeAreaLayoutGuide.snp.right).offset(-defaultPadding)
             make.left.equalTo(captureWidget.snp.left).offset(-defaultPadding)
-            make.bottom.equalTo(exposureButton.snp.bottom).offset(15)
+            make.bottom.equalTo(offsetsButton.snp.bottom).offset(15)
         }
         
         captureWidget.snp.remakeConstraints { make in
             if (portrait || tablet) {
-                make.centerY.equalTo(primaryView.snp.centerY).offset(28)
+                make.centerY.equalTo(primaryView.snp.centerY).offset(4)
             }
             else {
-                make.top.equalTo(cameraConfigInfoWidget.snp.bottom).offset(132)
+                make.top.equalTo(cameraConfigInfoWidget.snp.bottom).offset(128)
             }
             make.right.equalTo(captureBackgroundView.snp.right).offset(-defaultPadding)
             make.height.equalTo(60)
@@ -378,7 +388,7 @@ public class DJIDashboardViewController: UIViewController {
         }
         
         pictureVideoSwitchWidget.snp.remakeConstraints { make in
-            make.bottom.equalTo(captureWidget.snp.top).offset(-defaultPadding * 2)
+            make.bottom.equalTo(captureWidget.snp.top).offset(-12)
             make.centerX.equalTo(captureWidget.snp.centerX)
             make.height.equalTo(45)
             make.width.equalTo(56)
@@ -392,7 +402,15 @@ public class DJIDashboardViewController: UIViewController {
         }
         
         exposureButton.snp.remakeConstraints { make in
-            make.top.equalTo(captureWidget.snp.bottom).offset(15)
+            make.top.equalTo(captureWidget.snp.bottom).offset(defaultPadding)
+            make.centerX.equalTo(captureWidget.snp.centerX)
+            make.height.equalTo(28)
+            make.width.equalTo(28)
+        }
+        
+        offsetsButton.tintColor = missionExecutorOffsetsViewController == nil ? UIColor.white : MDCPalette.pink.accent400
+        offsetsButton.snp.remakeConstraints { make in
+            make.top.equalTo(exposureButton.snp.bottom).offset(15)
             make.centerX.equalTo(captureWidget.snp.centerX)
             make.height.equalTo(28)
             make.width.equalTo(28)
@@ -432,6 +450,22 @@ public class DJIDashboardViewController: UIViewController {
             }
             make.height.equalTo(tablet ? 85 : 75)
             make.width.equalTo(tablet ? 350 : 275)
+        }
+        
+        if let missionExecutorOffsetsViewController = missionExecutorOffsetsViewController {
+            view.bringSubviewToFront(missionExecutorOffsetsViewController.view)
+            missionExecutorOffsetsViewController.view.snp.remakeConstraints { make in
+                make.height.equalTo(215)
+                make.width.equalTo(170)
+                if portrait {
+                    make.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(-defaultPadding)
+                    make.top.equalTo(secondaryView.snp.top).offset(defaultPadding)
+                }
+                else {
+                    make.right.equalTo(captureBackgroundView.snp.left).offset(-defaultPadding)
+                    make.top.equalTo(captureBackgroundView.snp.top)
+                }
+            }
         }
         
         updateConstraintsMission()
@@ -552,6 +586,22 @@ public class DJIDashboardViewController: UIViewController {
     
     @objc func onExposureSettings(sender: Any) {
         showOverlay(viewController: DUXExposureSettingsController())
+    }
+    
+    @objc func onOffsets(sender: Any) {
+        if let missionExecutorOffsetsViewController = self.missionExecutorOffsetsViewController {
+            missionExecutorOffsetsViewController.view.removeFromSuperview()
+            missionExecutorOffsetsViewController.removeFromParent()
+            self.missionExecutorOffsetsViewController = nil
+        }
+        else {
+            let missionExecutorOffsetsViewController = MissionExecutorOffsetsViewController.create(droneSessionManager: self.droneSessionManager)
+            addChild(missionExecutorOffsetsViewController)
+            view.addSubview(missionExecutorOffsetsViewController.view)
+            missionExecutorOffsetsViewController.didMove(toParent: self)
+            self.missionExecutorOffsetsViewController = missionExecutorOffsetsViewController
+        }
+        view.setNeedsUpdateConstraints()
     }
     
     private func showOverlay(viewController: UIViewController) {

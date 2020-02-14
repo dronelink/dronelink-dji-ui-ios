@@ -68,7 +68,7 @@ public class DJIDashboardViewController: UIViewController {
     private let compassWidget = DUXCompassWidget()
     
     private var telemetryViewController: TelemetryViewController?
-    private var missionExecutorOffsetsViewController: MissionExecutorOffsetsViewController?
+    private var droneOffsetsViewController: DroneOffsetsViewController?
     private var missionViewController: MissionViewController?
     private var missionExpanded = false
     private var funcViewController: FuncViewController?
@@ -408,7 +408,7 @@ public class DJIDashboardViewController: UIViewController {
             make.width.equalTo(28)
         }
         
-        offsetsButton.tintColor = missionExecutorOffsetsViewController == nil ? UIColor.white : MDCPalette.pink.accent400
+        offsetsButton.tintColor = droneOffsetsViewController == nil ? UIColor.white : MDCPalette.pink.accent400
         offsetsButton.snp.remakeConstraints { make in
             make.top.equalTo(exposureButton.snp.bottom).offset(15)
             make.centerX.equalTo(captureWidget.snp.centerX)
@@ -452,11 +452,11 @@ public class DJIDashboardViewController: UIViewController {
             make.width.equalTo(tablet ? 350 : 275)
         }
         
-        if let missionExecutorOffsetsViewController = missionExecutorOffsetsViewController {
-            view.bringSubviewToFront(missionExecutorOffsetsViewController.view)
-            missionExecutorOffsetsViewController.view.snp.remakeConstraints { make in
-                make.height.equalTo(215)
-                make.width.equalTo(170)
+        if let droneOffsetsViewController = droneOffsetsViewController {
+            view.bringSubviewToFront(droneOffsetsViewController.view)
+            droneOffsetsViewController.view.snp.remakeConstraints { make in
+                make.height.equalTo(240)
+                make.width.equalTo(200)
                 if portrait {
                     make.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(-defaultPadding)
                     make.top.equalTo(secondaryView.snp.top).offset(defaultPadding)
@@ -589,17 +589,17 @@ public class DJIDashboardViewController: UIViewController {
     }
     
     @objc func onOffsets(sender: Any) {
-        if let missionExecutorOffsetsViewController = self.missionExecutorOffsetsViewController {
-            missionExecutorOffsetsViewController.view.removeFromSuperview()
-            missionExecutorOffsetsViewController.removeFromParent()
-            self.missionExecutorOffsetsViewController = nil
+        if let droneOffsetsViewController = self.droneOffsetsViewController {
+            droneOffsetsViewController.view.removeFromSuperview()
+            droneOffsetsViewController.removeFromParent()
+            self.droneOffsetsViewController = nil
         }
         else {
-            let missionExecutorOffsetsViewController = MissionExecutorOffsetsViewController.create(droneSessionManager: self.droneSessionManager)
-            addChild(missionExecutorOffsetsViewController)
-            view.addSubview(missionExecutorOffsetsViewController.view)
-            missionExecutorOffsetsViewController.didMove(toParent: self)
-            self.missionExecutorOffsetsViewController = missionExecutorOffsetsViewController
+            let droneOffsetsViewController = DroneOffsetsViewController.create(droneSessionManager: self.droneSessionManager)
+            addChild(droneOffsetsViewController)
+            view.addSubview(droneOffsetsViewController.view)
+            droneOffsetsViewController.didMove(toParent: self)
+            self.droneOffsetsViewController = droneOffsetsViewController
         }
         view.setNeedsUpdateConstraints()
     }
@@ -607,9 +607,9 @@ public class DJIDashboardViewController: UIViewController {
     private func showOverlay(viewController: UIViewController) {
         overlayViewController = viewController
         addChild(viewController)
+        view.addSubview(viewController.view)
         viewController.didMove(toParent: self)
         viewController.view.addShadow()
-        view.addSubview(viewController.view)
         view.setNeedsUpdateConstraints()
     }
     

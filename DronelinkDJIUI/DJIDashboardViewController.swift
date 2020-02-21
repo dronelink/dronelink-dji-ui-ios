@@ -525,12 +525,13 @@ public class DJIDashboardViewController: UIViewController {
         if let funcViewController = funcViewController {
             view.bringSubviewToFront(funcViewController.view)
             funcViewController.view.snp.remakeConstraints { make in
-                make.height.equalTo(200)
+                let large = tablet || portrait
+                make.height.equalTo(165)
                 
                 if (portrait && tablet) {
                     make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-defaultPadding)
                     make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(defaultPadding)
-                    make.width.equalTo(350)
+                    make.width.equalTo(large ? 350 : 310)
                     return
                 }
                 
@@ -543,7 +544,7 @@ public class DJIDashboardViewController: UIViewController {
                 
                 make.top.equalTo(topBarBackgroundView.snp.bottom).offset(defaultPadding)
                 make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(defaultPadding)
-                make.width.equalTo(350)
+                make.width.equalTo(large ? 350 : 310)
             }
         }
     }

@@ -68,7 +68,9 @@ public class DJIDashboardViewController: UIViewController {
     private let compassWidget = DUXCompassWidget()
     
     private var telemetryViewController: TelemetryViewController?
-    private var droneOffsetsViewController: DroneOffsetsViewController?
+    private var droneOffsetsViewController1: DroneOffsetsViewController?
+    private var droneOffsetsViewController2: DroneOffsetsViewController?
+    private var cameraOffsetsViewController: CameraOffsetsViewController?
     private var missionViewController: MissionViewController?
     private var missionExpanded = false
     private var funcViewController: FuncViewController?
@@ -410,7 +412,7 @@ public class DJIDashboardViewController: UIViewController {
             make.width.equalTo(28)
         }
         
-        offsetsButton.tintColor = droneOffsetsViewController == nil ? UIColor.white : MDCPalette.pink.accent400
+        offsetsButton.tintColor = droneOffsetsViewController1 == nil ? UIColor.white : MDCPalette.pink.accent400
         offsetsButton.snp.remakeConstraints { make in
             make.top.equalTo(exposureButton.snp.bottom).offset(15)
             make.centerX.equalTo(captureWidget.snp.centerX)
@@ -454,9 +456,9 @@ public class DJIDashboardViewController: UIViewController {
             make.width.equalTo(tablet ? 350 : 275)
         }
         
-        if let droneOffsetsViewController = droneOffsetsViewController {
-            view.bringSubviewToFront(droneOffsetsViewController.view)
-            droneOffsetsViewController.view.snp.remakeConstraints { make in
+        if let droneOffsetsViewController1 = droneOffsetsViewController1 {
+            view.bringSubviewToFront(droneOffsetsViewController1.view)
+            droneOffsetsViewController1.view.snp.remakeConstraints { make in
                 make.height.equalTo(240)
                 make.width.equalTo(200)
                 if portrait {
@@ -465,7 +467,27 @@ public class DJIDashboardViewController: UIViewController {
                 }
                 else {
                     make.right.equalTo(captureBackgroundView.snp.left).offset(-defaultPadding)
-                    make.top.equalTo(captureBackgroundView.snp.top)
+                    make.top.equalTo(cameraConfigInfoWidget.snp.bottom).offset(defaultPadding)
+                }
+            }
+            
+            if let droneOffsetsViewController2 = droneOffsetsViewController2 {
+                view.bringSubviewToFront(droneOffsetsViewController2.view)
+                droneOffsetsViewController2.view.snp.remakeConstraints { make in
+                    make.height.equalTo(droneOffsetsViewController1.view)
+                    make.width.equalTo(droneOffsetsViewController1.view)
+                    make.right.equalTo(droneOffsetsViewController1.view)
+                    make.top.equalTo(droneOffsetsViewController1.view.snp.bottom).offset(defaultPadding)
+                }
+            }
+            
+            if let cameraOffsetsViewController = cameraOffsetsViewController {
+                view.bringSubviewToFront(cameraOffsetsViewController.view)
+                cameraOffsetsViewController.view.snp.remakeConstraints { make in
+                    make.height.equalTo(65)
+                    make.width.equalTo(droneOffsetsViewController1.view)
+                    make.right.equalTo(droneOffsetsViewController1.view)
+                    make.top.equalTo((droneOffsetsViewController2 ?? droneOffsetsViewController1).view.snp.bottom).offset(defaultPadding)
                 }
             }
         }
@@ -592,18 +614,47 @@ public class DJIDashboardViewController: UIViewController {
     }
     
     @objc func onOffsets(sender: Any) {
-        if let droneOffsetsViewController = self.droneOffsetsViewController {
+        if let droneOffsetsViewController = self.droneOffsetsViewController1 {
             droneOffsetsViewController.view.removeFromSuperview()
             droneOffsetsViewController.removeFromParent()
-            self.droneOffsetsViewController = nil
+            self.droneOffsetsViewController1 = nil
         }
         else {
-            let droneOffsetsViewController = DroneOffsetsViewController.create(droneSessionManager: self.droneSessionManager)
+            let droneOffsetsViewController = DroneOffsetsViewController.create(droneSessionManager: self.droneSessionManager, styles: tablet ? [.position] : [.altYaw, .position])
             addChild(droneOffsetsViewController)
             view.addSubview(droneOffsetsViewController.view)
             droneOffsetsViewController.didMove(toParent: self)
-            self.droneOffsetsViewController = droneOffsetsViewController
+            self.droneOffsetsViewController1 = droneOffsetsViewController
         }
+        
+        if tablet {
+            if let droneOffsetsViewController = self.droneOffsetsViewController2 {
+                droneOffsetsViewController.view.removeFromSuperview()
+                droneOffsetsViewController.removeFromParent()
+                self.droneOffsetsViewController2 = nil
+            }
+            else {
+                let droneOffsetsViewController = DroneOffsetsViewController.create(droneSessionManager: self.droneSessionManager, styles: [.altYaw])
+                addChild(droneOffsetsViewController)
+                view.addSubview(droneOffsetsViewController.view)
+                droneOffsetsViewController.didMove(toParent: self)
+                self.droneOffsetsViewController2 = droneOffsetsViewController
+            }
+        }
+        
+        if let cameraOffsetsViewController = self.cameraOffsetsViewController {
+            cameraOffsetsViewController.view.removeFromSuperview()
+            cameraOffsetsViewController.removeFromParent()
+            self.cameraOffsetsViewController = nil
+        }
+        else {
+            let cameraOffsetsViewController = CameraOffsetsViewController.create(droneSessionManager: self.droneSessionManager)
+            addChild(cameraOffsetsViewController)
+            view.addSubview(cameraOffsetsViewController.view)
+            cameraOffsetsViewController.didMove(toParent: self)
+            self.cameraOffsetsViewController = cameraOffsetsViewController
+        }
+        
         view.setNeedsUpdateConstraints()
     }
     
@@ -627,6 +678,12 @@ public class DJIDashboardViewController: UIViewController {
         delegate?.onDashboardDismissed()
         dismiss(animated: true)
     }
+    
+    //work-around for this: https://github.com/flutter/flutter/issues/35784
+    override public func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {}
+    override public func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {}
+    override public func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {}
+    override public func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {}
 }
 
 extension DJIDashboardViewController: DronelinkDelegate {

@@ -13,12 +13,12 @@ Pod::Spec.new do |s|
   s.resources = "DronelinkDJIUI/**/*.{strings,xcassets}"
 
   s.dependency "DronelinkCore", "~> 1.3.0"
-  s.dependency "DronelinkCoreUI", "~> 1.1.0"
+  s.dependency "DronelinkCoreUI", "~> 1.1.1"
   s.dependency "DronelinkDJI", "~> 1.3.0"
-  s.dependency "DJI-SDK-iOS", "~> 4.11"
-  s.dependency "DJIWidget", "~> 1.6.1"
-  s.dependency "DJI-UXSDK-iOS", "~> 4.11"
-  s.dependency "SnapKit", "~> 5.0.0"
-  s.dependency "MaterialComponents/Palettes", "~> 103.1.0"
+  s.dependency "DJI-SDK-iOS", "~> 4.11.2"
+  s.dependency "DJIWidget", "~> 1.6.2"
+  s.dependency "DJI-UXSDK-iOS", "~> 4.11.1"
+  s.dependency "SnapKit", "~> 5.0.1"
+  s.dependency "MaterialComponents/Palettes", "~> 107.4.0"
 end
 

@@ -10,3 +10,5 @@
 "DJIDashboardViewController.settings.exposure" = "Exposure Settings";
 "DJIDashboardViewController.settings.histogram" = "Histogram";
 "DJIDashboardViewController.settings.cancel" = "Cancel";
+"DJIDashboardViewController.camera.noSDCard.title" = "SD Card Missing";
+"DJIDashboardViewController.camera.noSDCard.details" = "Please make sure to insert an SD card before running a mission with data capture.";

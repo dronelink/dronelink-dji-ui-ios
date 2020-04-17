@@ -3,9 +3,9 @@ inhibit_all_warnings!
 use_frameworks!
 
 target 'DronelinkDJIUI' do
-  pod 'DronelinkCore', '~> 1.3.0'
-  pod 'DronelinkCoreUI', '~> 1.1.1'
-  pod 'DronelinkDJI', '~> 1.3.0'
+  pod 'DronelinkCore', '~> 1.4.0'
+  pod 'DronelinkCoreUI', '~> 1.2.0'
+  pod 'DronelinkDJI', '~> 1.4.0'
   pod 'DJI-UXSDK-iOS', '~> 4.11.1'
   pod 'SnapKit', '~> 5.0.1'
   pod 'MaterialComponents/Palettes', '~> 107.4.0'

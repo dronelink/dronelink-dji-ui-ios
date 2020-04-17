@@ -74,6 +74,7 @@ public class DJIDashboardViewController: UIViewController {
     private var missionViewController: MissionViewController?
     private var missionExpanded = false
     private var funcViewController: FuncViewController?
+    private var primaryViewToggled = false
     private var videoPreviewerPrimary = true
     private let defaultPadding = 10
     private var primaryView: UIView { return videoPreviewerPrimary || portrait ? videoPreviewerView : mapViewController.view }
@@ -93,6 +94,8 @@ public class DJIDashboardViewController: UIViewController {
         if #available(iOS 13.0, *) {
             overrideUserInterfaceStyle = .dark
         }
+        
+        videoPreviewerPrimary = droneSessionManager.session != nil
         
         view.backgroundColor = UIColor.black
         
@@ -196,6 +199,8 @@ public class DJIDashboardViewController: UIViewController {
         super.viewDidDisappear(animated)
         Dronelink.shared.remove(delegate: self)
         droneSessionManager?.remove(delegate: self)
+        session?.remove(delegate: self)
+        missionExecutor?.remove(delegate: self)
     }
     
     override public func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -412,7 +417,7 @@ public class DJIDashboardViewController: UIViewController {
             make.width.equalTo(28)
         }
         
-        offsetsButton.tintColor = droneOffsetsViewController1 == nil ? UIColor.white : MDCPalette.pink.accent400
+        offsetsButton.tintColor = droneOffsetsViewController1 == nil ? UIColor.white : DronelinkUI.Constants.secondaryColor
         offsetsButton.snp.remakeConstraints { make in
             make.top.equalTo(exposureButton.snp.bottom).offset(15)
             make.centerX.equalTo(captureWidget.snp.centerX)
@@ -535,8 +540,14 @@ public class DJIDashboardViewController: UIViewController {
                 else {
                     make.width.equalToSuperview().multipliedBy(0.4)
                 }
+                
                 if (missionExpanded) {
-                    make.bottom.equalTo(secondaryView.snp.top).offset(-Double(defaultPadding) * 1.5)
+                    if (tablet) {
+                        make.height.equalTo(180)
+                    }
+                    else {
+                        make.bottom.equalTo(secondaryView.snp.top).offset(-Double(defaultPadding) * 1.5)
+                    }
                 }
                 else {
                     make.height.equalTo(80)
@@ -594,6 +605,7 @@ public class DJIDashboardViewController: UIViewController {
     }
     
     @objc func onPrimaryViewToggle(sender: Any) {
+        primaryViewToggled = true
         videoPreviewerPrimary = !videoPreviewerPrimary
         updateConstraints()
         view.animateLayout()
@@ -743,23 +755,54 @@ extension DJIDashboardViewController: DronelinkDelegate {
 
 extension DJIDashboardViewController: DroneSessionManagerDelegate {
     public func onOpened(session: DroneSession) {
+        self.session = session
+        session.add(delegate: self)
         DispatchQueue.main.async {
-            self.session = session
+            if !self.primaryViewToggled {
+                self.videoPreviewerPrimary = true
+            }
             self.view.setNeedsUpdateConstraints()
         }
     }
     
     public func onClosed(session: DroneSession) {
+        self.session = nil
+        session.remove(delegate: self)
         DispatchQueue.main.async {
-            self.session = nil
             self.view.setNeedsUpdateConstraints()
         }
     }
 }
 
-extension DJIDashboardViewController: MissionExecutorDelegate {
-    public func onMissionEstimated(executor: MissionExecutor, duration: TimeInterval) {}
+extension DJIDashboardViewController: DroneSessionDelegate {
+    public func onInitialized(session: DroneSession) {
+        if let cameraState = session.cameraState(channel: 0), !cameraState.value.isSDCardInserted {
+            DronelinkUI.shared.showDialog(title: "DJIDashboardViewController.camera.noSDCard.title".localized, details: "DJIDashboardViewController.camera.noSDCard.details".localized)
+        }
+    }
     
+    public func onLocated(session: DroneSession) {}
+    
+    public func onMotorsChanged(session: DroneSession, value: Bool) {}
+    
+    public func onCommandExecuted(session: DroneSession, command: MissionCommand) {}
+    
+    public func onCommandFinished(session: DroneSession, command: MissionCommand, error: Error?) {}
+    
+    public func onCameraFileGenerated(session: DroneSession, file: CameraFile) {}
+}
+
+extension DJIDashboardViewController: MissionExecutorDelegate {
+    public func onMissionEstimating(executor: MissionExecutor) {}
+    
+    public func onMissionEstimated(executor: MissionExecutor, estimate: MissionExecutor.Estimate) {}
+    
+    public func onMissionEngaging(executor: MissionExecutor) {
+        DispatchQueue.main.async {
+            self.view.setNeedsUpdateConstraints()
+        }
+    }
+        
     public func onMissionEngaged(executor: MissionExecutor, engagement: MissionExecutor.Engagement) {
         DispatchQueue.main.async {
             self.view.setNeedsUpdateConstraints()

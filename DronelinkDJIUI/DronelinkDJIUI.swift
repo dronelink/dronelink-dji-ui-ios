@@ -10,8 +10,8 @@ import UIKit
 
 extension DronelinkDJIUI {
     public static let shared = DronelinkDJIUI()
-    internal static let bundle = Bundle.init(for: DronelinkDJIUI.self)
-    internal static func loadImage(named: String, renderingMode: UIImage.RenderingMode = .alwaysTemplate) -> UIImage? {
+    public static let bundle = Bundle.init(for: DronelinkDJIUI.self)
+    public static func loadImage(named: String, renderingMode: UIImage.RenderingMode = .alwaysTemplate) -> UIImage? {
         return UIImage(named: named, in: DronelinkDJIUI.bundle, compatibleWith: nil)?.withRenderingMode(renderingMode)
     }
 }

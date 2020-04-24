@@ -22,8 +22,9 @@ public protocol DJIDashboardViewControllerDelegate {
 }
 
 public class DJIDashboardViewController: UIViewController {
-    public static func create(droneSessionManager: DJIDroneSessionManager, delegate: DJIDashboardViewControllerDelegate? = nil) -> DJIDashboardViewController {
+    public static func create(droneSessionManager: DJIDroneSessionManager, mapCredentialsKey: String, delegate: DJIDashboardViewControllerDelegate? = nil) -> DJIDashboardViewController {
         let dashboardViewController = DJIDashboardViewController()
+        dashboardViewController.mapCredentialsKey = mapCredentialsKey
         dashboardViewController.modalPresentationStyle = .fullScreen
         dashboardViewController.droneSessionManager = droneSessionManager
         dashboardViewController.delegate = delegate
@@ -37,7 +38,8 @@ public class DJIDashboardViewController: UIViewController {
     private var funcExecutor: FuncExecutor?
     private var overlayViewController: UIViewController?
     private let hideOverlayButton = UIButton(type: .custom)
-    private var mapViewController: MapViewController!
+    private var mapViewController: MicrosoftMapViewController!
+    private var mapCredentialsKey = ""
     private let primaryViewToggleButton = UIButton(type: .custom)
     private let dismissButton = UIButton(type: .custom)
     private let videoPreviewerViewController = DUXFPVViewController()
@@ -74,6 +76,7 @@ public class DJIDashboardViewController: UIViewController {
     private var missionViewController: MissionViewController?
     private var missionExpanded = false
     private var funcViewController: FuncViewController?
+    private var funcExpanded = false
     private var primaryViewToggled = false
     private var videoPreviewerPrimary = true
     private let defaultPadding = 10
@@ -171,7 +174,7 @@ public class DJIDashboardViewController: UIViewController {
         dismissButton.addTarget(self, action: #selector(onDismiss(sender:)), for: .touchUpInside)
         view.addSubview(dismissButton)
         
-        let mapViewController = MapViewController.create(droneSessionManager: self.droneSessionManager)
+        let mapViewController = MicrosoftMapViewController.create(droneSessionManager: self.droneSessionManager, credentialsKey: mapCredentialsKey)
         self.mapViewController = mapViewController
         addChild(mapViewController)
         view.addSubview(mapViewController.view)
@@ -561,7 +564,12 @@ public class DJIDashboardViewController: UIViewController {
             view.bringSubviewToFront(funcViewController.view)
             funcViewController.view.snp.remakeConstraints { make in
                 let large = tablet || portrait
-                make.height.equalTo(165)
+                if (funcExpanded) {
+                    make.height.equalTo(330)
+                }
+                else {
+                    make.height.equalTo(165)
+                }
                 
                 if (portrait && tablet) {
                     make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-defaultPadding)
@@ -731,7 +739,7 @@ extension DJIDashboardViewController: DronelinkDelegate {
     public func onFuncLoaded(executor: FuncExecutor) {
         DispatchQueue.main.async {
             self.funcExecutor = executor
-            let funcViewController = FuncViewController.create(droneSessionManager: self.droneSessionManager)
+            let funcViewController = FuncViewController.create(droneSessionManager: self.droneSessionManager, delegate: self)
             self.addChild(funcViewController)
             self.view.addSubview(funcViewController.view)
             funcViewController.didMove(toParent: self)
@@ -819,9 +827,17 @@ extension DJIDashboardViewController: MissionExecutorDelegate {
 }
 
 extension DJIDashboardViewController: MissionViewControllerDelegate {
-    public func onExpandToggle() {
+    public func onMissionExpandToggle() {
         missionExpanded = !missionExpanded
         updateConstraintsMission()
+        view.animateLayout()
+    }
+}
+
+extension DJIDashboardViewController: FuncViewControllerDelegate {
+    public func onFuncExpanded(value: Bool) {
+        funcExpanded = value
+        updateConstraintsFunc()
         view.animateLayout()
     }
 }

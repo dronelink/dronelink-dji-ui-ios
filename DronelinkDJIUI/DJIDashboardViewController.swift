@@ -38,9 +38,10 @@ public class DJIDashboardViewController: UIViewController {
     private var funcExecutor: FuncExecutor?
     private var overlayViewController: UIViewController?
     private let hideOverlayButton = UIButton(type: .custom)
-    private var mapViewController: MicrosoftMapViewController!
+    private var mapViewController: UIViewController!
     private var mapCredentialsKey = ""
     private let primaryViewToggleButton = UIButton(type: .custom)
+    private let mapMoreButton = UIButton(type: .custom)
     private let dismissButton = UIButton(type: .custom)
     private let videoPreviewerViewController = DUXFPVViewController()
     private var videoPreviewerView = UIView()
@@ -174,16 +175,17 @@ public class DJIDashboardViewController: UIViewController {
         dismissButton.addTarget(self, action: #selector(onDismiss(sender:)), for: .touchUpInside)
         view.addSubview(dismissButton)
         
-        let mapViewController = MicrosoftMapViewController.create(droneSessionManager: self.droneSessionManager, credentialsKey: mapCredentialsKey)
-        self.mapViewController = mapViewController
-        addChild(mapViewController)
-        view.addSubview(mapViewController.view)
-        mapViewController.didMove(toParent: self)
+        updateMapMicrosoft()
         
         primaryViewToggleButton.tintColor = UIColor.white
         primaryViewToggleButton.setImage(DronelinkDJIUI.loadImage(named: "vector-arrange-below"), for: .normal)
         primaryViewToggleButton.addTarget(self, action: #selector(onPrimaryViewToggle(sender:)), for: .touchUpInside)
         view.addSubview(primaryViewToggleButton)
+        
+        mapMoreButton.tintColor = UIColor.white
+        mapMoreButton.setImage(DronelinkDJIUI.loadImage(named: "outline_layers_white_36pt"), for: .normal)
+        mapMoreButton.addTarget(self, action: #selector(onMapMore(sender:)), for: .touchUpInside)
+        view.addSubview(mapMoreButton)
         
         let telemetryViewController = TelemetryViewController.create(droneSessionManager: self.droneSessionManager)
         addChild(telemetryViewController)
@@ -225,6 +227,7 @@ public class DJIDashboardViewController: UIViewController {
         view.sendSubviewToBack(primaryView)
         view.bringSubviewToFront(secondaryView)
         view.bringSubviewToFront(primaryViewToggleButton)
+        view.bringSubviewToFront(mapMoreButton)
         view.bringSubviewToFront(compassWidget)
         if let telemetryView = telemetryViewController?.view {
             view.bringSubviewToFront(telemetryView)
@@ -272,6 +275,13 @@ public class DJIDashboardViewController: UIViewController {
         primaryViewToggleButton.snp.remakeConstraints { make in
             make.left.equalTo(secondaryView.snp.left).offset(defaultPadding)
             make.top.equalTo(secondaryView.snp.top).offset(defaultPadding)
+            make.width.equalTo(30)
+            make.height.equalTo(30)
+        }
+        
+        mapMoreButton.snp.remakeConstraints { make in
+            make.left.equalTo(primaryViewToggleButton)
+            make.top.equalTo(portrait ? secondaryView.snp.top : primaryViewToggleButton.snp.bottom).offset(defaultPadding)
             make.width.equalTo(30)
             make.height.equalTo(30)
         }
@@ -617,6 +627,51 @@ public class DJIDashboardViewController: UIViewController {
         videoPreviewerPrimary = !videoPreviewerPrimary
         updateConstraints()
         view.animateLayout()
+    }
+    
+    private func updateMapMicrosoft() {
+        if let mapViewController = mapViewController {
+            mapViewController.view.removeFromSuperview()
+            mapViewController.removeFromParent()
+        }
+        
+        let mapViewController = MicrosoftMapViewController.create(droneSessionManager: droneSessionManager, credentialsKey: mapCredentialsKey)
+        self.mapViewController = mapViewController
+        addChild(mapViewController)
+        view.addSubview(mapViewController.view)
+        mapViewController.didMove(toParent: self)
+        view.setNeedsUpdateConstraints()
+    }
+    
+    private func updateMapMapbox() {
+        if let mapViewController = mapViewController {
+            mapViewController.view.removeFromSuperview()
+            mapViewController.removeFromParent()
+        }
+        
+        let mapViewController = MapboxMapViewController.create(droneSessionManager: droneSessionManager)
+        self.mapViewController = mapViewController
+        addChild(mapViewController)
+        view.addSubview(mapViewController.view)
+        mapViewController.didMove(toParent: self)
+        view.setNeedsUpdateConstraints()
+    }
+    
+    @objc func onMapMore(sender: Any) {
+        if let mapViewController = mapViewController as? MicrosoftMapViewController {
+            mapViewController.onMore(sender: sender, actions: [
+                UIAlertAction(title: "DJIDashboardViewController.map.mapbox".localized, style: .default, handler: { _ in
+                    self.updateMapMapbox()
+                })
+            ])
+        }
+        else if let mapViewController = mapViewController as? MapboxMapViewController {
+            mapViewController.onMore(sender: sender, actions: [
+                UIAlertAction(title: "DJIDashboardViewController.map.microsoft".localized, style: .default, handler: { _ in
+                    self.updateMapMicrosoft()
+                })
+            ])
+        }
     }
     
     @objc func onPreflight(sender: Any) {

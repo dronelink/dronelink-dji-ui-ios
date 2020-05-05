@@ -264,10 +264,15 @@ public class DJIDashboardViewController: UIViewController {
                 make.bottom.equalToSuperview()
             }
             else {
-                make.width.equalTo(view.snp.width).multipliedBy(tablet ? 0.4 : 0.28)
+                make.width.equalTo(view.snp.width).multipliedBy(tablet && !funcExpanded ? 0.4 : 0.28)
                 make.height.equalTo(secondaryView.snp.width).multipliedBy(0.5)
                 make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-defaultPadding)
-                make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(defaultPadding)
+                if !portrait, funcExpanded, let funcViewController = funcViewController {
+                    make.left.equalTo(funcViewController.view.snp.right).offset(defaultPadding)
+                }
+                else {
+                    make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(defaultPadding)
+                }
             }
         }
         
@@ -456,8 +461,8 @@ public class DJIDashboardViewController: UIViewController {
             }
             
             make.bottom.equalTo(secondaryView.snp.bottom)
-            make.height.equalTo(secondaryView.snp.height).multipliedBy(0.65)
-            make.right.equalTo(captureBackgroundView.snp.left).offset(-defaultPadding * 2)
+            make.height.equalTo(primaryView.snp.width).multipliedBy(tablet ? 0.12 : 0.09)
+            make.right.equalTo(tablet ? captureBackgroundView.snp.right : captureBackgroundView.snp.left).offset(tablet ? 0 : -defaultPadding)
             make.width.equalTo(compassWidget.snp.height)
         }
         
@@ -575,7 +580,12 @@ public class DJIDashboardViewController: UIViewController {
             funcViewController.view.snp.remakeConstraints { make in
                 let large = tablet || portrait
                 if (funcExpanded) {
-                    make.height.equalTo(330)
+                    if (portrait) {
+                        make.height.equalTo(tablet ? 550 : 300)
+                    }
+                    else {
+                        make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-defaultPadding)
+                    }
                 }
                 else {
                     make.height.equalTo(165)
@@ -892,7 +902,7 @@ extension DJIDashboardViewController: MissionViewControllerDelegate {
 extension DJIDashboardViewController: FuncViewControllerDelegate {
     public func onFuncExpanded(value: Bool) {
         funcExpanded = value
-        updateConstraintsFunc()
+        updateConstraints()
         view.animateLayout()
     }
 }

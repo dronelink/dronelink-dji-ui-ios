@@ -264,7 +264,13 @@ public class DJIDashboardViewController: UIViewController {
                 make.bottom.equalToSuperview()
             }
             else {
-                make.width.equalTo(view.snp.width).multipliedBy(tablet && !funcExpanded ? 0.4 : 0.28)
+                if tablet {
+                    make.width.equalTo(view.snp.width).multipliedBy(funcViewController == nil || !funcExpanded ? 0.4 : 0.30)
+                }
+                else {
+                    make.width.equalTo(view.snp.width).multipliedBy(funcViewController == nil || !funcExpanded ? 0.28 : 0.18)
+                }
+                
                 make.height.equalTo(secondaryView.snp.width).multipliedBy(0.5)
                 make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-defaultPadding)
                 if !portrait, funcExpanded, let funcViewController = funcViewController {
@@ -804,6 +810,7 @@ extension DJIDashboardViewController: DronelinkDelegate {
     public func onFuncLoaded(executor: FuncExecutor) {
         DispatchQueue.main.async {
             self.funcExecutor = executor
+            self.funcExpanded = false
             let funcViewController = FuncViewController.create(droneSessionManager: self.droneSessionManager, delegate: self)
             self.addChild(funcViewController)
             self.view.addSubview(funcViewController.view)

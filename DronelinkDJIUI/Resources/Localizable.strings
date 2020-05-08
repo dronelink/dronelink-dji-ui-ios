@@ -12,5 +12,5 @@
 "DJIDashboardViewController.settings.cancel" = "Cancel";
 "DJIDashboardViewController.camera.noSDCard.title" = "SD Card Missing";
 "DJIDashboardViewController.camera.noSDCard.details" = "Please make sure to insert an SD card before running a mission with data capture.";
-"DJIDashboardViewController.map.mapbox" = "2D (Mapbox)";
-"DJIDashboardViewController.map.microsoft" = "3D (Bing)";
+"DJIDashboardViewController.map.mapbox" = "2D (Satellite)";
+"DJIDashboardViewController.map.microsoft" = "3D (Beta)";

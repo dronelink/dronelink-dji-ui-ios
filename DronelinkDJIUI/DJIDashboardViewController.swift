@@ -16,6 +16,7 @@ import DronelinkCoreUI
 import DronelinkDJI
 import DJIUXSDK
 import MaterialComponents.MaterialPalettes
+import Kingfisher
 
 public protocol DJIDashboardViewControllerDelegate {
     func onDashboardDismissed()
@@ -45,6 +46,7 @@ public class DJIDashboardViewController: UIViewController {
     private let dismissButton = UIButton(type: .custom)
     private let videoPreviewerViewController = DUXFPVViewController()
     private var videoPreviewerView = UIView()
+    private let reticalImageView = UIImageView()
     private let topBarBackgroundView = UIView()
     private let preflightButton = UIButton(type: .custom)
     private let preflightStatusWidget = DUXPreFlightStatusWidget()
@@ -114,6 +116,10 @@ public class DJIDashboardViewController: UIViewController {
         videoPreviewerView.backgroundColor = UIColor(displayP3Red: 35/255, green: 35/255, blue: 35/255, alpha: 1)
         view.addSubview(videoPreviewerView)
         
+        reticalImageView.isUserInteractionEnabled = false
+        reticalImageView.contentMode = .scaleAspectFit
+        view.addSubview(reticalImageView)
+        
         topBarBackgroundView.backgroundColor = DronelinkUI.Constants.overlayColor
         view.addSubview(topBarBackgroundView)
         
@@ -175,7 +181,7 @@ public class DJIDashboardViewController: UIViewController {
         dismissButton.addTarget(self, action: #selector(onDismiss(sender:)), for: .touchUpInside)
         view.addSubview(dismissButton)
         
-        updateMapMicrosoft()
+        updateMapMapbox()
         
         primaryViewToggleButton.tintColor = UIColor.white
         primaryViewToggleButton.setImage(DronelinkDJIUI.loadImage(named: "vector-arrange-below"), for: .normal)
@@ -225,7 +231,13 @@ public class DJIDashboardViewController: UIViewController {
     
     func updateConstraints() {
         view.sendSubviewToBack(primaryView)
+        if primaryView == videoPreviewerView {
+            view.bringSubviewToFront(reticalImageView)
+        }
         view.bringSubviewToFront(secondaryView)
+        if secondaryView == videoPreviewerView {
+            view.bringSubviewToFront(reticalImageView)
+        }
         view.bringSubviewToFront(primaryViewToggleButton)
         view.bringSubviewToFront(mapMoreButton)
         view.bringSubviewToFront(compassWidget)
@@ -280,6 +292,11 @@ public class DJIDashboardViewController: UIViewController {
                     make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(defaultPadding)
                 }
             }
+        }
+        
+        reticalImageView.snp.remakeConstraints { make in
+            make.center.equalTo(videoPreviewerView)
+            make.height.equalTo(videoPreviewerView).multipliedBy(0.5)
         }
         
         primaryViewToggleButton.isHidden = portrait
@@ -705,7 +722,17 @@ public class DJIDashboardViewController: UIViewController {
     }
     
     @objc func onOffsets(sender: Any) {
-        if let droneOffsetsViewController = self.droneOffsetsViewController1 {
+        toggleOffsets()
+    }
+    
+    private func toggleOffsets(visible: Bool? = nil) {
+        if let visible = visible {
+            if (visible && droneOffsetsViewController1 != nil) || (!visible && droneOffsetsViewController1 == nil) {
+                return
+            }
+        }
+        
+        if let droneOffsetsViewController = droneOffsetsViewController1 {
             droneOffsetsViewController.view.removeFromSuperview()
             droneOffsetsViewController.removeFromParent()
             self.droneOffsetsViewController1 = nil
@@ -770,6 +797,24 @@ public class DJIDashboardViewController: UIViewController {
         dismiss(animated: true)
     }
     
+    private func apply(userInterfaceSettings: Mission.UserInterfaceSettings?) {
+        reticalImageView.image = nil
+        if let reticalImageUrl = userInterfaceSettings?.reticalImageUrl {
+            reticalImageView.kf.setImage(with: URL(string: reticalImageUrl))
+        }
+        
+        if let droneOffsetsVisible = userInterfaceSettings?.droneOffsetsVisible {
+            toggleOffsets(visible: droneOffsetsVisible)
+        }
+        
+        if let missionDetailsExpanded = userInterfaceSettings?.missionDetailsExpanded {
+            missionExpanded = missionDetailsExpanded
+            updateConstraintsMission()
+        }
+        
+        view.setNeedsUpdateConstraints()
+    }
+    
     //work-around for this: https://github.com/flutter/flutter/issues/35784
     override public func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {}
     override public func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {}
@@ -790,7 +835,7 @@ extension DJIDashboardViewController: DronelinkDelegate {
             missionViewController.didMove(toParent: self)
             self.missionViewController = missionViewController
             executor.add(delegate: self)
-            self.view.setNeedsUpdateConstraints()
+            self.apply(userInterfaceSettings: executor.userInterfaceSettings)
         }
     }
     
@@ -803,7 +848,7 @@ extension DJIDashboardViewController: DronelinkDelegate {
                 self.missionViewController = nil
             }
             executor.remove(delegate: self)
-            self.view.setNeedsUpdateConstraints()
+            self.apply(userInterfaceSettings: nil)
         }
     }
     
@@ -816,7 +861,7 @@ extension DJIDashboardViewController: DronelinkDelegate {
             self.view.addSubview(funcViewController.view)
             funcViewController.didMove(toParent: self)
             self.funcViewController = funcViewController
-            self.view.setNeedsUpdateConstraints()
+            self.apply(userInterfaceSettings: executor.userInterfaceSettings)
         }
     }
     
@@ -828,7 +873,7 @@ extension DJIDashboardViewController: DronelinkDelegate {
                 funcViewController.removeFromParent()
                 self.funcViewController = nil
             }
-            self.view.setNeedsUpdateConstraints()
+            self.apply(userInterfaceSettings: nil)
         }
     }
 }

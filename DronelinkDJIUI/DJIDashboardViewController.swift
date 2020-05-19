@@ -88,7 +88,7 @@ public class DJIDashboardViewController: UIViewController {
     private var portrait: Bool { return UIScreen.main.bounds.width < UIScreen.main.bounds.height }
     private var tablet: Bool { return UIDevice.current.userInterfaceIdiom == .pad }
     private var statusWidgetHeight: CGFloat { return tablet ? 50 : 40 }
-    private let offsetsEnabled = true
+    private let offsetsButtonEnabled = false
     
     public override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -167,7 +167,7 @@ public class DJIDashboardViewController: UIViewController {
         exposureButton.addTarget(self, action: #selector(onExposureSettings(sender:)), for: .touchUpInside)
         view.addSubview(exposureButton)
         
-        offsetsButton.isHidden = !offsetsEnabled
+        offsetsButton.isHidden = !offsetsButtonEnabled
         offsetsButton.setImage(DronelinkDJIUI.loadImage(named: "baseline_control_camera_white_36pt"), for: .normal)
         offsetsButton.addTarget(self, action: #selector(onOffsets(sender:)), for: .touchUpInside)
         view.addSubview(offsetsButton)
@@ -230,14 +230,9 @@ public class DJIDashboardViewController: UIViewController {
     }
     
     func updateConstraints() {
+        view.sendSubviewToBack(reticalImageView)
         view.sendSubviewToBack(primaryView)
-        if primaryView == videoPreviewerView {
-            view.bringSubviewToFront(reticalImageView)
-        }
         view.bringSubviewToFront(secondaryView)
-        if secondaryView == videoPreviewerView {
-            view.bringSubviewToFront(reticalImageView)
-        }
         view.bringSubviewToFront(primaryViewToggleButton)
         view.bringSubviewToFront(mapMoreButton)
         view.bringSubviewToFront(compassWidget)
@@ -296,7 +291,7 @@ public class DJIDashboardViewController: UIViewController {
         
         reticalImageView.snp.remakeConstraints { make in
             make.center.equalTo(videoPreviewerView)
-            make.height.equalTo(videoPreviewerView).multipliedBy(0.5)
+            make.height.equalTo(videoPreviewerView)
         }
         
         primaryViewToggleButton.isHidden = portrait
@@ -422,7 +417,7 @@ public class DJIDashboardViewController: UIViewController {
             make.top.equalTo(menuButton.snp.top)
             make.right.equalTo(primaryView.safeAreaLayoutGuide.snp.right).offset(-defaultPadding)
             make.left.equalTo(captureWidget.snp.left).offset(-defaultPadding)
-            make.bottom.equalTo((offsetsEnabled ? offsetsButton : exposureButton).snp.bottom).offset(15)
+            make.bottom.equalTo((offsetsButtonEnabled ? offsetsButton : exposureButton).snp.bottom).offset(15)
         }
         
         captureWidget.snp.remakeConstraints { make in
@@ -806,6 +801,9 @@ public class DJIDashboardViewController: UIViewController {
         if let droneOffsetsVisible = userInterfaceSettings?.droneOffsetsVisible {
             toggleOffsets(visible: droneOffsetsVisible)
         }
+        else if !offsetsButtonEnabled {
+            toggleOffsets(visible: false)
+        }
         
         if let missionDetailsExpanded = userInterfaceSettings?.missionDetailsExpanded {
             missionExpanded = missionDetailsExpanded
@@ -848,6 +846,7 @@ extension DJIDashboardViewController: DronelinkDelegate {
                 self.missionViewController = nil
             }
             executor.remove(delegate: self)
+            
             self.apply(userInterfaceSettings: nil)
         }
     }
@@ -873,7 +872,10 @@ extension DJIDashboardViewController: DronelinkDelegate {
                 funcViewController.removeFromParent()
                 self.funcViewController = nil
             }
-            self.apply(userInterfaceSettings: nil)
+            
+            if self.missionExecutor == nil {
+                self.apply(userInterfaceSettings: nil)
+            }
         }
     }
 }

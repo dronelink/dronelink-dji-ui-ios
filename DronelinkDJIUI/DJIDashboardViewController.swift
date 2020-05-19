@@ -77,7 +77,7 @@ public class DJIDashboardViewController: UIViewController {
     private var droneOffsetsViewController2: DroneOffsetsViewController?
     private var cameraOffsetsViewController: CameraOffsetsViewController?
     private var missionViewController: MissionViewController?
-    private var missionExpanded = false
+    private var missionExpanded: Bool { missionViewController?.expanded ?? false }
     private var funcViewController: FuncViewController?
     private var funcExpanded = false
     private var primaryViewToggled = false
@@ -806,8 +806,7 @@ public class DJIDashboardViewController: UIViewController {
         }
         
         if let missionDetailsExpanded = userInterfaceSettings?.missionDetailsExpanded {
-            missionExpanded = missionDetailsExpanded
-            updateConstraintsMission()
+            missionViewController?.toggle(expanded: missionDetailsExpanded)
         }
         
         view.setNeedsUpdateConstraints()
@@ -947,7 +946,6 @@ extension DJIDashboardViewController: MissionExecutorDelegate {
 
 extension DJIDashboardViewController: MissionViewControllerDelegate {
     public func onMissionExpandToggle() {
-        missionExpanded = !missionExpanded
         updateConstraintsMission()
         view.animateLayout()
     }

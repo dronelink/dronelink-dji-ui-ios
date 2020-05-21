@@ -88,7 +88,7 @@ public class DJIDashboardViewController: UIViewController {
     private var portrait: Bool { return UIScreen.main.bounds.width < UIScreen.main.bounds.height }
     private var tablet: Bool { return UIDevice.current.userInterfaceIdiom == .pad }
     private var statusWidgetHeight: CGFloat { return tablet ? 50 : 40 }
-    private let offsetsButtonEnabled = false
+    private var offsetsButtonEnabled = false
     
     public override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -453,6 +453,7 @@ public class DJIDashboardViewController: UIViewController {
             make.width.equalTo(28)
         }
         
+        offsetsButton.isHidden = !offsetsButtonEnabled
         offsetsButton.tintColor = droneOffsetsViewController1 == nil ? UIColor.white : DronelinkUI.Constants.secondaryColor
         offsetsButton.snp.remakeConstraints { make in
             make.top.equalTo(exposureButton.snp.bottom).offset(15)
@@ -799,9 +800,11 @@ public class DJIDashboardViewController: UIViewController {
         }
         
         if let droneOffsetsVisible = userInterfaceSettings?.droneOffsetsVisible {
+            offsetsButtonEnabled = droneOffsetsVisible
             toggleOffsets(visible: droneOffsetsVisible)
         }
-        else if !offsetsButtonEnabled {
+        else {
+            offsetsButtonEnabled = false
             toggleOffsets(visible: false)
         }
         

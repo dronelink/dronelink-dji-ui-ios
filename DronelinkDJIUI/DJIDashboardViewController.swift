@@ -808,10 +808,6 @@ public class DJIDashboardViewController: UIViewController {
             toggleOffsets(visible: false)
         }
         
-        if let missionDetailsExpanded = userInterfaceSettings?.missionDetailsExpanded {
-            missionViewController?.toggle(expanded: missionDetailsExpanded)
-        }
-        
         view.setNeedsUpdateConstraints()
     }
     

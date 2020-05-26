@@ -181,7 +181,7 @@ public class DJIDashboardViewController: UIViewController {
         dismissButton.addTarget(self, action: #selector(onDismiss(sender:)), for: .touchUpInside)
         view.addSubview(dismissButton)
         
-        updateMapMapbox()
+        updateMapMicrosoft()
         
         primaryViewToggleButton.tintColor = UIColor.white
         primaryViewToggleButton.setImage(DronelinkDJIUI.loadImage(named: "vector-arrange-below"), for: .normal)

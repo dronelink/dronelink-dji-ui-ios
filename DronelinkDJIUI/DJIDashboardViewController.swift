@@ -906,6 +906,9 @@ extension DJIDashboardViewController: DronelinkDelegate {
             if self.missionExecutor == nil {
                 self.apply(userInterfaceSettings: nil)
             }
+            else {
+                self.view.setNeedsUpdateConstraints()
+            }
         }
     }
 }

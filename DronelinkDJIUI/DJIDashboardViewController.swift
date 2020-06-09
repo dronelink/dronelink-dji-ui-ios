@@ -72,6 +72,7 @@ public class DJIDashboardViewController: UIViewController {
     private let captureBackgroundView = UIView()
     private let compassWidget = DUXCompassWidget()
     
+    private var interfaceVisible = true
     private var telemetryViewController: TelemetryViewController?
     private var droneOffsetsViewController1: DroneOffsetsViewController?
     private var droneOffsetsViewController2: DroneOffsetsViewController?
@@ -83,7 +84,7 @@ public class DJIDashboardViewController: UIViewController {
     private var primaryViewToggled = false
     private var videoPreviewerPrimary = true
     private let defaultPadding = 10
-    private var primaryView: UIView { return videoPreviewerPrimary || portrait ? videoPreviewerView : mapViewController.view }
+    private var primaryView: UIView { return !interfaceVisible || videoPreviewerPrimary || portrait ? videoPreviewerView : mapViewController.view }
     private var secondaryView: UIView { return primaryView == videoPreviewerView ? mapViewController.view : videoPreviewerView }
     private var portrait: Bool { return UIScreen.main.bounds.width < UIScreen.main.bounds.height }
     private var tablet: Bool { return UIDevice.current.userInterfaceIdiom == .pad }
@@ -181,7 +182,12 @@ public class DJIDashboardViewController: UIViewController {
         dismissButton.addTarget(self, action: #selector(onDismiss(sender:)), for: .touchUpInside)
         view.addSubview(dismissButton)
         
-        updateMapMicrosoft()
+        if Device.legacy {
+            updateMapMapbox()
+        }
+        else {
+            updateMapMicrosoft()
+        }
         
         primaryViewToggleButton.tintColor = UIColor.white
         primaryViewToggleButton.setImage(DronelinkDJIUI.loadImage(named: "vector-arrange-below"), for: .normal)
@@ -198,6 +204,16 @@ public class DJIDashboardViewController: UIViewController {
         view.addSubview(telemetryViewController.view)
         telemetryViewController.didMove(toParent: self)
         self.telemetryViewController = telemetryViewController
+        
+        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(onShowInterface))
+        swipeDown.direction = .down
+        swipeDown.numberOfTouchesRequired = 3
+        videoPreviewerView.addGestureRecognizer(swipeDown)
+        
+        let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(onHideInterface))
+        swipeUp.direction = .up
+        swipeUp.numberOfTouchesRequired = 3
+        videoPreviewerView.addGestureRecognizer(swipeUp)
     }
     
     public override func viewWillAppear(_ animated: Bool) {
@@ -537,6 +553,12 @@ public class DJIDashboardViewController: UIViewController {
         updateConstraintsMission()
         updateConstraintsFunc()
         updateConstraintsOverlay()
+        
+        if !interfaceVisible && !portrait {
+            videoPreviewerViewController.isHUDInteractionEnabled = false
+            videoPreviewerViewController.isRadarWidgetVisible = false
+            view.bringSubviewToFront(videoPreviewerView)
+        }
     }
     
     func updateConstraintsMission() {
@@ -785,6 +807,16 @@ public class DJIDashboardViewController: UIViewController {
         overlayViewController?.removeFromParent()
         overlayViewController?.view.removeFromSuperview()
         overlayViewController = nil
+        view.setNeedsUpdateConstraints()
+    }
+    
+    @objc func onHideInterface() {
+        interfaceVisible = false
+        view.setNeedsUpdateConstraints()
+    }
+    
+    @objc func onShowInterface() {
+        interfaceVisible = true
         view.setNeedsUpdateConstraints()
     }
 

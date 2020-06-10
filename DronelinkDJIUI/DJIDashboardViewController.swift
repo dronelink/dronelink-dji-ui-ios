@@ -184,6 +184,15 @@ public class DJIDashboardViewController: UIViewController {
         
         if Device.legacy {
             updateMapMapbox()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                DronelinkUI.shared.showDialog(
+                    title: "DJIDashboardViewController.device.legacy.title".localized,
+                    details: "DJIDashboardViewController.device.legacy.details".localized,
+                    actions: [
+                        MDCAlertAction(title: "DJIDashboardViewController.device.legacy.confirm".localized, emphasis: .high, handler: { action in
+                        })
+                    ])
+            }
         }
         else {
             updateMapMicrosoft()

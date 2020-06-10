@@ -14,3 +14,6 @@
 "DJIDashboardViewController.camera.noSDCard.details" = "Please make sure to insert an SD card before running a mission with data capture.";
 "DJIDashboardViewController.map.mapbox" = "2D (Satellite)";
 "DJIDashboardViewController.map.microsoft" = "3D (Beta)";
+"DJIDashboardViewController.device.legacy.title" = "Low Performance Device";
+"DJIDashboardViewController.device.legacy.details" = "Using this device may result in poor flight performance or other unexpected issues. Please consider upgrading to a modern device for a more reliable experience.";
+"DJIDashboardViewController.device.legacy.confirm" = "I Understand";

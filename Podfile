@@ -7,6 +7,7 @@ target 'DronelinkDJIUI' do
   pod 'DronelinkCoreUI', '~> 1.4.0'
   pod 'DronelinkDJI', '~> 1.6.0'
   pod 'DJI-UXSDK-iOS', '~> 4.12'
+  pod 'DJI-UXSDK-iOS-Beta', '~> 0.2'
   pod 'SnapKit', '~> 5.0.1'
   pod 'MaterialComponents/Palettes', '~> 109.2.0'
   post_install do |installer|

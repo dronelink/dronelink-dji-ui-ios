@@ -15,6 +15,7 @@ import DronelinkCore
 import DronelinkCoreUI
 import DronelinkDJI
 import DJIUXSDK
+import DJIUXSDKBeta
 import MaterialComponents.MaterialPalettes
 import Kingfisher
 
@@ -44,20 +45,20 @@ public class DJIDashboardViewController: UIViewController {
     private let primaryViewToggleButton = UIButton(type: .custom)
     private let mapMoreButton = UIButton(type: .custom)
     private let dismissButton = UIButton(type: .custom)
-    private let videoPreviewerViewController = DUXFPVViewController()
+    private let fpvWidget = DUXBetaFPVWidget()
     private var videoPreviewerView = UIView()
     private let reticalImageView = UIImageView()
     private let topBarBackgroundView = UIView()
     private let preflightButton = UIButton(type: .custom)
-    private let preflightStatusWidget = DUXPreFlightStatusWidget()
-    private let remainingFlightTimeWidget = DUXRemainingFlightTimeWidget()
-    private let statusWidgets: [(view: UIView, widthRatio: CGFloat)] = [
-        (view: DUXBatteryWidget(), widthRatio: 2.75),
-        (view: DUXVideoSignalWidget(), widthRatio: 2.75),
-        (view: DUXRemoteControlSignalWidget(), widthRatio: 2.5),
-        (view: DUXVisionWidget(), widthRatio: 1.35),
-        (view: DUXGPSSignalWidget(), widthRatio: 1.75),
-        (view: DUXFlightModeWidget(), widthRatio: 4.5)
+    private let systemStatusWidget = DUXBetaSystemStatusWidget()
+    private let remainingFlightTimeWidget = DUXBetaRemainingFlightTimeWidget()
+    private let statusWidgets: [(view: DUXBetaBaseWidget, widthRatio: CGFloat)] = [
+        (view: DUXBetaBatteryWidget(), widthRatio: 2.75),
+        (view: DUXBetaVideoSignalWidget(), widthRatio: 2.75),
+        (view: DUXBetaRemoteControllerSignalWidget(), widthRatio: 2.5),
+        (view: DUXBetaVisionWidget(), widthRatio: 1.35),
+        (view: DUXBetaGPSSignalWidget(), widthRatio: 1.75),
+        (view: DUXBetaFlightModeWidget(), widthRatio: 4.5)
     ]
     private let menuButton = UIButton(type: .custom)
     private let exposureButton = UIButton(type: .custom)
@@ -70,8 +71,9 @@ public class DJIDashboardViewController: UIViewController {
     private let pictureVideoSwitchWidget = DUXPictureVideoSwitchWidget()
     private let captureWidget = DUXCaptureWidget()
     private let captureBackgroundView = UIView()
-    private let compassWidget = DUXCompassWidget()
+    private let compassWidget = DUXBetaCompassWidget()
     
+    private var interfaceVisible = true
     private var telemetryViewController: TelemetryViewController?
     private var droneOffsetsViewController1: DroneOffsetsViewController?
     private var droneOffsetsViewController2: DroneOffsetsViewController?
@@ -83,7 +85,7 @@ public class DJIDashboardViewController: UIViewController {
     private var primaryViewToggled = false
     private var videoPreviewerPrimary = true
     private let defaultPadding = 10
-    private var primaryView: UIView { return videoPreviewerPrimary || portrait ? videoPreviewerView : mapViewController.view }
+    private var primaryView: UIView { return !interfaceVisible || videoPreviewerPrimary || portrait ? videoPreviewerView : mapViewController.view }
     private var secondaryView: UIView { return primaryView == videoPreviewerView ? mapViewController.view : videoPreviewerView }
     private var portrait: Bool { return UIScreen.main.bounds.width < UIScreen.main.bounds.height }
     private var tablet: Bool { return UIDevice.current.userInterfaceIdiom == .pad }
@@ -108,10 +110,9 @@ public class DJIDashboardViewController: UIViewController {
         hideOverlayButton.addTarget(self, action: #selector(onHideOverlay(sender:)), for: .touchUpInside)
         view.addSubview(hideOverlayButton)
         
-        addChild(videoPreviewerViewController)
-        videoPreviewerViewController.didMove(toParent: self)
+        fpvWidget.install(in: self)
             
-        videoPreviewerView = videoPreviewerViewController.view
+        videoPreviewerView = fpvWidget.view
         videoPreviewerView.addShadow()
         videoPreviewerView.backgroundColor = UIColor(displayP3Red: 35/255, green: 35/255, blue: 35/255, alpha: 1)
         view.addSubview(videoPreviewerView)
@@ -123,10 +124,10 @@ public class DJIDashboardViewController: UIViewController {
         topBarBackgroundView.backgroundColor = DronelinkUI.Constants.overlayColor
         view.addSubview(topBarBackgroundView)
         
-        view.addSubview(preflightStatusWidget)
+        systemStatusWidget.install(in: self)
         
         for statusWidget in statusWidgets {
-            view.addSubview(statusWidget.view)
+            statusWidget.view.install(in: self)
         }
         
         focusModeWidget.addShadow()
@@ -147,7 +148,7 @@ public class DJIDashboardViewController: UIViewController {
         view.addSubview(preflightButton)
         preflightButton.addTarget(self, action: #selector(onPreflight(sender:)), for: .touchUpInside)
         
-        view.addSubview(remainingFlightTimeWidget)
+        remainingFlightTimeWidget.install(in: self)
 
         captureBackgroundView.addShadow()
         captureBackgroundView.backgroundColor = DronelinkUI.Constants.overlayColor
@@ -172,7 +173,7 @@ public class DJIDashboardViewController: UIViewController {
         offsetsButton.addTarget(self, action: #selector(onOffsets(sender:)), for: .touchUpInside)
         view.addSubview(offsetsButton)
         
-        view.addSubview(compassWidget)
+        compassWidget.install(in: self)
         
         dismissButton.tintColor = UIColor.white
         dismissButton.setImage(DronelinkDJIUI.loadImage(named: "dronelink-logo"), for: .normal)
@@ -181,7 +182,7 @@ public class DJIDashboardViewController: UIViewController {
         dismissButton.addTarget(self, action: #selector(onDismiss(sender:)), for: .touchUpInside)
         view.addSubview(dismissButton)
         
-        updateMapMicrosoft()
+        updateMapMapbox()
         
         primaryViewToggleButton.tintColor = UIColor.white
         primaryViewToggleButton.setImage(DronelinkDJIUI.loadImage(named: "vector-arrange-below"), for: .normal)
@@ -198,6 +199,16 @@ public class DJIDashboardViewController: UIViewController {
         view.addSubview(telemetryViewController.view)
         telemetryViewController.didMove(toParent: self)
         self.telemetryViewController = telemetryViewController
+        
+        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(onShowInterface))
+        swipeDown.direction = .down
+        swipeDown.numberOfTouchesRequired = 3
+        videoPreviewerView.addGestureRecognizer(swipeDown)
+        
+        let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(onHideInterface))
+        swipeUp.direction = .up
+        swipeUp.numberOfTouchesRequired = 3
+        videoPreviewerView.addGestureRecognizer(swipeUp)
     }
     
     public override func viewWillAppear(_ animated: Bool) {
@@ -235,14 +246,14 @@ public class DJIDashboardViewController: UIViewController {
         view.bringSubviewToFront(secondaryView)
         view.bringSubviewToFront(primaryViewToggleButton)
         view.bringSubviewToFront(mapMoreButton)
-        view.bringSubviewToFront(compassWidget)
+        view.bringSubviewToFront(compassWidget.view)
         if let telemetryView = telemetryViewController?.view {
             view.bringSubviewToFront(telemetryView)
         }
         
-        videoPreviewerViewController.isHUDInteractionEnabled = primaryView == videoPreviewerView
-        videoPreviewerViewController.isRadarWidgetVisible = primaryView == videoPreviewerView
-        videoPreviewerViewController.fpvView?.showCameraDisplayName = false
+        //FIXME fpvWidget.isHUDInteractionEnabled = primaryView == videoPreviewerView
+        //FIXME fpvWidget.isRadarWidgetVisible = primaryView == videoPreviewerView
+        fpvWidget.isCameraNameVisible = false
         primaryView.snp.remakeConstraints { make in
             if (portrait && !tablet) {
                 make.top.equalTo(topBarBackgroundView.safeAreaLayoutGuide.snp.bottom).offset(statusWidgetHeight * 2)
@@ -330,7 +341,7 @@ public class DJIDashboardViewController: UIViewController {
         
         var statusWidgetPrevious: UIView?
         for statusWidget in statusWidgets {
-            statusWidget.view.snp.remakeConstraints { make in
+            statusWidget.view.view.snp.remakeConstraints { make in
                 let paddingRight: CGFloat = 5
                 if let statusWidgetPrevious = statusWidgetPrevious {
                     make.right.equalTo(statusWidgetPrevious.snp.left).offset(-paddingRight)
@@ -342,27 +353,27 @@ public class DJIDashboardViewController: UIViewController {
                 make.top.equalTo(topBarBackgroundView.snp.top).offset((portrait && !tablet ? statusWidgetHeight : 0) + (statusWidgetHeight * topPadding))
                 let height = statusWidgetHeight * (1 - (2 * topPadding))
                 make.height.equalTo(height)
-                make.width.equalTo(statusWidget.view.snp.height).multipliedBy(statusWidget.widthRatio)
+                make.width.equalTo(statusWidget.view.view.snp.height).multipliedBy(statusWidget.widthRatio)
                 
             }
-            statusWidgetPrevious = statusWidget.view
+            statusWidgetPrevious = statusWidget.view.view
         }
         
-        preflightStatusWidget.snp.remakeConstraints { make in
-            make.top.equalTo(topBarBackgroundView.snp.top)
+        systemStatusWidget.view.snp.remakeConstraints { make in
+            make.top.equalTo(topBarBackgroundView.snp.top).offset(3)
             make.left.equalTo(dismissButton.snp.right).offset(defaultPadding)
-            make.height.equalTo(topBarBackgroundView.snp.height)
+            make.bottom.equalTo(topBarBackgroundView.snp.bottom).offset(-5)
             if (portrait && !tablet) {
                 make.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(-defaultPadding)
             }
             else {
-                make.right.equalTo(statusWidgets.last!.view.snp.left).offset(-defaultPadding)
+                make.right.equalTo(statusWidgets.last!.view.view.snp.left).offset(-defaultPadding)
             }
         }
         
         let cameraWidgetSize = statusWidgetHeight * 0.65
         focusModeWidget.snp.remakeConstraints { make in
-            make.top.equalTo(statusWidgets[0].view.snp.bottom).offset(portrait && !tablet ? 14 : 20)
+            make.top.equalTo(statusWidgets[0].view.view.snp.bottom).offset(portrait && !tablet ? 14 : 20)
             make.right.equalToSuperview().offset(portrait && !tablet ? -5 : -defaultPadding)
             make.height.equalTo(cameraWidgetSize)
             make.width.equalTo(cameraWidgetSize)
@@ -394,7 +405,7 @@ public class DJIDashboardViewController: UIViewController {
             make.height.equalTo(cameraWidgetSize)
         }
         
-        remainingFlightTimeWidget.snp.remakeConstraints { make in
+        remainingFlightTimeWidget.view.snp.remakeConstraints { make in
             let topOffset = -9
             if (portrait) {
                 make.top.equalTo(videoPreviewerView.snp.top).offset(topOffset)
@@ -462,18 +473,18 @@ public class DJIDashboardViewController: UIViewController {
             make.width.equalTo(28)
         }
         
-        compassWidget.snp.remakeConstraints { make in
+        compassWidget.view.snp.remakeConstraints { make in
             if (portrait && tablet) {
                 make.bottom.equalTo(secondaryView.snp.top).offset(-defaultPadding)
                 make.height.equalTo(primaryView.snp.width).multipliedBy(0.15)
                 make.right.equalTo(captureBackgroundView.snp.right)
-                make.width.equalTo(compassWidget.snp.height)
+                make.width.equalTo(compassWidget.view.snp.height)
                 return
             }
             
             if (portrait) {
                 make.bottom.equalTo(secondaryView.snp.top).offset(-5)
-                make.height.equalTo(compassWidget.snp.width)
+                make.height.equalTo(compassWidget.view.snp.width)
                 make.centerX.equalTo(captureBackgroundView.snp.centerX)
                 make.width.equalTo(captureBackgroundView.snp.width)
                 return
@@ -482,7 +493,7 @@ public class DJIDashboardViewController: UIViewController {
             make.bottom.equalTo(secondaryView.snp.bottom)
             make.height.equalTo(primaryView.snp.width).multipliedBy(tablet ? 0.12 : 0.09)
             make.right.equalTo(tablet ? captureBackgroundView.snp.right : captureBackgroundView.snp.left).offset(tablet ? 0 : -defaultPadding)
-            make.width.equalTo(compassWidget.snp.height)
+            make.width.equalTo(compassWidget.view.snp.height)
         }
         
         telemetryViewController?.view.snp.remakeConstraints { make in
@@ -537,6 +548,12 @@ public class DJIDashboardViewController: UIViewController {
         updateConstraintsMission()
         updateConstraintsFunc()
         updateConstraintsOverlay()
+        
+        if !interfaceVisible && !portrait {
+            //FIXME fpvWidget.isHUDInteractionEnabled = false
+            //FIXME fpvWidget.isRadarWidgetVisible = false
+            view.bringSubviewToFront(videoPreviewerView)
+        }
     }
     
     func updateConstraintsMission() {
@@ -787,6 +804,16 @@ public class DJIDashboardViewController: UIViewController {
         overlayViewController = nil
         view.setNeedsUpdateConstraints()
     }
+    
+    @objc func onHideInterface() {
+        interfaceVisible = false
+        view.setNeedsUpdateConstraints()
+    }
+    
+    @objc func onShowInterface() {
+        interfaceVisible = true
+        view.setNeedsUpdateConstraints()
+    }
 
     @objc func onDismiss(sender: Any) {
         delegate?.onDashboardDismissed()
@@ -844,7 +871,6 @@ extension DJIDashboardViewController: DronelinkDelegate {
                 self.missionViewController = nil
             }
             executor.remove(delegate: self)
-            
             self.apply(userInterfaceSettings: nil)
         }
     }
@@ -873,6 +899,9 @@ extension DJIDashboardViewController: DronelinkDelegate {
             
             if self.missionExecutor == nil {
                 self.apply(userInterfaceSettings: nil)
+            }
+            else {
+                self.view.setNeedsUpdateConstraints()
             }
         }
     }

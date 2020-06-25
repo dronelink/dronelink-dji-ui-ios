@@ -638,7 +638,7 @@ public class DJIDashboardViewController: UIViewController {
                     }
                 }
                 else {
-                    make.height.equalTo(165)
+                    make.height.equalTo(185)
                 }
                 
                 if (portrait && tablet) {

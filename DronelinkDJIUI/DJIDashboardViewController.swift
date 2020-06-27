@@ -17,6 +17,11 @@ import DronelinkDJI
 import DJIUXSDK
 import MaterialComponents.MaterialPalettes
 import Kingfisher
+import SwiftyUserDefaults
+
+extension DefaultsKeys {
+    var legacyDeviceWarningViewed: DefaultsKey<Bool> { .init("legacyDeviceWarningViewed", defaultValue: false) }
+}
 
 public protocol DJIDashboardViewControllerDelegate {
     func onDashboardDismissed()
@@ -184,14 +189,17 @@ public class DJIDashboardViewController: UIViewController {
         
         if Device.legacy {
             updateMapMapbox()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                DronelinkUI.shared.showDialog(
-                    title: "DJIDashboardViewController.device.legacy.title".localized,
-                    details: "DJIDashboardViewController.device.legacy.details".localized,
-                    actions: [
-                        MDCAlertAction(title: "DJIDashboardViewController.device.legacy.confirm".localized, emphasis: .high, handler: { action in
-                        })
-                    ])
+            if !Defaults[\.legacyDeviceWarningViewed] {
+                Defaults[\.legacyDeviceWarningViewed] = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    DronelinkUI.shared.showDialog(
+                        title: "DJIDashboardViewController.device.legacy.title".localized,
+                        details: "DJIDashboardViewController.device.legacy.details".localized,
+                        actions: [
+                            MDCAlertAction(title: "DJIDashboardViewController.device.legacy.confirm".localized, emphasis: .high, handler: { action in
+                            })
+                        ])
+                }
             }
         }
         else {

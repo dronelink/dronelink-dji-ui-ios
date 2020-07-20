@@ -585,7 +585,7 @@ public class DJIDashboardViewController: UIViewController {
                 if (portrait && tablet) {
                     make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-defaultPadding)
                     make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(defaultPadding)
-                    make.width.equalToSuperview().multipliedBy(0.45)
+                    make.width.equalToSuperview().multipliedBy(0.35)
                     if (missionExpanded) {
                         make.top.equalTo(secondaryView.snp.top).offset(defaultPadding)
                     }
@@ -611,7 +611,7 @@ public class DJIDashboardViewController: UIViewController {
                 make.top.equalTo(topBarBackgroundView.snp.bottom).offset(defaultPadding)
                 make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(defaultPadding)
                 if (tablet) {
-                    make.right.equalTo(secondaryView.snp.right)
+                    make.width.equalTo(350)
                 }
                 else {
                     make.width.equalToSuperview().multipliedBy(0.4)

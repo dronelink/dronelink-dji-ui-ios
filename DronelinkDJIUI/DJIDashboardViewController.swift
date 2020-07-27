@@ -30,8 +30,8 @@ public protocol DJIDashboardViewControllerDelegate {
 public class DJIDashboardViewController: UIViewController {
     public static func create(droneSessionManager: DJIDroneSessionManager, mapCredentialsKey: String, delegate: DJIDashboardViewControllerDelegate? = nil) -> DJIDashboardViewController {
         let dashboardViewController = DJIDashboardViewController()
-        dashboardViewController.mapCredentialsKey = mapCredentialsKey
         dashboardViewController.modalPresentationStyle = .fullScreen
+        dashboardViewController.mapCredentialsKey = mapCredentialsKey
         dashboardViewController.droneSessionManager = droneSessionManager
         dashboardViewController.delegate = delegate
         return dashboardViewController
@@ -89,12 +89,20 @@ public class DJIDashboardViewController: UIViewController {
     private var primaryViewToggled = false
     private var videoPreviewerPrimary = true
     private let defaultPadding = 10
-    private var primaryView: UIView { return !interfaceVisible || videoPreviewerPrimary || portrait ? videoPreviewerView : mapViewController.view }
+    private var primaryView: UIView {
+        return !interfaceVisible
+            || videoPreviewerPrimary
+            || portrait ? videoPreviewerView : mapViewController.view
+    }
     private var secondaryView: UIView { return primaryView == videoPreviewerView ? mapViewController.view : videoPreviewerView }
     private var portrait: Bool { return UIScreen.main.bounds.width < UIScreen.main.bounds.height }
     private var tablet: Bool { return UIDevice.current.userInterfaceIdiom == .pad }
     private var statusWidgetHeight: CGFloat { return tablet ? 50 : 40 }
-    private var offsetsButtonEnabled = false
+    private var offsetsButtonEnabled = true
+    
+    private let frameProcessorUpdateInterval: TimeInterval = 1 / 30
+    private var frameProcessorUpdateTimer: Timer?
+    private var frameProcessorFullscreen = false
     
     public override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -116,7 +124,7 @@ public class DJIDashboardViewController: UIViewController {
         
         addChild(videoPreviewerViewController)
         videoPreviewerViewController.didMove(toParent: self)
-            
+        
         videoPreviewerView = videoPreviewerViewController.view
         videoPreviewerView.addShadow()
         videoPreviewerView.backgroundColor = UIColor(displayP3Red: 35/255, green: 35/255, blue: 35/255, alpha: 1)
@@ -237,6 +245,7 @@ public class DJIDashboardViewController: UIViewController {
         super.viewWillAppear(animated)
         Dronelink.shared.add(delegate: self)
         droneSessionManager?.add(delegate: self)
+        frameProcessorUpdateTimer = Timer.scheduledTimer(timeInterval: frameProcessorUpdateInterval, target: self, selector: #selector(frameProcessorUpdate), userInfo: nil, repeats: true)
     }
     
     override public func viewDidDisappear(_ animated: Bool) {
@@ -245,6 +254,8 @@ public class DJIDashboardViewController: UIViewController {
         droneSessionManager?.remove(delegate: self)
         session?.remove(delegate: self)
         missionExecutor?.remove(delegate: self)
+        frameProcessorUpdateTimer?.invalidate()
+        frameProcessorUpdateTimer = nil
     }
     
     override public func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -272,7 +283,7 @@ public class DJIDashboardViewController: UIViewController {
         if let telemetryView = telemetryViewController?.view {
             view.bringSubviewToFront(telemetryView)
         }
-        
+    
         videoPreviewerViewController.isHUDInteractionEnabled = primaryView == videoPreviewerView
         videoPreviewerViewController.isRadarWidgetVisible = primaryView == videoPreviewerView
         videoPreviewerViewController.fpvView?.showCameraDisplayName = false
@@ -571,10 +582,20 @@ public class DJIDashboardViewController: UIViewController {
         updateConstraintsFunc()
         updateConstraintsOverlay()
         
-        if !interfaceVisible && !portrait {
+        if (!interfaceVisible && !portrait) || frameProcessorFullscreen {
             videoPreviewerViewController.isHUDInteractionEnabled = false
             videoPreviewerViewController.isRadarWidgetVisible = false
             view.bringSubviewToFront(videoPreviewerView)
+            if frameProcessorFullscreen {
+                view.bringSubviewToFront(topBarBackgroundView)
+                view.bringSubviewToFront(dismissButton)
+                view.bringSubviewToFront(preflightButton)
+                view.bringSubviewToFront(preflightStatusWidget)
+                view.bringSubviewToFront(remainingFlightTimeWidget)
+                statusWidgets.forEach {
+                    view.bringSubviewToFront($0.view)
+                }
+            }
         }
     }
     
@@ -853,11 +874,30 @@ public class DJIDashboardViewController: UIViewController {
             toggleOffsets(visible: droneOffsetsVisible)
         }
         else {
-            offsetsButtonEnabled = false
+            offsetsButtonEnabled = true
             toggleOffsets(visible: false)
         }
         
         view.setNeedsUpdateConstraints()
+    }
+    
+    @objc func frameProcessorUpdate() {
+        var frameProcessorFullscreen = false
+        let frameProcessors = Dronelink.shared.frameProcessors.filter {
+            frameProcessorFullscreen = frameProcessorFullscreen || $0.fullscreen
+            return $0.updateRequested
+        }
+        
+        if frameProcessors.count > 0 {
+            if let frame = videoPreviewerViewController.fpvView?.image {
+                frameProcessors.forEach { $0.update(frame: frame) }
+            }
+        }
+        
+        if self.frameProcessorFullscreen != frameProcessorFullscreen {
+            self.frameProcessorFullscreen = frameProcessorFullscreen
+            view.setNeedsUpdateConstraints()
+        }
     }
     
     //work-around for this: https://github.com/flutter/flutter/issues/35784

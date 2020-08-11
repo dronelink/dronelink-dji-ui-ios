@@ -829,10 +829,11 @@ public class DJIDashboardViewController: UIViewController, RPPreviewViewControll
     }
     
     @objc func onHideInterface() {
-        RPScreenRecorder.shared().startRecording{ error in }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            self.interfaceVisible = false
-            self.view.setNeedsUpdateConstraints()
+        self.interfaceVisible = false
+        self.view.setNeedsUpdateConstraints()
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            RPScreenRecorder.shared().startRecording{ error in }
         }
     }
     

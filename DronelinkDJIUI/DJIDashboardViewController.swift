@@ -21,6 +21,11 @@ import SwiftyUserDefaults
 
 extension DefaultsKeys {
     var legacyDeviceWarningViewed: DefaultsKey<Bool> { .init("legacyDeviceWarningViewed", defaultValue: false) }
+    var mapType: DefaultsKey<String> { .init("mapType", defaultValue: Device.legacy ? MapType.mapbox.rawValue : MapType.microsoft.rawValue) }
+}
+
+private enum MapType: String {
+    case mapbox = "mapbox", microsoft = "microsoft"
 }
 
 public protocol DJIDashboardViewControllerDelegate {
@@ -188,7 +193,6 @@ public class DJIDashboardViewController: UIViewController {
         view.addSubview(dismissButton)
         
         if Device.legacy {
-            updateMapMapbox()
             if !Defaults[\.legacyDeviceWarningViewed] {
                 Defaults[\.legacyDeviceWarningViewed] = true
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
@@ -202,8 +206,19 @@ public class DJIDashboardViewController: UIViewController {
                 }
             }
         }
-        else {
+        
+        switch Defaults[\.mapType] {
+        case MapType.microsoft.rawValue:
             updateMapMicrosoft()
+            break
+            
+        case MapType.mapbox.rawValue:
+            updateMapMapbox()
+            break
+            
+        default:
+            updateMapMapbox()
+            break
         }
         
         primaryViewToggleButton.tintColor = UIColor.white
@@ -698,6 +713,8 @@ public class DJIDashboardViewController: UIViewController {
     }
     
     private func updateMapMicrosoft() {
+        Defaults[\.mapType] = MapType.microsoft.rawValue
+        
         if let mapViewController = mapViewController {
             mapViewController.view.removeFromSuperview()
             mapViewController.removeFromParent()
@@ -712,6 +729,8 @@ public class DJIDashboardViewController: UIViewController {
     }
     
     private func updateMapMapbox() {
+        Defaults[\.mapType] = MapType.mapbox.rawValue
+        
         if let mapViewController = mapViewController {
             mapViewController.view.removeFromSuperview()
             mapViewController.removeFromParent()

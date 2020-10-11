@@ -101,8 +101,6 @@ public class DJIDashboardViewController: UIViewController {
     private var tablet: Bool { return UIDevice.current.userInterfaceIdiom == .pad }
     private var statusWidgetHeight: CGFloat { return tablet ? 50 : 40 }
     private var offsetsButtonEnabled = false
-//    private let rtk = DUXRTKStatusViewController()
-//    private var rtkView = UIView()
     private let rtkStatus = RtkStatus()
     
     public override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -122,14 +120,7 @@ public class DJIDashboardViewController: UIViewController {
         
         hideOverlayButton.addTarget(self, action: #selector(onHideOverlay(sender:)), for: .touchUpInside)
         view.addSubview(hideOverlayButton)
-//        addChild(rtk)
-//        rtk.didMove(toParent: self)
-//        rtkView = rtk.view
-//            rtkView.backgroundColor=UIColor.blue;
-//        rtkView.addShadow()
-//        view.addSubview(rtkView)
-        //view.addSubview(vw)
-        
+                
         addChild(videoPreviewerViewController)
         videoPreviewerViewController.didMove(toParent: self)
             
@@ -159,7 +150,7 @@ public class DJIDashboardViewController: UIViewController {
         
         autoExposureSwitchWidget.addShadow()
         view.addSubview(autoExposureSwitchWidget)
-                
+        
         cameraConfigStorageWidget.addShadow()
         view.addSubview(cameraConfigStorageWidget)
         
@@ -260,6 +251,10 @@ public class DJIDashboardViewController: UIViewController {
         swipeUp.direction = .up
         swipeUp.numberOfTouchesRequired = 3
         videoPreviewerView.addGestureRecognizer(swipeUp)
+        
+        let tapRtk = UITapGestureRecognizer(target: self, action: #selector(onRtkConfiguration))
+        rtkStatus.view.addGestureRecognizer(tapRtk)
+        
     }
     
     public override func viewWillAppear(_ animated: Bool) {
@@ -299,7 +294,6 @@ public class DJIDashboardViewController: UIViewController {
         view.bringSubviewToFront(mapMoreButton)
         view.bringSubviewToFront(compassWidget)
         view.bringSubviewToFront(rtkStatus.view)
-        //view.bringSubviewToFront(rtkView)
         
         if let telemetryView = telemetryViewController?.view {
             view.bringSubviewToFront(telemetryView)
@@ -366,13 +360,7 @@ public class DJIDashboardViewController: UIViewController {
             make.width.equalTo(30)
             make.height.equalTo(30)
         }
-//        rtkView.isHidden = false;
-//        rtkView.snp.remakeConstraints { make in
-//               make.left.equalTo(150)
-//               make.top.equalTo(150)
-//               make.width.equalTo(300)
-//               make.height.equalTo(300)
-//        }
+        
         mapMoreButton.snp.remakeConstraints { make in
             make.left.equalTo(primaryViewToggleButton)
             make.top.equalTo(portrait ? secondaryView.snp.top : primaryViewToggleButton.snp.bottom).offset(defaultPadding)
@@ -468,6 +456,7 @@ public class DJIDashboardViewController: UIViewController {
             make.top.equalTo(focusModeWidget.snp.top)
             make.right.equalTo(cameraConfigInfoWidget.snp.left).offset(-defaultPadding)
             make.height.equalTo(cameraWidgetSize)
+            make.width.equalTo(60)
         }
         
         remainingFlightTimeWidget.snp.remakeConstraints { make in
@@ -771,7 +760,7 @@ public class DJIDashboardViewController: UIViewController {
         mapViewController.didMove(toParent: self)
         view.setNeedsUpdateConstraints()
     }
-    
+        
     @objc func onMapMore(sender: Any) {
         if let mapViewController = mapViewController as? MicrosoftMapViewController {
             mapViewController.onMore(sender: sender, actions: [
@@ -806,7 +795,14 @@ public class DJIDashboardViewController: UIViewController {
     @objc func onOffsets(sender: Any) {
         toggleOffsets()
     }
-    
+    @objc func onRtkConfiguration() {
+        let config = RtkConfiguration()
+        config.modalPresentationStyle = .popover
+        config.modalTransitionStyle = .coverVertical
+        let popover = config.popoverPresentationController!
+        popover.sourceView = rtkStatus.view
+        present(config, animated: true, completion: nil)
+    }
     private func toggleOffsets(visible: Bool? = nil) {
         if let visible = visible {
             if (visible && droneOffsetsViewController1 != nil) || (!visible && droneOffsetsViewController1 == nil) {
@@ -866,9 +862,7 @@ public class DJIDashboardViewController: UIViewController {
         viewController.view.addShadow()
         view.setNeedsUpdateConstraints()
     }
-    @objc func onRtk(){
-        
-    }
+    
     @objc func onHideOverlay(sender: Any!) {
         overlayViewController?.removeFromParent()
         overlayViewController?.view.removeFromSuperview()

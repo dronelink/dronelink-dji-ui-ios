@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   s.ios.deployment_target  = "12.0"
   s.source = { :git => "https://github.com/dronelink/dronelink-dji-ui-ios.git", :tag => "#{s.version}" }
   s.source_files  = "DronelinkDJIUI/**/*.swift"
-  s.resources = "DronelinkDJIUI/**/*.{strings,xcassets,xib}"
+  s.resources = "DronelinkDJIUI/**/*.{strings,xcassets}"
   s.pod_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
   s.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
   s.dependency "DronelinkCore", "~> 1.7.0"

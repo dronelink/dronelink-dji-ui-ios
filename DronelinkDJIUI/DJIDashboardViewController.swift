@@ -67,8 +67,7 @@ public class DJIDashboardViewController: UIViewController {
         (view: DUXRemoteControlSignalWidget(), widthRatio: 2.5),
         (view: DUXVisionWidget(), widthRatio: 1.35),
         (view: DUXGPSSignalWidget(), widthRatio: 1.75),
-        (view: DUXFlightModeWidget(), widthRatio: 4.5),
-        //(view: RtkStatus(), widthRatio: 3),
+        (view: DUXFlightModeWidget(), widthRatio: 4.5)
     ]
     private let menuButton = UIButton(type: .custom)
     private let exposureButton = UIButton(type: .custom)
@@ -116,11 +115,11 @@ public class DJIDashboardViewController: UIViewController {
         
         videoPreviewerPrimary = droneSessionManager.session != nil
         
-        view.backgroundColor = UIColor.green
+        view.backgroundColor = UIColor.black
         
         hideOverlayButton.addTarget(self, action: #selector(onHideOverlay(sender:)), for: .touchUpInside)
         view.addSubview(hideOverlayButton)
-                
+        
         addChild(videoPreviewerViewController)
         videoPreviewerViewController.didMove(toParent: self)
             
@@ -760,7 +759,7 @@ public class DJIDashboardViewController: UIViewController {
         mapViewController.didMove(toParent: self)
         view.setNeedsUpdateConstraints()
     }
-        
+    	
     @objc func onMapMore(sender: Any) {
         if let mapViewController = mapViewController as? MicrosoftMapViewController {
             mapViewController.onMore(sender: sender, actions: [

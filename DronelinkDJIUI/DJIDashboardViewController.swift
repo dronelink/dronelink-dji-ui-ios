@@ -67,7 +67,8 @@ public class DJIDashboardViewController: UIViewController {
         (view: DUXRemoteControlSignalWidget(), widthRatio: 2.5),
         (view: DUXVisionWidget(), widthRatio: 1.35),
         (view: DUXGPSSignalWidget(), widthRatio: 1.75),
-        (view: DUXFlightModeWidget(), widthRatio: 4.5)
+        (view: DUXFlightModeWidget(), widthRatio: 4.5),
+        //(view: RtkStatus(), widthRatio: 3),
     ]
     private let menuButton = UIButton(type: .custom)
     private let exposureButton = UIButton(type: .custom)
@@ -100,6 +101,9 @@ public class DJIDashboardViewController: UIViewController {
     private var tablet: Bool { return UIDevice.current.userInterfaceIdiom == .pad }
     private var statusWidgetHeight: CGFloat { return tablet ? 50 : 40 }
     private var offsetsButtonEnabled = false
+//    private let rtk = DUXRTKStatusViewController()
+//    private var rtkView = UIView()
+    private let rtkStatus = RtkStatus()
     
     public override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -114,10 +118,17 @@ public class DJIDashboardViewController: UIViewController {
         
         videoPreviewerPrimary = droneSessionManager.session != nil
         
-        view.backgroundColor = UIColor.black
+        view.backgroundColor = UIColor.green
         
         hideOverlayButton.addTarget(self, action: #selector(onHideOverlay(sender:)), for: .touchUpInside)
         view.addSubview(hideOverlayButton)
+//        addChild(rtk)
+//        rtk.didMove(toParent: self)
+//        rtkView = rtk.view
+//            rtkView.backgroundColor=UIColor.blue;
+//        rtkView.addShadow()
+//        view.addSubview(rtkView)
+        //view.addSubview(vw)
         
         addChild(videoPreviewerViewController)
         videoPreviewerViewController.didMove(toParent: self)
@@ -148,7 +159,7 @@ public class DJIDashboardViewController: UIViewController {
         
         autoExposureSwitchWidget.addShadow()
         view.addSubview(autoExposureSwitchWidget)
-        
+                
         cameraConfigStorageWidget.addShadow()
         view.addSubview(cameraConfigStorageWidget)
         
@@ -160,6 +171,9 @@ public class DJIDashboardViewController: UIViewController {
         
         view.addSubview(remainingFlightTimeWidget)
 
+        addChild(rtkStatus)
+        view.addSubview(rtkStatus.view)
+        
         captureBackgroundView.addShadow()
         captureBackgroundView.backgroundColor = DronelinkUI.Constants.overlayColor
         captureBackgroundView.layer.cornerRadius = DronelinkUI.Constants.cornerRadius
@@ -284,6 +298,9 @@ public class DJIDashboardViewController: UIViewController {
         view.bringSubviewToFront(primaryViewToggleButton)
         view.bringSubviewToFront(mapMoreButton)
         view.bringSubviewToFront(compassWidget)
+        view.bringSubviewToFront(rtkStatus.view)
+        //view.bringSubviewToFront(rtkView)
+        
         if let telemetryView = telemetryViewController?.view {
             view.bringSubviewToFront(telemetryView)
         }
@@ -349,7 +366,13 @@ public class DJIDashboardViewController: UIViewController {
             make.width.equalTo(30)
             make.height.equalTo(30)
         }
-        
+//        rtkView.isHidden = false;
+//        rtkView.snp.remakeConstraints { make in
+//               make.left.equalTo(150)
+//               make.top.equalTo(150)
+//               make.width.equalTo(300)
+//               make.height.equalTo(300)
+//        }
         mapMoreButton.snp.remakeConstraints { make in
             make.left.equalTo(primaryViewToggleButton)
             make.top.equalTo(portrait ? secondaryView.snp.top : primaryViewToggleButton.snp.bottom).offset(defaultPadding)
@@ -439,6 +462,11 @@ public class DJIDashboardViewController: UIViewController {
         cameraConfigInfoWidget.snp.remakeConstraints { make in
             make.top.equalTo(focusModeWidget.snp.top)
             make.right.equalTo(cameraConfigStorageWidget.snp.left).offset(-defaultPadding)
+            make.height.equalTo(cameraWidgetSize)
+        }
+        rtkStatus.view.snp.remakeConstraints { make in
+            make.top.equalTo(focusModeWidget.snp.top)
+            make.right.equalTo(cameraConfigInfoWidget.snp.left).offset(-defaultPadding)
             make.height.equalTo(cameraWidgetSize)
         }
         
@@ -838,7 +866,9 @@ public class DJIDashboardViewController: UIViewController {
         viewController.view.addShadow()
         view.setNeedsUpdateConstraints()
     }
-    
+    @objc func onRtk(){
+        
+    }
     @objc func onHideOverlay(sender: Any!) {
         overlayViewController?.removeFromParent()
         overlayViewController?.view.removeFromSuperview()

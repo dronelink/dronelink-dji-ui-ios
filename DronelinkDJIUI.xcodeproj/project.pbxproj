@@ -12,6 +12,7 @@
 		245975382367A3A7008CAB6B /* DJIDashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245975372367A3A7008CAB6B /* DJIDashboardViewController.swift */; };
 		249EBFBE236867F7002946E1 /* DronelinkDJIUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249EBFBD236867F7002946E1 /* DronelinkDJIUI.swift */; };
 		249EBFC023686836002946E1 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249EBFBF23686836002946E1 /* Extensions.swift */; };
+		4A1AAF492531946600454E41 /* RtkStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A1AAF482531946600454E41 /* RtkStatus.swift */; };
 		55275A839F87BE3AFF93F87B /* Pods_DronelinkDJIUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 808B6907992B4437B375858E /* Pods_DronelinkDJIUI.framework */; };
 /* End PBXBuildFile section */
 
@@ -24,6 +25,7 @@
 		249EBFBD236867F7002946E1 /* DronelinkDJIUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DronelinkDJIUI.swift; sourceTree = "<group>"; };
 		249EBFBF23686836002946E1 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		3A25A0223381E20F3A4AD672 /* Pods-DronelinkDJIUI.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DronelinkDJIUI.release.xcconfig"; path = "Target Support Files/Pods-DronelinkDJIUI/Pods-DronelinkDJIUI.release.xcconfig"; sourceTree = "<group>"; };
+		4A1AAF482531946600454E41 /* RtkStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RtkStatus.swift; sourceTree = "<group>"; };
 		808B6907992B4437B375858E /* Pods_DronelinkDJIUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DronelinkDJIUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E97FA109E5F37B7B34834F53 /* Pods-DronelinkDJIUI.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DronelinkDJIUI.debug.xcconfig"; path = "Target Support Files/Pods-DronelinkDJIUI/Pods-DronelinkDJIUI.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -75,6 +77,7 @@
 				249EBFBF23686836002946E1 /* Extensions.swift */,
 				245975302367A32D008CAB6B /* Resources */,
 				245975272367A17E008CAB6B /* Info.plist */,
+				4A1AAF482531946600454E41 /* RtkStatus.swift */,
 			);
 			path = DronelinkDJIUI;
 			sourceTree = "<group>";
@@ -206,6 +209,7 @@
 				249EBFBE236867F7002946E1 /* DronelinkDJIUI.swift in Sources */,
 				249EBFC023686836002946E1 /* Extensions.swift in Sources */,
 				245975382367A3A7008CAB6B /* DJIDashboardViewController.swift in Sources */,
+				4A1AAF492531946600454E41 /* RtkStatus.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -341,7 +345,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = HB9BS895PG;
+				DEVELOPMENT_TEAM = 244594FN6F;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -372,7 +376,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = HB9BS895PG;
+				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";

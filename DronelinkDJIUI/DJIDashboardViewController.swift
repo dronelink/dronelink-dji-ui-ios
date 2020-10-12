@@ -455,7 +455,7 @@ public class DJIDashboardViewController: UIViewController {
             make.top.equalTo(focusModeWidget.snp.top)
             make.right.equalTo(cameraConfigInfoWidget.snp.left).offset(-defaultPadding)
             make.height.equalTo(cameraWidgetSize)
-            make.width.equalTo(60)
+            make.width.equalTo(80)
         }
         
         remainingFlightTimeWidget.snp.remakeConstraints { make in
@@ -796,10 +796,12 @@ public class DJIDashboardViewController: UIViewController {
     }
     @objc func onRtkConfiguration() {
         let config = RtkConfiguration()
+        config.delegate = RtkManager.instance
         config.modalPresentationStyle = .popover
         config.modalTransitionStyle = .coverVertical
         let popover = config.popoverPresentationController!
         popover.sourceView = rtkStatus.view
+        popover.sourceRect = CGRect(x: 0, y: 0, width: 60, height: statusWidgetHeight * 0.65)
         present(config, animated: true, completion: nil)
     }
     private func toggleOffsets(visible: Bool? = nil) {

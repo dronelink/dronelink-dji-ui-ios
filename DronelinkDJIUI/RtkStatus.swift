@@ -19,7 +19,7 @@ import MaterialComponents.MaterialPalettes
 import Kingfisher
 import SwiftyUserDefaults
 
-class RtkStatus : UIViewController, DJIRTKDelegate {
+class RtkStatus : UIViewController {
     
     private var droneSessionManager: DroneSessionManager!
     
@@ -37,61 +37,41 @@ class RtkStatus : UIViewController, DJIRTKDelegate {
         rtkLabel.textColor = .lightGray
         view.addSubview(rtkLabel)
         
-        statusLabel.text = "..."
+        statusLabel.text = "N/A"
         statusLabel.textAlignment = .left
         statusLabel.textColor = .white
+        statusLabel.adjustsFontSizeToFitWidth = true
         view.addSubview(statusLabel)
         
-        onProductConnection(product: DJISDKManager.product())
-        
-        DJISDKManager.startListeningOnProductConnectionUpdates(withListener: "x") { (product) in self.onProductConnection(product: product)
+        RtkManager.instance.addUpdateListner(key: "RtkStatus") { (state: RtkState) in
+            self.updateLabel(state)
         }
     }
-    func onProductConnection(product: DJIBaseProduct?) {
-        if let aircraft = product as? DJIAircraft {
-            statusLabel.text = "n/a"
-            aircraft.flightController?.rtk?.delegate = self;
+    
+    func updateLabel(_ state: RtkState) {
+        if state.state != nil && state.state?.positioningSolution != DJIRTKPositioningSolution.none {
+            statusLabel.text = state.positioningSolutionText
+        }
+        else if state.networkServiceState != nil {
+            statusLabel.text = state.networkServiceStateText
         }
         else {
-            statusLabel.text = "..."
-        }
-    }
-    @objc func didUpdateState(_ sender: DJIRTK, state: DJIRTKState)
-    {
-        if state.positioningSolution == .none {
-            statusLabel.text = "none"
-        }
-        else if state.positioningSolution == .float {
-            statusLabel.text = "float"
-        }
-        else if state.positioningSolution == .singlePoint {
-            statusLabel.text = "single"
-        }
-        else if state.positioningSolution == .fixedPoint {
-            statusLabel.text = "fixed"
-        }
-        else {
-            statusLabel.text = "?"
+            statusLabel.text = "N/A"
         }
         
     }
-    
-    @objc func handleGesture(_ sender: UITapGestureRecognizer) {
-        statusLabel.text="xyz"
-    }
-    
     public override func updateViewConstraints() {
         super.updateViewConstraints()
         
         rtkLabel.snp.remakeConstraints { make in
-            make.left.equalToSuperview().offset(2)
-            make.right.equalToSuperview().offset(2)
+            make.left.equalToSuperview().offset(8)
+            make.right.equalToSuperview().offset(8)
             make.top.equalToSuperview().offset(2)
         }
         
         statusLabel.snp.remakeConstraints { make in
-            make.left.equalToSuperview().offset(2)
-            make.right.equalToSuperview().offset(2)
+            make.left.equalToSuperview().offset(8)
+            make.right.equalToSuperview().offset(8)
             make.top.equalTo(rtkLabel.snp.bottom)
         }
     }

@@ -21,7 +21,7 @@ import SwiftyUserDefaults
 
 extension DefaultsKeys {
     var legacyDeviceWarningViewed: DefaultsKey<Bool> { .init("legacyDeviceWarningViewed", defaultValue: false) }
-    var mapType: DefaultsKey<String> { .init("mapType", defaultValue: Device.legacy ? MapType.mapbox.rawValue : MapType.microsoft.rawValue) }
+    var mapType: DefaultsKey<String> { .init("mapType", defaultValue: MapType.mapbox.rawValue) }
 }
 
 private enum MapType: String {
@@ -861,7 +861,7 @@ public class DJIDashboardViewController: UIViewController {
         dismiss(animated: true)
     }
     
-    private func apply(userInterfaceSettings: Mission.UserInterfaceSettings?) {
+    private func apply(userInterfaceSettings: Kernel.UserInterfaceSettings?) {
         reticalImageView.image = nil
         if let reticalImageUrl = userInterfaceSettings?.reticalImageUrl {
             reticalImageView.kf.setImage(with: URL(string: reticalImageUrl))
@@ -981,9 +981,9 @@ extension DJIDashboardViewController: DroneSessionDelegate {
     
     public func onMotorsChanged(session: DroneSession, value: Bool) {}
     
-    public func onCommandExecuted(session: DroneSession, command: MissionCommand) {}
+    public func onCommandExecuted(session: DroneSession, command: KernelCommand) {}
     
-    public func onCommandFinished(session: DroneSession, command: MissionCommand, error: Error?) {}
+    public func onCommandFinished(session: DroneSession, command: KernelCommand, error: Error?) {}
     
     public func onCameraFileGenerated(session: DroneSession, file: CameraFile) {}
 }
@@ -1007,7 +1007,7 @@ extension DJIDashboardViewController: MissionExecutorDelegate {
     
     public func onMissionExecuted(executor: MissionExecutor, engagement: MissionExecutor.Engagement) {}
     
-    public func onMissionDisengaged(executor: MissionExecutor, engagement: MissionExecutor.Engagement, reason: Mission.Message) {
+    public func onMissionDisengaged(executor: MissionExecutor, engagement: MissionExecutor.Engagement, reason: Kernel.Message) {
         DispatchQueue.main.async {
             self.view.setNeedsUpdateConstraints()
         }

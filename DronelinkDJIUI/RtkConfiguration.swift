@@ -25,7 +25,7 @@ import SwiftyUserDefaults
 extension DefaultsKeys {
     var rtkEnabled: DefaultsKey<Bool> { .init("rtkEnabled", defaultValue: false) }
     var rtkServerAddress: DefaultsKey<String?> { .init("rtkServerAddress") }
-    var rtkPort: DefaultsKey<Int?> { .init("rtkPort", defaultValue:  2101) }
+    var rtkPort: DefaultsKey<Int> { .init("rtkPort", defaultValue:  2101) }
     var rtkMountPoint: DefaultsKey<String?> { .init("rtkMountPoint") }
     var rtkUsername: DefaultsKey<String?> { .init("rtkUsername") }
     var rtkPassword: DefaultsKey<String?> { .init("rtkPassword") }
@@ -33,7 +33,7 @@ extension DefaultsKeys {
 public struct RtkConfigurationRecord {
     let enabled: Bool
     let serverAddress: String?
-    let port: Int32?
+    let port: Int?
     let mountPoint: String?
     let userName: String?
     let password: String?
@@ -100,6 +100,7 @@ class RtkConfiguration : UIViewController {
         
         let config = RtkManager.instance.config
         enabled.tintColor = .white
+        enabled.isOn = config?.enabled ?? false
         addField("Enabled", enabled)
         serverAddress.tintColor = .white
         serverAddress.textColor = .white
@@ -108,7 +109,7 @@ class RtkConfiguration : UIViewController {
         port.tintColor = .white
         port.textColor = .white
         port.keyboardType = .numberPad
-        port.text = "\(config?.port)"
+        port.text = "\(config?.port ?? 2101)"
         addField("Port", port)
         mountPoint.tintColor = .white
         mountPoint.textColor = .white
@@ -116,7 +117,7 @@ class RtkConfiguration : UIViewController {
         addField("Mount Point", mountPoint)
         userName.tintColor = .white
         userName.textColor = .white
-        mountPoint.text = config?.userName
+        userName.text = config?.userName
         addField("Username", userName)
         password.tintColor = .white
         password.textColor = .white
@@ -245,7 +246,7 @@ class RtkConfiguration : UIViewController {
             delegate?.onConfigurationUpdate(config: RtkConfigurationRecord(
                 enabled: enabled.isOn,
                 serverAddress: serverAddress.text,
-                port: Int32(port.text ?? "2021"),
+                port: Int(port.text ?? "2021"),
                 mountPoint: mountPoint.text,
                 userName: userName.text,
                 password: password.text
@@ -271,11 +272,13 @@ class RtkManager : NSObject {
     private var rtkState: DJIRTKState?
     private var networkState: DJIRTKNetworkServiceState?
     private var listners: [String: (_ update:RtkState) -> Void] = [:]
-    private var lastState: RtkState = RtkState(state: nil, networkServiceState: nil, networkServiceStateText: "Unknown", positioningSolutionText: "Unknown")
+    private var lastState: RtkState = RtkState(state: nil, networkServiceState: nil, networkServiceStateText: "Unknown", positioningSolutionText: "Unknown", configurationStatus: "Unknown")
     private var aircraft: DJIAircraft?
     private var configurationState: String?
     
     public override init() {
+        super.init()
+        
         loadConfiguration()
     }
     public func loadConfiguration() {
@@ -293,7 +296,7 @@ class RtkManager : NSObject {
         let config = self.config!
         Defaults[\.rtkEnabled] = config.enabled
         Defaults[\.rtkServerAddress] = config.serverAddress
-        Defaults[\.rtkPort] = Int32(config.port)
+        Defaults[\.rtkPort] = config.port ?? 2101
         Defaults[\.rtkMountPoint] = config.mountPoint
         Defaults[\.rtkUsername] = config.userName
         Defaults[\.rtkPassword] = config.password
@@ -346,7 +349,7 @@ class RtkManager : NSObject {
             networkServiceState: networkState,
             networkServiceStateText: self.mapNetworkState(networkState?.channelState),
             positioningSolutionText: self.mapSolution(rtkState?.positioningSolution),
-            configurationStatus: self.configurationState)
+            configurationStatus: self.configurationState ?? "")
         
         logText  += "Update \(listners.count)\n"
         for (key, listner) in listners {
@@ -358,6 +361,7 @@ class RtkManager : NSObject {
         guard self.aircraft?.flightController?.rtk != nil else {
             os_log(.default, log: self.log, "RTK not available on flightcontroller")
             logText += "conf no rtk\n"
+            self.configurationState = "RTK not supported"
             return
         }
             
@@ -375,11 +379,11 @@ class RtkManager : NSObject {
         
         let config = self.config!
         guard (config.serverAddress?.count ?? 0 >= 0) else {
-            self.configuartionState = "Configuration incomplete"
+            self.configurationState = "Configuration incomplete"
             return
         }
         
-        ConfigureRtkHelper.configureRtk(aircraft: aircraft!, config: config!) { (error: Error?, msg: String) in
+        ConfigureRtkHelper.configureRtk(aircraft: aircraft!, config: config) { (error: Error?, msg: String) in
             self.logText += msg + "\n"
             self.configurationState = msg
         } withSuccess: {
@@ -511,7 +515,7 @@ class ConfigureRtkHelper {
         var settings = DJIMutableRTKNetworkServiceSettings()
         settings.mountpoint = config.mountPoint
         settings.password = config.password
-        settings.port = config.port!
+        settings.port = Int32(config.port!)
         settings.serverAddress = config.serverAddress
         settings.userName = config.userName
         

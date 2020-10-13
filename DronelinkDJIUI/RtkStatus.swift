@@ -44,7 +44,15 @@ class RtkStatus : UIViewController {
         view.addSubview(statusLabel)
         
         RtkManager.instance.addUpdateListner(key: "RtkStatus") { (state: RtkState) in
-            self.updateLabel(state)
+            let rtk = true //RtkManager.instance.isRtkSupported()
+            if rtk {
+                self.updateLabel(state)
+                self.view.isHidden = false
+            }
+            else {
+                self.view.isHidden = true
+                
+            }
         }
     }
     

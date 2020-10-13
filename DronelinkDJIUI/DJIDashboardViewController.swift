@@ -161,6 +161,7 @@ public class DJIDashboardViewController: UIViewController {
         
         view.addSubview(remainingFlightTimeWidget)
 
+        droneSessionManager.add(delegate: RtkManager.instance)
         addChild(rtkStatus)
         view.addSubview(rtkStatus.view)
         

@@ -70,13 +70,13 @@ class RtkConfiguration : UIViewController {
         if #available(iOS 13.0, *) {
             overrideUserInterfaceStyle = .dark
         }
-        self.preferredContentSize = CGSize(width: 400, height: 480)
+        self.preferredContentSize = CGSize(width: 400, height: 495)
         view.addShadow()
         
         view.backgroundColor = .black
         
         scroll.backgroundColor = .black
-        scroll.contentSize = view.frame.size
+        scroll.contentSize = self.preferredContentSize
         scroll.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(scroll)
         
@@ -182,7 +182,7 @@ class RtkConfiguration : UIViewController {
         
         let padding = 8
         let labelHeight = 30
-        
+        let labelWidth = 100
         scroll.snp.remakeConstraints { make in
             make.left.equalToSuperview()
             make.right.equalToSuperview()
@@ -206,7 +206,7 @@ class RtkConfiguration : UIViewController {
         for (label, control) in self.statusControls {
             control.snp.remakeConstraints { make in
                 make.top.equalTo(previous.snp.bottom).offset(2)
-                make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(100 + padding)
+                make.left.equalTo(label.snp.right).offset(padding)
                 make.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(-padding)
                 make.height.equalTo(15)
             }
@@ -214,7 +214,8 @@ class RtkConfiguration : UIViewController {
             label.snp.remakeConstraints { make in
                 make.top.equalTo(control.snp.top)
                 make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(padding)
-                make.width.equalTo(100)
+                make.width.equalTo(labelWidth)
+                make.height.equalTo(control.snp.height)
             }
             
             previous = control
@@ -228,14 +229,14 @@ class RtkConfiguration : UIViewController {
         for (label, control) in self.controls {
             control.snp.remakeConstraints { make in
                 make.top.equalTo(previous.snp.bottom).offset(2)
-                make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(100 + padding * 2)
+                make.left.equalTo(label.snp.right).offset(padding)
                 make.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(-padding)
             }
             
             label.snp.remakeConstraints { make in
                 make.bottom.equalTo(control.snp.bottom).offset(-8)
                 make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(padding)
-                make.width.equalTo(100)
+                make.width.equalTo(labelWidth)
                 make.height.equalTo(labelHeight)
             }
             

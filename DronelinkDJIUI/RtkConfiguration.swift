@@ -23,7 +23,7 @@ import SwiftyUserDefaults
 
 
 extension DefaultsKeys {
-    var rtkEnabled: DefaultsKey<Bool> { .init("rtkEnabled", defaultValue: false) }
+    var rtkAutoConnect: DefaultsKey<Bool> { .init("rtkAutoConnect", defaultValue: false) }
     var rtkServerAddress: DefaultsKey<String?> { .init("rtkServerAddress") }
     var rtkPort: DefaultsKey<Int> { .init("rtkPort", defaultValue:  2101) }
     var rtkMountPoint: DefaultsKey<String?> { .init("rtkMountPoint") }
@@ -32,6 +32,7 @@ extension DefaultsKeys {
 }
 public struct RtkConfigurationRecord {
     let enabled: Bool
+    let autoConnect: Bool
     let serverAddress: String?
     let port: Int?
     let mountPoint: String?
@@ -42,7 +43,7 @@ public protocol RtkConfigurationUpdated {
     func onConfigurationUpdate(config: RtkConfigurationRecord)
 }
 class RtkConfiguration : UIViewController {
-    let closeButton = UIButton()
+    let dismissButton = UIButton()
     let headingConfiguration = UILabel()
     let headingStatus = UILabel()
     var statusControls: [(label: UILabel, control: UIView)] = []
@@ -53,6 +54,7 @@ class RtkConfiguration : UIViewController {
     let userName = MDCTextField()
     let password = MDCTextField()
     let confirm = MDCButton()
+    let autoconnect = UISwitch()
     let enabled = UISwitch()
     let scroll = UIScrollView()
     let networkStatus = UILabel()
@@ -68,7 +70,7 @@ class RtkConfiguration : UIViewController {
         if #available(iOS 13.0, *) {
             overrideUserInterfaceStyle = .dark
         }
-        self.preferredContentSize = CGSize(width: 400, height: 460)
+        self.preferredContentSize = CGSize(width: 400, height: 480)
         view.addShadow()
         
         view.backgroundColor = .black
@@ -78,58 +80,61 @@ class RtkConfiguration : UIViewController {
         scroll.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(scroll)
         
-        headingStatus.text = "RTK Status"
+        headingStatus.text = "DJIDashboardViewController.rtk.popover.status.heading".localized
         headingStatus.textColor = .white
         scroll.addSubview(headingStatus)
         
-        headingConfiguration.text = "RTK Network Configuration"
+        headingConfiguration.text = "DJIDashboardViewController.rtk.popover.configuration.heading".localized
         headingConfiguration.textColor = .white
         scroll.addSubview(headingConfiguration)
         
-        closeButton.setTitle("x", for: .normal)
-        closeButton.setTitleColor(.white, for: .normal)
-        closeButton.addTarget(self, action: #selector(onClose),for: .touchUpInside)
-        view.addSubview(closeButton)
+        dismissButton.setImage(DronelinkUI.loadImage(named: "baseline_close_white_36pt"), for: .normal)
+        dismissButton.tintColor = .white
+        dismissButton.addTarget(self, action: #selector(onClose),for: .touchUpInside)
+        view.addSubview(dismissButton)
         
         networkStatus.textColor = .white
-        addStatus("Network Service", networkStatus)
+        addStatus("DJIDashboardViewController.rtk.popover.status.channel".localized, networkStatus)
         rtkSolution.textColor = .white
-        addStatus("RTK Solution", rtkSolution)
+        addStatus("DJIDashboardViewController.rtk.popover.status.solution".localized, rtkSolution)
         configStatus.textColor = .white
-        addStatus("Configuration Status", configStatus)
+        addStatus("DJIDashboardViewController.rtk.popover.status.configuration".localized, configStatus)
         
         let config = RtkManager.instance.config
         enabled.tintColor = .white
         enabled.isOn = config?.enabled ?? false
-        addField("Enabled", enabled)
+        addField("DJIDashboardViewController.rtk.popover.configuration.enabled".localized, enabled)
+        autoconnect.tintColor = .white
+        autoconnect.isOn = config?.autoConnect ?? false
+        addField("DJIDashboardViewController.rtk.popover.configuration.autoconnect".localized, autoconnect)
         serverAddress.tintColor = .white
         serverAddress.textColor = .white
         serverAddress.text = config?.serverAddress
-        addField("Server Address", serverAddress)
+        addField("DJIDashboardViewController.rtk.popover.configuration.serveraddress".localized, serverAddress)
         port.tintColor = .white
         port.textColor = .white
         port.keyboardType = .numberPad
         port.text = "\(config?.port ?? 2101)"
-        addField("Port", port)
+        addField("DJIDashboardViewController.rtk.popover.configuration.port".localized, port)
         mountPoint.tintColor = .white
         mountPoint.textColor = .white
         mountPoint.text = config?.mountPoint
-        addField("Mount Point", mountPoint)
+        addField("DJIDashboardViewController.rtk.popover.configuration.mountpoint".localized, mountPoint)
         userName.tintColor = .white
         userName.textColor = .white
         userName.text = config?.userName
-        addField("Username", userName)
+        addField("DJIDashboardViewController.rtk.popover.configuration.username".localized, userName)
         password.tintColor = .white
         password.textColor = .white
         password.isSecureTextEntry = true
         password.text = config?.password
-        addField("Password", password)
+        addField("DJIDashboardViewController.rtk.popover.configuration.password".localized, password)
         
         let scheme = MDCContainerScheme()
         scheme.colorScheme = MDCSemanticColorScheme(defaults: .materialDark201907)
         scheme.colorScheme.primaryColor = UIColor.darkGray
         confirm.applyContainedTheme(withScheme: scheme)
-        confirm.setTitle("Confirm", for: .normal)
+        confirm.setTitle("DJIDashboardViewController.rtk.popover.configuration.confirm".localized, for: .normal)
         confirm.setTitleColor(.white, for: .normal)
         confirm.addTarget(self, action: #selector(onConfirm),for: .touchUpInside)
         scroll.addSubview(confirm)
@@ -138,7 +143,7 @@ class RtkConfiguration : UIViewController {
             self.statusUpdate(state)
         })
     }
-    override func viewDidAppear(_ animated: Bool) {
+    override func viewDidDisappear(_ animated: Bool) {
         RtkManager.instance.removeUpdateListner(key: "RtkConfiguration")
     }
     private func statusUpdate(_ state: RtkState) {
@@ -176,17 +181,21 @@ class RtkConfiguration : UIViewController {
         super.updateViewConstraints()
         
         let padding = 8
+        let labelHeight = 30
+        
         scroll.snp.remakeConstraints { make in
             make.left.equalToSuperview()
             make.right.equalToSuperview()
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
         }
-        closeButton.snp.remakeConstraints { make in
+        dismissButton.snp.remakeConstraints { make in
+            make.height.equalTo(24)
+            make.width.equalTo(dismissButton.snp.height)
             make.right.equalToSuperview().offset(-padding)
             make.top.equalToSuperview().offset(padding)
         }
-        view.bringSubviewToFront(closeButton)
+        view.bringSubviewToFront(dismissButton)
         
         headingStatus.snp.remakeConstraints { make in
             make.top.equalToSuperview().offset(padding)
@@ -219,7 +228,7 @@ class RtkConfiguration : UIViewController {
         for (label, control) in self.controls {
             control.snp.remakeConstraints { make in
                 make.top.equalTo(previous.snp.bottom).offset(2)
-                make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(100 + padding)
+                make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(100 + padding * 2)
                 make.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(-padding)
             }
             
@@ -227,6 +236,7 @@ class RtkConfiguration : UIViewController {
                 make.bottom.equalTo(control.snp.bottom).offset(-8)
                 make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(padding)
                 make.width.equalTo(100)
+                make.height.equalTo(labelHeight)
             }
             
             previous = control
@@ -245,6 +255,7 @@ class RtkConfiguration : UIViewController {
         if delegate != nil {
             delegate?.onConfigurationUpdate(config: RtkConfigurationRecord(
                 enabled: enabled.isOn,
+                autoConnect: autoconnect.isOn,
                 serverAddress: serverAddress.text,
                 port: Int(port.text ?? "2021"),
                 mountPoint: mountPoint.text,
@@ -272,7 +283,7 @@ class RtkManager : NSObject {
     private var rtkState: DJIRTKState?
     private var networkState: DJIRTKNetworkServiceState?
     private var listners: [String: (_ update:RtkState) -> Void] = [:]
-    private var lastState: RtkState = RtkState(state: nil, networkServiceState: nil, networkServiceStateText: "Unknown", positioningSolutionText: "Unknown", configurationStatus: "Unknown")
+    private var lastState: RtkState = RtkState(state: nil, networkServiceState: nil, networkServiceStateText: "DJIDashboardViewController.rtk.channelstate.unknown".localized, positioningSolutionText: "DJIDashboardViewController.rtk.solution.unknown".localized, configurationStatus: "DJIDashboardViewController.rtk.configstate.unknown".localized)
     private var aircraft: DJIAircraft?
     private var configurationState: String?
     
@@ -283,7 +294,8 @@ class RtkManager : NSObject {
     }
     public func loadConfiguration() {
         config = RtkConfigurationRecord(
-            enabled: Defaults[\.rtkEnabled],
+            enabled: Defaults[\.rtkAutoConnect],
+            autoConnect: Defaults[\.rtkAutoConnect],
             serverAddress: Defaults[\.rtkServerAddress],
             port: Int(Defaults[\.rtkPort]),
             mountPoint: Defaults[\.rtkMountPoint],
@@ -294,7 +306,7 @@ class RtkManager : NSObject {
         guard self.config != nil else { return }
         
         let config = self.config!
-        Defaults[\.rtkEnabled] = config.enabled
+        Defaults[\.rtkAutoConnect] = config.autoConnect
         Defaults[\.rtkServerAddress] = config.serverAddress
         Defaults[\.rtkPort] = config.port ?? 2101
         Defaults[\.rtkMountPoint] = config.mountPoint
@@ -336,11 +348,9 @@ class RtkManager : NSObject {
     public func addUpdateListner(key: String, closure: @escaping (_ update: RtkState) -> Void) {
         listners[key] = closure
         closure(lastState)
-        //logText  += "Subscribe \(key)\n"
     }
     public func removeUpdateListner(key: String) {
         listners.removeValue(forKey: key)
-        //logText  += "Unsubscribe \(key)\n"
     }
     
     private func update() {
@@ -361,7 +371,7 @@ class RtkManager : NSObject {
         guard self.aircraft?.flightController?.rtk != nil else {
             os_log(.default, log: self.log, "RTK not available on flightcontroller")
             logText += "conf no rtk\n"
-            self.configurationState = "RTK not supported"
+            self.configurationState = "DJIDashboardViewController.rtk.configstate.notsupported".localized
             return
         }
             
@@ -369,17 +379,22 @@ class RtkManager : NSObject {
         
         if config == nil || config?.enabled == false {
             rtk.setEnabled(false, withCompletion: { (error: Error?) in
-                self.configurationState = "RTK disable failed: \(error?.localizedDescription)"
-                self.logText += "RTK disable failed: \(error?.localizedDescription)\n"
+                if (error == nil) {
+                    self.configurationState = "DJIDashboardViewController.rtk.configstate.disabled".localized
+                }
+                else {
+                    self.configurationState = "\("DJIDashboardViewController.rtk.configstate.disablefailed".localized): \(error?.localizedDescription)"
+                    self.logText += "RTK disable failed: \(error?.localizedDescription)\n"
+                }
+                self.update()
             })
-            self.configurationState = "RTK disabled"
-            update()
+            
             return
         }
         
         let config = self.config!
         guard (config.serverAddress?.count ?? 0 >= 0) else {
-            self.configurationState = "Configuration incomplete"
+            self.configurationState = "DJIDashboardViewController.rtk.configstate.incomplete".localized
             return
         }
         
@@ -388,7 +403,7 @@ class RtkManager : NSObject {
             self.configurationState = msg
         } withSuccess: {
             self.logText += "RTK OK"
-            self.configurationState = "OK"
+            self.configurationState = "DJIDashboardViewController.rtk.configstate.ok".localized
         }
     }
     
@@ -396,46 +411,46 @@ class RtkManager : NSObject {
     private func mapSolution(_ solution: DJIRTKPositioningSolution?) -> String {
         switch (solution) {
         case .fixedPoint:
-            return "Fixed"
+            return "DJIDashboardViewController.rtk.solution.fixed".localized
         case .float:
-            return "Float"
+            return "DJIDashboardViewController.rtk.solution.float".localized
         case .none:
-            return "None"
+            return "DJIDashboardViewController.rtk.solution.none".localized
         case .singlePoint:
-            return "Single"
+            return "DJIDashboardViewController.rtk.solution.single".localized
         default:
-            return "Unknown"
+            return "DJIDashboardViewController.rtk.solution.unknown".localized
         }
     }
     private func mapNetworkState(_ state: DJIRTKNetworkServiceChannelState?) -> String
     {
         switch (state) {
         case .accountError:
-            return "Account error"
+            return "DJIDashboardViewController.rtk.channelstate.accounterror".localized
         case .aircraftDisconnected:
-            return "Aircraft disconnected"
+            return "DJIDashboardViewController.rtk.channelstate.airecraftdisconnected".localized
         case .connecting:
-            return "Connecting"
+            return "DJIDashboardViewController.rtk.channelstate.connecting".localized
         case .disabled:
-            return "Disabled"
+            return "DJIDashboardViewController.rtk.channelstate.disabled".localized
         case .disconnected:
-            return "Disconnected"
+            return "DJIDashboardViewController.rtk.channelstate.disconnected".localized
         case .invalidRequest:
-            return "Invalid request"
+            return "DJIDashboardViewController.rtk.channelstate.invalidrequest".localized
         case .loginFailure:
-            return "Login failure"
+            return "DJIDashboardViewController.rtk.channelstate.loginfailure" .localized
         case .networkNotReachable:
-            return "Network not reachable"
+            return "DJIDashboardViewController.rtk.channelstate.networknotreachable".localized
         case .ready:
-            return "Ready"
+            return "DJIDashboardViewController.rtk.channelstate.ready".localized
         case .serverNotReachable:
-            return "Server not reachablke"
+            return "DJIDashboardViewController.rtk.channelstate.servernotreachable".localized
         case .serviceSuspension:
-            return "Service suspension"
+            return "DJIDashboardViewController.rtk.channelstate.servicesuspension".localized
         case .transmitting:
-            return "Transmitting"
+            return "DJIDashboardViewController.rtk.channelstate.transmitting".localized
         default:
-            return "Unknown"
+            return "DJIDashboardViewController.rtk.channelstate.unknown".localized
         }
     }
 }

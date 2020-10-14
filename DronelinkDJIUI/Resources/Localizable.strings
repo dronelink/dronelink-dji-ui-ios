@@ -54,3 +54,6 @@
 "DJIDashboardViewController.rtk.popover.configuration.password" = "Password";
 "DJIDashboardViewController.rtk.popover.configuration.confirm" = "Confirm";
 "DJIDashboardViewController.rtk.popover.configuration.mountpoint" = "Mount point";
+"DJIDashboardViewController.rtk.status.label" = "RTK";
+"DJIDashboardViewController.rtk.status.na" = "N/A";
+

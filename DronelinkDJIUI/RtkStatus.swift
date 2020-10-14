@@ -32,12 +32,12 @@ class RtkStatus : UIViewController {
         view.backgroundColor = DronelinkUI.Constants.overlayColor
         
         rtkLabel.font = rtkLabel.font.withSize(9)
-        rtkLabel.text = "RTK"
+        rtkLabel.text = "DJIDashboardViewController.rtk.status.label".localized
         rtkLabel.textAlignment = .left
         rtkLabel.textColor = .lightGray
         view.addSubview(rtkLabel)
         
-        statusLabel.text = "N/A"
+        statusLabel.text = "DJIDashboardViewController.rtk.status.na".localized
         statusLabel.textAlignment = .left
         statusLabel.textColor = .white
         statusLabel.adjustsFontSizeToFitWidth = true
@@ -64,7 +64,7 @@ class RtkStatus : UIViewController {
             statusLabel.text = state.networkServiceStateText
         }
         else {
-            statusLabel.text = "N/A"
+            statusLabel.text = "DJIDashboardViewController.rtk.status.na".localized
         }
         
     }

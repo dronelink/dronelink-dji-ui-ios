@@ -291,7 +291,7 @@ struct RtkState {
     let positioningSolutionText: String
     let configurationStatus: String
 }
-class RtkManager : NSObject {
+class RtkManager : NSObject, DJIRTKDelegate {
     var config: RtkConfigurationRecord?
     let log = OSLog(subsystem: "DronelinkDJIUI", category: "RtkManager")
     
@@ -335,22 +335,34 @@ class RtkManager : NSObject {
     public func isRtkSupported() -> Bool {
         return self.aircraft?.flightController?.rtk != nil
     }
+    var nw = 0
+    var updatecnt = 0
+    var del = ""
     private func connectToDrone(_ aircraft: DJIAircraft) {
         self.aircraft = aircraft
-        if (aircraft.flightController?.delegate == nil){
-            logText += "no del\n"
-        }
         logText += "Drone Connect \(self.isRtkSupported())\n"
         DJISDKManager.rtkNetworkServiceProvider().addNetworkServiceStateListener("RtkManager", queue: nil) { (state: DJIRTKNetworkServiceState) in
             self.networkState = state
+            self.nw += 1
             self.update()
             if (state != nil) {
                 self.logText += "Network update \(state.channelState)\n"
             }
-
+            if self.aircraft?.flightController?.rtk?.delegate ==  nil {
+                self.del += " nu "
+            }
+            else if self.aircraft?.flightController?.rtk?.delegate as? NSObject == self {
+                self.del += " se "
+            }
+            else {
+                self.del += " a "
+            }
         }
         if (aircraft.flightController?.rtk != nil) {
             let rtk = aircraft.flightController!.rtk!
+            if rtk.delegate == nil {
+                del += "no "
+            }
             rtk.delegate = self
             logText += "FC RTK\n"
         }
@@ -479,6 +491,12 @@ class RtkManager : NSObject {
             return "DJIDashboardViewController.rtk.channelstate.unknown".localized
         }
     }
+    func didUpdateState(state: DJIRTKState) {
+        updatecnt += 1
+        self.rtkState = state
+        logText += "Rtk update \(state)\n"
+        self.update()
+    }
 }
 extension RtkManager : RtkConfigurationUpdated {
     func onConfigurationUpdate(config: RtkConfigurationRecord) {
@@ -489,14 +507,10 @@ extension RtkManager : RtkConfigurationUpdated {
         configure()
     }
 }
-
-extension RtkManager : DJIRTKDelegate {
-    func didUpdateState(state: DJIRTKState) {
-        self.rtkState = state
-        logText += "Rtk update \(state)\n"
-        self.update()
-    }
-}
+//
+//extension RtkManager : DJIRTKDelegate {
+//
+//}
 extension RtkManager :DroneSessionManagerDelegate {
     
     func onOpened(session: DronelinkCore.DroneSession) {

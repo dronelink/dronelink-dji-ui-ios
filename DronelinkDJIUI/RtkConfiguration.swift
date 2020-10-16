@@ -46,6 +46,7 @@ class RtkConfiguration : UIViewController {
     let dismissButton = UIButton()
     let headingConfiguration = UILabel()
     let headingStatus = UILabel()
+    let rtkStatus = UILabel()
     var statusControls: [(label: UILabel, control: UIView)] = []
     var controls: [(label: UILabel, control: UIView)] = []
     let serverAddress = MDCTextField()
@@ -63,21 +64,33 @@ class RtkConfiguration : UIViewController {
     
     public var delegate: RtkConfigurationUpdated?
     
+    //public var delegate: RtkConfigurationUpdated?
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        
+        modalPresentationStyle = .formSheet
+        modalTransitionStyle = UIModalTransitionStyle.coverVertical
+    }
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        modalPresentationStyle = .formSheet
+        modalTransitionStyle = UIModalTransitionStyle.coverVertical
+    }
     public override func viewDidLoad() {
         super.viewDidLoad()
-        view.translatesAutoresizingMaskIntoConstraints = false
+        //view.translatesAutoresizingMaskIntoConstraints = false
         
         if #available(iOS 13.0, *) {
             overrideUserInterfaceStyle = .dark
         }
-        self.preferredContentSize = CGSize(width: 400, height: 495)
+        //self.preferredContentSize = CGSize(width: 400, height: 495)
         view.addShadow()
         
         view.backgroundColor = .black
         
         scroll.backgroundColor = .black
-        scroll.contentSize = self.preferredContentSize
-        scroll.translatesAutoresizingMaskIntoConstraints = false
+        //scroll.contentSize = self.preferredContentSize
+        //scroll.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(scroll)
         
         headingStatus.text = "DJIDashboardViewController.rtk.popover.status.heading".localized
@@ -99,6 +112,9 @@ class RtkConfiguration : UIViewController {
         addStatus("DJIDashboardViewController.rtk.popover.status.solution".localized, rtkSolution)
         configStatus.textColor = .white
         addStatus("DJIDashboardViewController.rtk.popover.status.configuration".localized, configStatus)
+        rtkStatus.textColor = .white
+        //rtkStatus.adjustsFontSizeToFitWidth = true
+        addStatus("X", rtkStatus)
         
         let config = RtkManager.instance.config
         enabled.tintColor = .white
@@ -150,6 +166,7 @@ class RtkConfiguration : UIViewController {
         networkStatus.text = state.networkServiceStateText
         rtkSolution.text = state.positioningSolutionText
         configStatus.text = state.configurationStatus
+        rtkStatus.text = "\(state.networkServiceState.debugDescription)\n\(state.state?.baseStationLocation)\n\(state.state?.isRTKBeingUsed)"
     }
     private func addField(_ title: String, _ control: UIView) {
         let label = UILabel()
@@ -323,7 +340,7 @@ class RtkManager : NSObject {
         if (aircraft.flightController?.delegate == nil){
             logText += "no del\n"
         }
-        logText += "Drone Connect\n"
+        logText += "Drone Connect \(self.isRtkSupported())\n"
         DJISDKManager.rtkNetworkServiceProvider().addNetworkServiceStateListener("RtkManager", queue: nil) { (state: DJIRTKNetworkServiceState) in
             self.networkState = state
             self.update()
@@ -344,6 +361,9 @@ class RtkManager : NSObject {
     private func disconnectFromDrone() {
         self.aircraft = nil
         DJISDKManager.rtkNetworkServiceProvider().removeNetworkServiceStateListener("RtkManager")
+        //self.rtkState = nil
+        //self.networkState = nil
+        update()
     }
     
     public func addUpdateListner(key: String, closure: @escaping (_ update: RtkState) -> Void) {
@@ -396,15 +416,20 @@ class RtkManager : NSObject {
         let config = self.config!
         guard (config.serverAddress?.count ?? 0 >= 0) else {
             self.configurationState = "DJIDashboardViewController.rtk.configstate.incomplete".localized
+            self.update()
             return
         }
+        self.configurationState = "Configuring"
+        self.update()
         
         ConfigureRtkHelper.configureRtk(aircraft: aircraft!, config: config) { (error: Error?, msg: String) in
             self.logText += msg + "\n"
             self.configurationState = msg
+            self.update()
         } withSuccess: {
             self.logText += "RTK OK"
             self.configurationState = "DJIDashboardViewController.rtk.configstate.ok".localized
+            self.update()
         }
     }
     

@@ -22,25 +22,6 @@
 "DJIDashboardViewController.rtk.solution.none" = "None";
 "DJIDashboardViewController.rtk.solution.single" = "Single";
 "DJIDashboardViewController.rtk.solution.unknown" = "Unknown";
-"DJIDashboardViewController.rtk.channelstate.accounterror" = "Account error";
-"DJIDashboardViewController.rtk.channelstate.airecraftdisconnected" = "Aircraft Disconnected";
-"DJIDashboardViewController.rtk.channelstate.connecting" = "Connecting";
-"DJIDashboardViewController.rtk.channelstate.disabled" = "Disabled";
-"DJIDashboardViewController.rtk.channelstate.disconnected" = "Disconnected";
-"DJIDashboardViewController.rtk.channelstate.invalidrequest" = "Invalid request";
-"DJIDashboardViewController.rtk.channelstate.loginfailure" = "Login failure";
-"DJIDashboardViewController.rtk.channelstate.networknotreachable" = "Network not reachable";
-"DJIDashboardViewController.rtk.channelstate.ready" = "Ready";
-"DJIDashboardViewController.rtk.channelstate.servernotreachable" = "Server not reachable";
-"DJIDashboardViewController.rtk.channelstate.servicesuspension" = "Service suspension";
-"DJIDashboardViewController.rtk.channelstate.transmitting" = "Transmitting";
-"DJIDashboardViewController.rtk.channelstate.unknown" = "Unknown";
-"DJIDashboardViewController.rtk.configstate.unknown" = "Unknown";
-"DJIDashboardViewController.rtk.configstate.notsupported" = "RTK not supported";
-"DJIDashboardViewController.rtk.configstate.disabled" = "RTK disabled";
-"DJIDashboardViewController.rtk.configstate.disablefailed" = "RTK disable failed";
-"DJIDashboardViewController.rtk.configstate.incomplete" = "Configuration incomplete";
-"DJIDashboardViewController.rtk.configstate.ok" = "OK";
 "DJIDashboardViewController.rtk.popover.status.heading" = "RTK Status";
 "DJIDashboardViewController.rtk.popover.status.channel" = "Network Service";
 "DJIDashboardViewController.rtk.popover.status.solution" = "Position Solution";
@@ -56,4 +37,6 @@
 "DJIDashboardViewController.rtk.popover.configuration.mountpoint" = "Mount point";
 "DJIDashboardViewController.rtk.status.label" = "RTK";
 "DJIDashboardViewController.rtk.status.na" = "N/A";
+"DJIDashboardViewController.rtk.status.disabled" = "Disabled";
+"DJIDashboardViewController.rtk.status.connected" = "Connected";
 

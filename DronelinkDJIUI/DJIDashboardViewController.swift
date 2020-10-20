@@ -100,7 +100,7 @@ public class DJIDashboardViewController: UIViewController {
     private var tablet: Bool { return UIDevice.current.userInterfaceIdiom == .pad }
     private var statusWidgetHeight: CGFloat { return tablet ? 50 : 40 }
     private var offsetsButtonEnabled = false
-    private let rtkStatus = RtkStatus()
+    private let rtkStatus = RTKStatus()
     
     public override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -796,8 +796,12 @@ public class DJIDashboardViewController: UIViewController {
         toggleOffsets()
     }
     @objc func onRtkConfiguration() {
-        let config = RtkConfiguration()
-        config.delegate = RtkManager.instance
+        guard session != nil else {
+            os_log(.error, log: log, "RTK Configuration but no session")
+            return
+        }
+        let config = RTKConfiguration()
+        config.setSession(self.session)
         present(config, animated: true, completion: nil)
     }
     private func toggleOffsets(visible: Bool? = nil) {
@@ -973,6 +977,7 @@ extension DJIDashboardViewController: DronelinkDelegate {
 extension DJIDashboardViewController: DroneSessionManagerDelegate {
     public func onOpened(session: DroneSession) {
         self.session = session
+        rtkStatus.setSession(session: session)
         session.add(delegate: self)
         DispatchQueue.main.async {
             if !self.primaryViewToggled {
@@ -984,6 +989,7 @@ extension DJIDashboardViewController: DroneSessionManagerDelegate {
     
     public func onClosed(session: DroneSession) {
         self.session = nil
+        rtkStatus.setSession(session: nil)
         session.remove(delegate: self)
         DispatchQueue.main.async {
             self.view.setNeedsUpdateConstraints()

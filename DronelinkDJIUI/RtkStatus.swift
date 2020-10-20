@@ -19,7 +19,7 @@ import MaterialComponents.MaterialPalettes
 import Kingfisher
 import SwiftyUserDefaults
 
-class RtkStatus : UIViewController {
+class RTKStatus : UIViewController {
     
     private var droneSessionManager: DroneSessionManager!
     
@@ -42,23 +42,30 @@ class RtkStatus : UIViewController {
         statusLabel.textColor = .white
         statusLabel.adjustsFontSizeToFitWidth = true
         view.addSubview(statusLabel)
-        
-        RtkManager.instance.addUpdateListner(key: "RtkStatus") { (state: RtkState) in
-            let rtk = true //RtkManager.instance.isRtkSupported()
-            if rtk {
-                self.updateLabel(state)
-                self.view.isHidden = false
-            }
-            else {
-                self.view.isHidden = true
-                
+    }
+    public func setSession(session: DroneSession) {
+        if let dji = session as? DJIDroneSession {
+            dji.rtk.addUpdateListner(key: "RtkStatus") { (state: RtkState) in
+                if (dji.rtk.isSupported())
+                {
+                    self.updateLabel(rtk)
+                    self.view.isHidden = false
+                }
+                else {
+                    self.view.isHidden = true
+                }
             }
         }
+        else {
+            self.view.isHidden = true
+        }
     }
-    
-    func updateLabel(_ state: RtkState) {
-        if state.state != nil && state.state?.positioningSolution != DJIRTKPositioningSolution.none {
-            statusLabel.text = state.positioningSolutionText
+    func updateLabel(_ state: RTKState) {
+        if (!state.networkRTKEnabled) {
+            statusLabel.text = "DJIDashboardViewController.rtk.status.disabled".localized
+        }
+        else if (state.networkRTKConnected) {
+            statusLabel.text = "DJIDashboardViewController.rtk.status.connected".localized
         }
         else if state.networkServiceState != nil {
             statusLabel.text = state.networkServiceStateText

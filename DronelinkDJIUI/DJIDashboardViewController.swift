@@ -47,6 +47,7 @@ public class DJIDashboardViewController: UIViewController {
     private var session: DroneSession?
     private var missionExecutor: MissionExecutor?
     private var funcExecutor: FuncExecutor?
+    private var modeExecutor: ModeExecutor?
     private var overlayViewController: UIViewController?
     private let hideOverlayButton = UIButton(type: .custom)
     private var mapViewController: UIViewController!
@@ -91,6 +92,8 @@ public class DJIDashboardViewController: UIViewController {
     private var missionExpanded: Bool { missionViewController?.expanded ?? false }
     private var funcViewController: FuncViewController?
     private var funcExpanded = false
+    private var modeViewController: ModeViewController?
+    private var modeExpanded: Bool { modeViewController?.expanded ?? false }
     private var primaryViewToggled = false
     private var videoPreviewerPrimary = true
     private let defaultPadding = 10
@@ -260,6 +263,7 @@ public class DJIDashboardViewController: UIViewController {
         droneSessionManager?.remove(delegate: self)
         session?.remove(delegate: self)
         missionExecutor?.remove(delegate: self)
+        modeExecutor?.remove(delegate: self)
     }
     
     override public func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -364,7 +368,7 @@ public class DJIDashboardViewController: UIViewController {
             make.height.equalTo(statusWidgetHeight)
         }
         
-        dismissButton.isEnabled = !(missionExecutor?.engaged ?? false)
+        dismissButton.isEnabled = !(missionExecutor?.engaged ?? false) && !(modeExecutor?.engaged ?? false)
         dismissButton.snp.remakeConstraints { make in
             make.left.equalToSuperview().offset(10)
             make.top.equalTo(topBarBackgroundView.snp.top)
@@ -584,6 +588,7 @@ public class DJIDashboardViewController: UIViewController {
         
         updateConstraintsMission()
         updateConstraintsFunc()
+        updateConstraintsMode()
         updateConstraintsOverlay()
         
         if !interfaceVisible && !portrait {
@@ -681,6 +686,60 @@ public class DJIDashboardViewController: UIViewController {
                 make.top.equalTo(topBarBackgroundView.snp.bottom).offset(defaultPadding)
                 make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(defaultPadding)
                 make.width.equalTo(large ? 350 : 310)
+            }
+        }
+    }
+    
+    func updateConstraintsMode() {
+        if let modeViewController = modeViewController {
+            view.bringSubviewToFront(modeViewController.view)
+            modeViewController.view.snp.remakeConstraints { make in
+                if (portrait && tablet) {
+                    make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-defaultPadding)
+                    make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(defaultPadding)
+                    make.width.equalToSuperview().multipliedBy(0.35)
+                    if (modeExpanded) {
+                        make.top.equalTo(secondaryView.snp.top).offset(defaultPadding)
+                    }
+                    else {
+                        make.height.equalTo(80)
+                    }
+                    return
+                }
+                
+                if (portrait) {
+                    make.right.equalToSuperview()
+                    make.left.equalToSuperview()
+                    make.bottom.equalToSuperview()
+                    if (modeExpanded) {
+                        make.height.equalTo(secondaryView.snp.height).multipliedBy(0.5)
+                    }
+                    else {
+                        make.height.equalTo(100)
+                    }
+                    return
+                }
+                
+                make.top.equalTo(topBarBackgroundView.snp.bottom).offset(defaultPadding)
+                make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(defaultPadding)
+                if (tablet) {
+                    make.width.equalTo(350)
+                }
+                else {
+                    make.width.equalToSuperview().multipliedBy(0.4)
+                }
+                
+                if (modeExpanded) {
+                    if (tablet) {
+                        make.height.equalTo(180)
+                    }
+                    else {
+                        make.bottom.equalTo(secondaryView.snp.top).offset(-Double(defaultPadding) * 1.5)
+                    }
+                }
+                else {
+                    make.height.equalTo(80)
+                }
             }
         }
     }
@@ -887,8 +946,7 @@ public class DJIDashboardViewController: UIViewController {
 }
 
 extension DJIDashboardViewController: DronelinkDelegate {
-    public func onRegistered(error: String?) {
-    }
+    public func onRegistered(error: String?) {}
     
     public func onMissionLoaded(executor: MissionExecutor) {
         DispatchQueue.main.async {
@@ -939,12 +997,39 @@ extension DJIDashboardViewController: DronelinkDelegate {
                 self.funcViewController = nil
             }
             
-            if self.missionExecutor == nil {
+            if self.missionExecutor == nil && self.modeExecutor == nil {
                 self.apply(userInterfaceSettings: nil)
             }
             else {
                 self.view.setNeedsUpdateConstraints()
             }
+        }
+    }
+    
+    public func onModeLoaded(executor: ModeExecutor) {
+        DispatchQueue.main.async {
+            self.modeExecutor = executor
+            let modeViewController = ModeViewController.create(droneSessionManager: self.droneSessionManager, delegate: self)
+            self.addChild(modeViewController)
+            self.view.addSubview(modeViewController.view)
+            modeViewController.didMove(toParent: self)
+            self.modeViewController = modeViewController
+            executor.add(delegate: self)
+            self.apply(userInterfaceSettings: executor.userInterfaceSettings)
+        }
+    }
+    
+    public func onModeUnloaded(executor: ModeExecutor) {
+        DispatchQueue.main.async {
+            self.modeExecutor = nil
+            if let modeViewController = self.modeViewController {
+                modeViewController.view.removeFromSuperview()
+                modeViewController.removeFromParent()
+                self.modeViewController = nil
+            }
+            executor.remove(delegate: self)
+            
+            self.apply(userInterfaceSettings: nil)
         }
     }
 }
@@ -1014,6 +1099,28 @@ extension DJIDashboardViewController: MissionExecutorDelegate {
     }
 }
 
+extension DJIDashboardViewController: ModeExecutorDelegate {
+    public func onModeEngaging(executor: ModeExecutor) {
+        DispatchQueue.main.async {
+            self.view.setNeedsUpdateConstraints()
+        }
+    }
+        
+    public func onModeEngaged(executor: ModeExecutor, engagement: Executor.Engagement) {
+        DispatchQueue.main.async {
+            self.view.setNeedsUpdateConstraints()
+        }
+    }
+    
+    public func onModeExecuted(executor: ModeExecutor, engagement: Executor.Engagement) {}
+    
+    public func onModeDisengaged(executor: ModeExecutor, engagement: Executor.Engagement, reason: Kernel.Message) {
+        DispatchQueue.main.async {
+            self.view.setNeedsUpdateConstraints()
+        }
+    }
+}
+
 extension DJIDashboardViewController: MissionViewControllerDelegate {
     public func onMissionExpandToggle() {
         updateConstraintsMission()
@@ -1025,6 +1132,13 @@ extension DJIDashboardViewController: FuncViewControllerDelegate {
     public func onFuncExpanded(value: Bool) {
         funcExpanded = value
         updateConstraints()
+        view.animateLayout()
+    }
+}
+
+extension DJIDashboardViewController: ModeViewControllerDelegate {
+    public func onModeExpandToggle() {
+        updateConstraintsMode()
         view.animateLayout()
     }
 }

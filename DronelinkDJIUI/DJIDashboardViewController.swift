@@ -100,6 +100,8 @@ public class DJIDashboardViewController: UIViewController {
     private var tablet: Bool { return UIDevice.current.userInterfaceIdiom == .pad }
     private var statusWidgetHeight: CGFloat { return tablet ? 50 : 40 }
     private var offsetsButtonEnabled = false
+    private let rtkStatus = RTKStatus()
+    private var rtkManager: DJIRTKManager?
     
     public override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -160,6 +162,10 @@ public class DJIDashboardViewController: UIViewController {
         
         view.addSubview(remainingFlightTimeWidget)
 
+        rtkStatus.setRTK(rtk: rtkManager)
+        addChild(rtkStatus)
+        view.addSubview(rtkStatus.view)
+        
         captureBackgroundView.addShadow()
         captureBackgroundView.backgroundColor = DronelinkUI.Constants.overlayColor
         captureBackgroundView.layer.cornerRadius = DronelinkUI.Constants.cornerRadius
@@ -246,6 +252,10 @@ public class DJIDashboardViewController: UIViewController {
         swipeUp.direction = .up
         swipeUp.numberOfTouchesRequired = 3
         videoPreviewerView.addGestureRecognizer(swipeUp)
+        
+        let tapRtk = UITapGestureRecognizer(target: self, action: #selector(onRtkConfiguration))
+        rtkStatus.view.addGestureRecognizer(tapRtk)
+        
     }
     
     public override func viewWillAppear(_ animated: Bool) {
@@ -284,6 +294,8 @@ public class DJIDashboardViewController: UIViewController {
         view.bringSubviewToFront(primaryViewToggleButton)
         view.bringSubviewToFront(mapMoreButton)
         view.bringSubviewToFront(compassWidget)
+        view.bringSubviewToFront(rtkStatus.view)
+        
         if let telemetryView = telemetryViewController?.view {
             view.bringSubviewToFront(telemetryView)
         }
@@ -440,6 +452,12 @@ public class DJIDashboardViewController: UIViewController {
             make.top.equalTo(focusModeWidget.snp.top)
             make.right.equalTo(cameraConfigStorageWidget.snp.left).offset(-defaultPadding)
             make.height.equalTo(cameraWidgetSize)
+        }
+        rtkStatus.view.snp.remakeConstraints { make in
+            make.top.equalTo(focusModeWidget.snp.bottom).offset(defaultPadding)
+            make.right.equalTo(focusModeWidget.snp.right)
+            make.height.equalTo(cameraWidgetSize)
+            make.width.equalTo(100)
         }
         
         remainingFlightTimeWidget.snp.remakeConstraints { make in
@@ -778,7 +796,17 @@ public class DJIDashboardViewController: UIViewController {
     @objc func onOffsets(sender: Any) {
         toggleOffsets()
     }
-    
+    @objc func onRtkConfiguration() {
+        guard rtkManager != nil else {
+            return
+        }
+        if let x = session?.drone as? DJIDroneSession {
+            x.drone
+        }
+        let config = RTKConfiguration()
+        config.setRTK(self.rtkManager!)
+        present(config, animated: true, completion: nil)
+    }
     private func toggleOffsets(visible: Bool? = nil) {
         if let visible = visible {
             if (visible && droneOffsetsViewController1 != nil) || (!visible && droneOffsetsViewController1 == nil) {
@@ -952,6 +980,10 @@ extension DJIDashboardViewController: DronelinkDelegate {
 extension DJIDashboardViewController: DroneSessionManagerDelegate {
     public func onOpened(session: DroneSession) {
         self.session = session
+        if let djiDrone = session.drone as? DJIDroneAdapter {
+            self.rtkManager = DJIRTKManager(djiDrone.drone)
+            rtkStatus.setRTK(rtk: rtkManager)
+        }
         session.add(delegate: self)
         DispatchQueue.main.async {
             if !self.primaryViewToggled {
@@ -963,6 +995,8 @@ extension DJIDashboardViewController: DroneSessionManagerDelegate {
     
     public func onClosed(session: DroneSession) {
         self.session = nil
+        self.rtkManager = nil
+        rtkStatus.setRTK(rtk: nil)
         session.remove(delegate: self)
         DispatchQueue.main.async {
             self.view.setNeedsUpdateConstraints()

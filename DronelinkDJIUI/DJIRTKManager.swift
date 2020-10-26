@@ -90,6 +90,7 @@ public class DJIRTKManager : NSObject {
             self.update()
         }
         
+        self.update()
         let rtk = aircraft.flightController!.rtk!
         
         rtk.getEnabledWithCompletion({ (enabled: Bool, error: Error?) in

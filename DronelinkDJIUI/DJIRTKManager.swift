@@ -51,7 +51,7 @@ public class DJIRTKManager : NSObject {
     
     private var networkState: DJIRTKNetworkServiceState?
     private var listners: [String: (_ update:RTKState) -> Void] = [:]
-    private var lastState: RTKState = RTKState(networkRTKEnabled: false, networkRTKConnected: false, networkRTKStatus: .disabled, networkServiceStateText: "RTK.channelstate.unknown".localized, configurationStatus: "RTK.configstate.unknown".localized)
+    private var lastState: RTKState = RTKState(networkRTKEnabled: false, networkRTKConnected: false, networkRTKStatus: .notSupported, networkServiceStateText: "RTK.channelstate.unknown".localized, configurationStatus: "RTK.configstate.unknown".localized)
     private var aircraft: DJIAircraft!
     private var configurationState: String?
     private var configuring: Bool = false
@@ -90,6 +90,7 @@ public class DJIRTKManager : NSObject {
             self.update()
         }
         
+        self.update()
         let rtk = aircraft.flightController!.rtk!
         
         rtk.getEnabledWithCompletion({ (enabled: Bool, error: Error?) in

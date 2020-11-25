@@ -82,7 +82,7 @@ public class DJIRTKManager : NSObject {
         
         DJISDKManager.rtkNetworkServiceProvider().addNetworkServiceStateListener("DJIRTKManager", queue: nil) { (state: DJIRTKNetworkServiceState) in
             self.networkState = state
-            if state != nil && self.waitForConnection {
+            if self.waitForConnection {
                 if state.channelState != .connecting {
                     self.waitForConnection = false
                 }

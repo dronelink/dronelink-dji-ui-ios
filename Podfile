@@ -9,7 +9,7 @@ target 'DronelinkDJIUI' do
   pod 'DJI-UXSDK-iOS', '~> 4.13'
   pod 'SwiftyUserDefaults', '~> 5.0.0'
   pod 'SnapKit', '~> 5.0.1'
-  pod 'MaterialComponents/Palettes', '~> 115.0.0'
+  pod 'MaterialComponents/Palettes', '~> 119.0.0'
   post_install do |installer|
     installer.pods_project.targets.each do |target|
       target.build_configurations.each do |config|

@@ -5,40 +5,40 @@ PODS:
   - DJI-UXSDK-iOS (4.13)
   - DronelinkCore (2.0.0)
   - DronelinkCoreUI (2.0.0):
-    - Agrume (~> 5.6.9)
+    - Agrume (~> 5.6.10)
     - DronelinkCore (~> 2.0.0)
     - IQKeyboardManager (~> 6.5.6)
-    - Kingfisher (~> 5.15.0)
-    - Mapbox-iOS-SDK (~> 5.9.0)
-    - MaterialComponents/ActivityIndicator (~> 115.0.0)
-    - MaterialComponents/Buttons (~> 115.0.0)
-    - "MaterialComponents/Buttons+Theming (~> 115.0.0)"
-    - MaterialComponents/Dialogs (~> 115.0.0)
-    - "MaterialComponents/Dialogs+Theming (~> 115.0.0)"
-    - MaterialComponents/Palettes (~> 115.0.0)
-    - MaterialComponents/ProgressView (~> 115.0.0)
-    - MaterialComponents/Snackbar (~> 115.0.0)
-    - MaterialComponents/TextFields (~> 115.0.0)
+    - Kingfisher (~> 5.15.7)
+    - Mapbox-iOS-SDK (~> 6.3.0)
+    - MaterialComponents/ActivityIndicator (~> 119.0.0)
+    - MaterialComponents/Buttons (~> 119.0.0)
+    - "MaterialComponents/Buttons+Theming (~> 119.0.0)"
+    - MaterialComponents/Dialogs (~> 119.0.0)
+    - "MaterialComponents/Dialogs+Theming (~> 119.0.0)"
+    - MaterialComponents/Palettes (~> 119.0.0)
+    - MaterialComponents/ProgressView (~> 119.0.0)
+    - MaterialComponents/Snackbar (~> 119.0.0)
+    - MaterialComponents/TextFields (~> 119.0.0)
     - MicrosoftMapsSDK (~> 1.1.4)
     - SnapKit (~> 5.0.1)
   - DronelinkDJI (2.0.0):
     - DJI-SDK-iOS (~> 4.13)
     - DronelinkCore (~> 2.0.0)
   - IQKeyboardManager (6.5.6)
-  - Kingfisher (5.15.5):
-    - Kingfisher/Core (= 5.15.5)
-  - Kingfisher/Core (5.15.5)
-  - Mapbox-iOS-SDK (5.9.0):
-    - MapboxMobileEvents (= 0.10.2)
-  - MapboxMobileEvents (0.10.2)
-  - MaterialComponents/ActivityIndicator (115.0.0):
+  - Kingfisher (5.15.7):
+    - Kingfisher/Core (= 5.15.7)
+  - Kingfisher/Core (5.15.7)
+  - Mapbox-iOS-SDK (6.3.0):
+    - MapboxMobileEvents (~> 0.10.4)
+  - MapboxMobileEvents (0.10.5)
+  - MaterialComponents/ActivityIndicator (119.0.0):
     - MaterialComponents/Palettes
     - MaterialComponents/private/Application
     - MDFInternationalization
     - MotionAnimator (~> 2.0)
-  - MaterialComponents/AnimationTiming (115.0.0)
-  - MaterialComponents/Availability (115.0.0)
-  - MaterialComponents/Buttons (115.0.0):
+  - MaterialComponents/AnimationTiming (119.0.0)
+  - MaterialComponents/Availability (119.0.0)
+  - MaterialComponents/Buttons (119.0.0):
     - MaterialComponents/Elevation
     - MaterialComponents/Ink
     - MaterialComponents/private/Math
@@ -50,23 +50,23 @@ PODS:
     - MaterialComponents/Typography
     - MDFInternationalization
     - MDFTextAccessibility
-  - "MaterialComponents/Buttons+ColorThemer (115.0.0)":
+  - "MaterialComponents/Buttons+ColorThemer (119.0.0)":
     - MaterialComponents/Buttons
     - MaterialComponents/schemes/Color
-  - "MaterialComponents/Buttons+ShapeThemer (115.0.0)":
+  - "MaterialComponents/Buttons+ShapeThemer (119.0.0)":
     - MaterialComponents/Buttons
     - MaterialComponents/schemes/Shape
-  - "MaterialComponents/Buttons+Theming (115.0.0)":
+  - "MaterialComponents/Buttons+Theming (119.0.0)":
     - MaterialComponents/Buttons
     - "MaterialComponents/Buttons+ColorThemer"
     - "MaterialComponents/Buttons+ShapeThemer"
     - "MaterialComponents/Buttons+TypographyThemer"
     - MaterialComponents/schemes/Container
     - MaterialComponents/ShadowElevations
-  - "MaterialComponents/Buttons+TypographyThemer (115.0.0)":
+  - "MaterialComponents/Buttons+TypographyThemer (119.0.0)":
     - MaterialComponents/Buttons
     - MaterialComponents/schemes/Typography
-  - MaterialComponents/Dialogs (115.0.0):
+  - MaterialComponents/Dialogs (119.0.0):
     - MaterialComponents/Buttons
     - MaterialComponents/Elevation
     - MaterialComponents/private/KeyboardWatcher
@@ -75,76 +75,76 @@ PODS:
     - MaterialComponents/ShadowLayer
     - MaterialComponents/Typography
     - MDFInternationalization
-  - "MaterialComponents/Dialogs+ColorThemer (115.0.0)":
+  - "MaterialComponents/Dialogs+ColorThemer (119.0.0)":
     - "MaterialComponents/Buttons+ColorThemer"
     - MaterialComponents/Dialogs
     - MaterialComponents/Themes
-  - "MaterialComponents/Dialogs+Theming (115.0.0)":
+  - "MaterialComponents/Dialogs+Theming (119.0.0)":
     - "MaterialComponents/Buttons+Theming"
     - MaterialComponents/Dialogs
     - "MaterialComponents/Dialogs+ColorThemer"
     - "MaterialComponents/Dialogs+TypographyThemer"
     - MaterialComponents/schemes/Container
     - MaterialComponents/ShadowElevations
-  - "MaterialComponents/Dialogs+TypographyThemer (115.0.0)":
+  - "MaterialComponents/Dialogs+TypographyThemer (119.0.0)":
     - "MaterialComponents/Buttons+TypographyThemer"
     - MaterialComponents/Dialogs
     - MaterialComponents/schemes/Typography
-  - MaterialComponents/Elevation (115.0.0):
+  - MaterialComponents/Elevation (119.0.0):
     - MaterialComponents/Availability
     - MaterialComponents/private/Color
     - MaterialComponents/private/Math
-  - MaterialComponents/Ink (115.0.0):
+  - MaterialComponents/Ink (119.0.0):
     - MaterialComponents/Availability
     - MaterialComponents/private/Color
     - MaterialComponents/private/Math
-  - MaterialComponents/OverlayWindow (115.0.0):
+  - MaterialComponents/OverlayWindow (119.0.0):
     - MaterialComponents/Availability
     - MaterialComponents/private/Application
-  - MaterialComponents/Palettes (115.0.0)
-  - MaterialComponents/private/Application (115.0.0)
-  - MaterialComponents/private/Color (115.0.0):
+  - MaterialComponents/Palettes (119.0.0)
+  - MaterialComponents/private/Application (119.0.0)
+  - MaterialComponents/private/Color (119.0.0):
     - MaterialComponents/Availability
-  - MaterialComponents/private/KeyboardWatcher (115.0.0):
+  - MaterialComponents/private/KeyboardWatcher (119.0.0):
     - MaterialComponents/private/Application
-  - MaterialComponents/private/Math (115.0.0)
-  - MaterialComponents/private/Overlay (115.0.0)
-  - MaterialComponents/ProgressView (115.0.0):
+  - MaterialComponents/private/Math (119.0.0)
+  - MaterialComponents/private/Overlay (119.0.0)
+  - MaterialComponents/ProgressView (119.0.0):
     - MaterialComponents/Palettes
     - MaterialComponents/private/Math
     - MDFInternationalization
-  - MaterialComponents/Ripple (115.0.0):
+  - MaterialComponents/Ripple (119.0.0):
     - MaterialComponents/AnimationTiming
     - MaterialComponents/Availability
     - MaterialComponents/private/Color
     - MaterialComponents/private/Math
-  - MaterialComponents/schemes/Color (115.0.0):
+  - MaterialComponents/schemes/Color (119.0.0):
     - MaterialComponents/Availability
     - MaterialComponents/private/Color
-  - MaterialComponents/schemes/Container (115.0.0):
+  - MaterialComponents/schemes/Container (119.0.0):
     - MaterialComponents/schemes/Color
     - MaterialComponents/schemes/Shape
     - MaterialComponents/schemes/Typography
-  - MaterialComponents/schemes/Shape (115.0.0):
+  - MaterialComponents/schemes/Shape (119.0.0):
     - MaterialComponents/ShapeLibrary
     - MaterialComponents/Shapes
-  - MaterialComponents/schemes/Typography (115.0.0):
+  - MaterialComponents/schemes/Typography (119.0.0):
     - "MaterialComponents/schemes/Typography+BasicFontScheme"
     - "MaterialComponents/schemes/Typography+Scheming"
     - MaterialComponents/Typography
-  - "MaterialComponents/schemes/Typography+BasicFontScheme (115.0.0)"
-  - "MaterialComponents/schemes/Typography+Scheming (115.0.0)"
-  - MaterialComponents/ShadowElevations (115.0.0)
-  - MaterialComponents/ShadowLayer (115.0.0):
+  - "MaterialComponents/schemes/Typography+BasicFontScheme (119.0.0)"
+  - "MaterialComponents/schemes/Typography+Scheming (119.0.0)"
+  - MaterialComponents/ShadowElevations (119.0.0)
+  - MaterialComponents/ShadowLayer (119.0.0):
     - MaterialComponents/ShadowElevations
-  - MaterialComponents/ShapeLibrary (115.0.0):
+  - MaterialComponents/ShapeLibrary (119.0.0):
     - MaterialComponents/private/Math
     - MaterialComponents/Shapes
-  - MaterialComponents/Shapes (115.0.0):
+  - MaterialComponents/Shapes (119.0.0):
     - MaterialComponents/private/Color
     - MaterialComponents/private/Math
     - MaterialComponents/ShadowLayer
-  - MaterialComponents/Snackbar (115.0.0):
+  - MaterialComponents/Snackbar (119.0.0):
     - MaterialComponents/AnimationTiming
     - MaterialComponents/Availability
     - MaterialComponents/Buttons
@@ -157,7 +157,7 @@ PODS:
     - MaterialComponents/ShadowElevations
     - MaterialComponents/ShadowLayer
     - MaterialComponents/Typography
-  - MaterialComponents/TextFields (115.0.0):
+  - MaterialComponents/TextFields (119.0.0):
     - MaterialComponents/AnimationTiming
     - MaterialComponents/Buttons
     - MaterialComponents/Elevation
@@ -165,10 +165,10 @@ PODS:
     - MaterialComponents/private/Math
     - MaterialComponents/Typography
     - MDFInternationalization
-  - MaterialComponents/Themes (115.0.0):
+  - MaterialComponents/Themes (119.0.0):
     - MaterialComponents/schemes/Color
     - MaterialComponents/schemes/Typography
-  - MaterialComponents/Typography (115.0.0):
+  - MaterialComponents/Typography (119.0.0):
     - MaterialComponents/private/Application
     - MaterialComponents/private/Math
     - MDFTextAccessibility
@@ -187,7 +187,7 @@ DEPENDENCIES:
   - DronelinkCore (from `../../private/dronelink-core-ios`)
   - DronelinkCoreUI (from `../dronelink-core-ui-ios`)
   - DronelinkDJI (from `../dronelink-dji-ios`)
-  - MaterialComponents/Palettes (~> 115.0.0)
+  - MaterialComponents/Palettes (~> 119.0.0)
   - SnapKit (~> 5.0.1)
   - SwiftyUserDefaults (~> 5.0.0)
 
@@ -223,13 +223,13 @@ SPEC CHECKSUMS:
   DJI-SDK-iOS: 8ec6e5e9199491339fed8021158bbf82d53751f3
   DJI-UXSDK-iOS: 7894cad9fc0864ab6ab8f12a42714e3db6e0e74c
   DronelinkCore: 8dfac69d2405686dd13cfc518e60214069ba7632
-  DronelinkCoreUI: 7435f8623f78f17ac03e3cbed987ea2a517c9c47
-  DronelinkDJI: 4e2a129d03c2030b7db6e237a444ef7de023a50f
+  DronelinkCoreUI: e86ed396cf48025142b16765fd70148a861a71d5
+  DronelinkDJI: 0ece14e02c3ac621e8d5f99d875e0b91e8613199
   IQKeyboardManager: 2a6e97afdafc7becf0cb17a9a8d795e3a980717f
-  Kingfisher: e3ec347a5ab8817b7585ef46923a2d2b9a7d8fbe
-  Mapbox-iOS-SDK: a5915700ec84bc1a7f8b3e746d474789e35b7956
-  MapboxMobileEvents: 2bc0ca2eedb627b73cf403258dce2b2fa98074a6
-  MaterialComponents: 0048689c8afeaae0b83f2ae26057fa1433c4e02f
+  Kingfisher: 6e1a13523fcb1c86924ce53affe4ac957e544d59
+  Mapbox-iOS-SDK: 6a67397df2bcafe5d2851604192aa8de6f8d6c89
+  MapboxMobileEvents: 7f6fb7fb0360302f524d198d36ccec3a0beae523
+  MaterialComponents: 69a725e28406a97816441dea4ec6ec38265a08bb
   MDFInternationalization: 010097556d6b09d2c4ea38e0820ea6d37be6a314
   MDFTextAccessibility: 85c09a1bd9c321f494348e632a25063bcda35a53
   MicrosoftMapsSDK: 64317bb343e3ef26507f61617889a6918a1b59d4
@@ -239,6 +239,6 @@ SPEC CHECKSUMS:
   SwiftyGif: e466e86c660d343357ab944a819a101c4127cb40
   SwiftyUserDefaults: 33fcb42bd1feb53a37d873feb62c82967db5f7f6
 
-PODFILE CHECKSUM: 018e7de77b281569f813d9dd6a265d30b665c488
+PODFILE CHECKSUM: 2a8288549e2f9f8872bfe7187ba67cc3925ed314
 
-COCOAPODS: 1.10.0.rc.1
+COCOAPODS: 1.10.0

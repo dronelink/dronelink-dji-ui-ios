@@ -16,11 +16,11 @@ import DronelinkCoreUI
 import DronelinkDJI
 import DJIUXSDK
 import MaterialComponents.MaterialPalettes
-import Kingfisher
 import SwiftyUserDefaults
 
 extension DefaultsKeys {
     var legacyDeviceWarningViewed: DefaultsKey<Bool> { .init("legacyDeviceWarningViewed", defaultValue: false) }
+    var legacyDeviceWarningDismissed: DefaultsKey<Bool> { .init("legacyDeviceWarningDismissed", defaultValue: false) }
     var mapType: DefaultsKey<String> { .init("mapType", defaultValue: MapType.mapbox.rawValue) }
 }
 
@@ -28,21 +28,15 @@ private enum MapType: String {
     case mapbox = "mapbox", microsoft = "microsoft"
 }
 
-public protocol DJIDashboardViewControllerDelegate {
-    func onDashboardDismissed()
-}
-
 public class DJIDashboardViewController: UIViewController {
-    public static func create(droneSessionManager: DJIDroneSessionManager, mapCredentialsKey: String, delegate: DJIDashboardViewControllerDelegate? = nil) -> DJIDashboardViewController {
+    public static func create(droneSessionManager: DJIDroneSessionManager, mapCredentialsKey: String) -> DJIDashboardViewController {
         let dashboardViewController = DJIDashboardViewController()
         dashboardViewController.mapCredentialsKey = mapCredentialsKey
         dashboardViewController.modalPresentationStyle = .fullScreen
         dashboardViewController.droneSessionManager = droneSessionManager
-        dashboardViewController.delegate = delegate
         return dashboardViewController
     }
     
-    private var delegate: DJIDashboardViewControllerDelegate?
     private var droneSessionManager: DJIDroneSessionManager!
     private var session: DroneSession?
     private var missionExecutor: MissionExecutor?
@@ -202,7 +196,7 @@ public class DJIDashboardViewController: UIViewController {
         view.addSubview(dismissButton)
         
         if Device.legacy {
-            if !Defaults[\.legacyDeviceWarningViewed] {
+            if !Defaults[\.legacyDeviceWarningDismissed] {
                 Defaults[\.legacyDeviceWarningViewed] = true
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                     DronelinkUI.shared.showDialog(
@@ -210,6 +204,9 @@ public class DJIDashboardViewController: UIViewController {
                         details: "DJIDashboardViewController.device.legacy.details".localized,
                         actions: [
                             MDCAlertAction(title: "DJIDashboardViewController.device.legacy.confirm".localized, emphasis: .high, handler: { action in
+                            }),
+                            MDCAlertAction(title: "DJIDashboardViewController.device.legacy.confirm.dismiss".localized, emphasis: .low, handler: { action in
+                                Defaults[\.legacyDeviceWarningDismissed] = true
                             })
                         ])
                 }
@@ -859,9 +856,6 @@ public class DJIDashboardViewController: UIViewController {
         guard rtkManager != nil else {
             return
         }
-        if let x = session?.drone as? DJIDroneSession {
-            x.drone
-        }
         let config = RTKConfiguration()
         config.setRTK(self.rtkManager!)
         present(config, animated: true, completion: nil)
@@ -944,7 +938,7 @@ public class DJIDashboardViewController: UIViewController {
     }
 
     @objc func onDismiss(sender: Any) {
-        delegate?.onDashboardDismissed()
+        Dronelink.shared.unload()
         dismiss(animated: true)
     }
     
@@ -1024,7 +1018,7 @@ extension DJIDashboardViewController: DronelinkDelegate {
                 funcViewController.removeFromParent()
                 self.funcViewController = nil
             }
-            
+
             if self.missionExecutor == nil && self.modeExecutor == nil {
                 self.apply(userInterfaceSettings: nil)
             }

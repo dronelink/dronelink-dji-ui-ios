@@ -110,8 +110,9 @@ public class DJIDashboardViewController: UIViewController, CaptureButtonProtocol
         view.addSubview(captureWidget)
     }
     
-    func captureButtonTapped(_ sender: CaptureButton) {
-        
+    public func captureButtonTapped(_ sender: CaptureButton) {
+        var command = Kernel.StartCaptureCameraCommand()
+        try? self.session?.add(command: command)
     }
     
     public override func viewDidLoad() {

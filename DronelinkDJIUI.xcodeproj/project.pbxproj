@@ -16,7 +16,6 @@
 		4A74DCE1253D7CFC00D67747 /* RTKStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A74DCE0253D7CFC00D67747 /* RTKStatus.swift */; };
 		4AE5DCD8253EB8870025BAF2 /* DJIRTKManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AE5DCD7253EB8860025BAF2 /* DJIRTKManager.swift */; };
 		55275A839F87BE3AFF93F87B /* Pods_DronelinkDJIUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 808B6907992B4437B375858E /* Pods_DronelinkDJIUI.framework */; };
-		E4F1FAD4257688C200778068 /* CaptureButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F1FAD3257688C200778068 /* CaptureButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,7 +31,6 @@
 		4A74DCE0253D7CFC00D67747 /* RTKStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RTKStatus.swift; sourceTree = "<group>"; };
 		4AE5DCD7253EB8860025BAF2 /* DJIRTKManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DJIRTKManager.swift; sourceTree = "<group>"; };
 		808B6907992B4437B375858E /* Pods_DronelinkDJIUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DronelinkDJIUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		E4F1FAD3257688C200778068 /* CaptureButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureButton.swift; sourceTree = "<group>"; };
 		E97FA109E5F37B7B34834F53 /* Pods-DronelinkDJIUI.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DronelinkDJIUI.debug.xcconfig"; path = "Target Support Files/Pods-DronelinkDJIUI/Pods-DronelinkDJIUI.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -78,7 +76,6 @@
 		245975252367A17E008CAB6B /* DronelinkDJIUI */ = {
 			isa = PBXGroup;
 			children = (
-				E4F1FAD3257688C200778068 /* CaptureButton.swift */,
 				245975372367A3A7008CAB6B /* DJIDashboardViewController.swift */,
 				4AE5DCD7253EB8860025BAF2 /* DJIRTKManager.swift */,
 				249EBFBD236867F7002946E1 /* DronelinkDJIUI.swift */,
@@ -216,7 +213,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				249EBFBE236867F7002946E1 /* DronelinkDJIUI.swift in Sources */,
-				E4F1FAD4257688C200778068 /* CaptureButton.swift in Sources */,
 				4A74DCE1253D7CFC00D67747 /* RTKStatus.swift in Sources */,
 				249EBFC023686836002946E1 /* Extensions.swift in Sources */,
 				245975382367A3A7008CAB6B /* DJIDashboardViewController.swift in Sources */,

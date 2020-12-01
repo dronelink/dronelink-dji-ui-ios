@@ -28,7 +28,7 @@ private enum MapType: String {
     case mapbox = "mapbox", microsoft = "microsoft"
 }
 
-public class DJIDashboardViewController: UIViewController {
+public class DJIDashboardViewController: UIViewController, CaptureButtonProtocol {
     public static func create(droneSessionManager: DJIDroneSessionManager, mapCredentialsKey: String) -> DJIDashboardViewController {
         let dashboardViewController = DJIDashboardViewController()
         dashboardViewController.mapCredentialsKey = mapCredentialsKey
@@ -73,7 +73,7 @@ public class DJIDashboardViewController: UIViewController {
     private let cameraConfigStorageWidget = DUXCameraConfigStorageWidget()
     private let cameraConfigInfoWidget = DUXCameraConfigInfoWidget()
     private let pictureVideoSwitchWidget = DUXPictureVideoSwitchWidget()
-    private let captureWidget = DUXCaptureWidget()
+    private let captureWidget = CaptureButton()//DUXCaptureWidget()
     private let captureBackgroundView = UIView()
     private let compassWidget = DUXCompassWidget()
     
@@ -102,6 +102,16 @@ public class DJIDashboardViewController: UIViewController {
     
     public override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
+    }
+    
+    private func initializeCustomComponents() {
+        captureWidget.delegate = self
+        captureWidget.backgroundColor = .red
+        view.addSubview(captureWidget)
+    }
+    
+    func captureButtonTapped(_ sender: CaptureButton) {
+        
     }
     
     public override func viewDidLoad() {
@@ -174,7 +184,8 @@ public class DJIDashboardViewController: UIViewController {
         view.addSubview(menuButton)
         
         view.addSubview(pictureVideoSwitchWidget)
-        view.addSubview(captureWidget)
+        
+        initializeCustomComponents()
         
         exposureButton.tintColor = UIColor.white
         exposureButton.setImage(DronelinkDJIUI.loadImage(named: "baseline_tune_white_36pt"), for: .normal)

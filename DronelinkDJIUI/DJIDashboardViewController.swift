@@ -106,9 +106,7 @@ public class DJIDashboardViewController: UIViewController {
     
     private func initializeCustomComponents() {
         let captureButton = CaptureButton.create(droneSessionManager: self.droneSessionManager)
-        captureButton.backgroundColor = .red
         view.addSubview(captureButton)
-        
         self.captureWidget = captureButton
     }
     
@@ -504,8 +502,8 @@ public class DJIDashboardViewController: UIViewController {
                 make.top.equalTo(cameraConfigInfoWidget.snp.bottom).offset(128)
             }
             make.right.equalTo(captureBackgroundView.snp.right).offset(-defaultPadding)
-            make.height.equalTo(60)
-            make.width.equalTo(49)
+            make.height.equalTo(50)
+            make.width.equalTo(50)
         }
         
         pictureVideoSwitchWidget.snp.remakeConstraints { make in

@@ -72,7 +72,7 @@ public class DJIDashboardViewController: UIViewController {
     private let focusModeWidget = DUXFocusModeWidget()
     private let cameraConfigStorageWidget = DUXCameraConfigStorageWidget()
     private let cameraConfigInfoWidget = DUXCameraConfigInfoWidget()
-    private let pictureVideoSwitchWidget = DUXPictureVideoSwitchWidget()
+    private var pictureVideoSwitchWidget: CameraModeControl?
     private var captureWidget: CaptureButton?
     private let captureBackgroundView = UIView()
     private let compassWidget = DUXCompassWidget()
@@ -108,6 +108,10 @@ public class DJIDashboardViewController: UIViewController {
         let captureButton = CaptureButton.create(droneSessionManager: self.droneSessionManager)
         view.addSubview(captureButton)
         self.captureWidget = captureButton
+        
+        let cameraModeControl = CameraModeControl.create(droneSessionManager: self.droneSessionManager)
+        view.addSubview(cameraModeControl)
+        self.pictureVideoSwitchWidget = cameraModeControl
     }
     
     public override func viewDidLoad() {
@@ -178,8 +182,6 @@ public class DJIDashboardViewController: UIViewController {
         menuButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 13)
         menuButton.addTarget(self, action: #selector(onMenu(sender:)), for: .touchUpInside)
         view.addSubview(menuButton)
-        
-        view.addSubview(pictureVideoSwitchWidget)
         
         initializeCustomComponents()
         
@@ -506,7 +508,7 @@ public class DJIDashboardViewController: UIViewController {
             make.width.equalTo(50)
         }
         
-        pictureVideoSwitchWidget.snp.remakeConstraints { make in
+        pictureVideoSwitchWidget!.snp.remakeConstraints { make in
             make.bottom.equalTo(captureWidget!.snp.top).offset(-12)
             make.centerX.equalTo(captureWidget!.snp.centerX)
             make.height.equalTo(45)
@@ -514,7 +516,7 @@ public class DJIDashboardViewController: UIViewController {
         }
         
         menuButton.snp.remakeConstraints { make in
-            make.bottom.equalTo(pictureVideoSwitchWidget.snp.top)
+            make.bottom.equalTo(pictureVideoSwitchWidget!.snp.top)
             make.centerX.equalTo(captureWidget!.snp.centerX)
             make.height.equalTo(48)
             make.width.equalTo(48)

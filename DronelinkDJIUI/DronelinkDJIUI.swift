@@ -101,7 +101,7 @@ extension DJIDroneSessionManager: WidgetFactory {
     }
     
     public func createCameraCaptureWidget(current: Widget? = nil) -> Widget? {
-        current?.view.subviews.first is DUXCaptureWidget ? current : DUXCaptureWidget().createWidget()
+        GenericWidgetFactory.shared.createCameraCaptureWidget(current: current)
     }
     
     public func createCameraExposureSettingsWidget(current: Widget? = nil) -> Widget? {

@@ -10,6 +10,7 @@ PODS:
     - IQKeyboardManager (~> 6.5.6)
     - Kingfisher (~> 5.15.7)
     - Mapbox-iOS-SDK (~> 6.3.0)
+    - MarqueeLabel (~> 4.0.5)
     - MaterialComponents/ActivityIndicator (~> 119.0.0)
     - MaterialComponents/Buttons (~> 119.0.0)
     - "MaterialComponents/Buttons+Theming (~> 119.0.0)"
@@ -21,6 +22,7 @@ PODS:
     - MaterialComponents/TextFields (~> 119.0.0)
     - MicrosoftMapsSDK (~> 1.1.4)
     - SnapKit (~> 5.0.1)
+    - SwiftyUserDefaults (~> 5.0.0)
   - DronelinkDJI (2.0.0):
     - DJI-SDK-iOS (~> 4.13)
     - DronelinkCore (~> 2.0.0)
@@ -31,6 +33,7 @@ PODS:
   - Mapbox-iOS-SDK (6.3.0):
     - MapboxMobileEvents (~> 0.10.4)
   - MapboxMobileEvents (0.10.5)
+  - MarqueeLabel (4.0.5)
   - MaterialComponents/ActivityIndicator (119.0.0):
     - MaterialComponents/Palettes
     - MaterialComponents/private/Application
@@ -200,6 +203,7 @@ SPEC REPOS:
     - Kingfisher
     - Mapbox-iOS-SDK
     - MapboxMobileEvents
+    - MarqueeLabel
     - MaterialComponents
     - MDFInternationalization
     - MDFTextAccessibility
@@ -223,12 +227,13 @@ SPEC CHECKSUMS:
   DJI-SDK-iOS: 8ec6e5e9199491339fed8021158bbf82d53751f3
   DJI-UXSDK-iOS: 7894cad9fc0864ab6ab8f12a42714e3db6e0e74c
   DronelinkCore: 8dfac69d2405686dd13cfc518e60214069ba7632
-  DronelinkCoreUI: e86ed396cf48025142b16765fd70148a861a71d5
+  DronelinkCoreUI: c7ece374d2a509dfe09d065ce1882f8fe5fc2d0f
   DronelinkDJI: 0ece14e02c3ac621e8d5f99d875e0b91e8613199
   IQKeyboardManager: 2a6e97afdafc7becf0cb17a9a8d795e3a980717f
   Kingfisher: 6e1a13523fcb1c86924ce53affe4ac957e544d59
   Mapbox-iOS-SDK: 2563ed87ead6ec08f1c2090873977b8a7be335a8
   MapboxMobileEvents: 7f6fb7fb0360302f524d198d36ccec3a0beae523
+  MarqueeLabel: 00cc0bcd087111dca575878b3531af980559707d
   MaterialComponents: 69a725e28406a97816441dea4ec6ec38265a08bb
   MDFInternationalization: 010097556d6b09d2c4ea38e0820ea6d37be6a314
   MDFTextAccessibility: 85c09a1bd9c321f494348e632a25063bcda35a53

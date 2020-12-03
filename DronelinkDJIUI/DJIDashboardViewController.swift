@@ -970,6 +970,8 @@ public class DJIDashboardViewController: UIViewController {
 extension DJIDashboardViewController: DronelinkDelegate {
     public func onRegistered(error: String?) {}
     
+    public func onDroneSessionManagerAdded(manager: DroneSessionManager) {}
+    
     public func onMissionLoaded(executor: MissionExecutor) {
         DispatchQueue.main.async {
             self.missionExecutor = executor

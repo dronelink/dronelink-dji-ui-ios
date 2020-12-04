@@ -72,8 +72,8 @@ public class DJIDashboardViewController: UIViewController {
     private let focusModeWidget = DUXFocusModeWidget()
     private let cameraConfigStorageWidget = DUXCameraConfigStorageWidget()
     private let cameraConfigInfoWidget = DUXCameraConfigInfoWidget()
-    private var pictureVideoSwitchWidget: CameraModeControl?
-    private var captureWidget: CaptureButton?
+    private let pictureVideoSwitchWidget = DUXPictureVideoSwitchWidget()
+    private let captureWidget = DUXCaptureWidget()
     private let captureBackgroundView = UIView()
     private let compassWidget = DUXCompassWidget()
     
@@ -102,16 +102,6 @@ public class DJIDashboardViewController: UIViewController {
     
     public override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
-    }
-    
-    private func initializeCustomComponents() {
-        let captureButton = CaptureButton.create(droneSessionManager: self.droneSessionManager)
-        view.addSubview(captureButton)
-        self.captureWidget = captureButton
-        
-        let cameraModeControl = CameraModeControl.create(droneSessionManager: self.droneSessionManager)
-        view.addSubview(cameraModeControl)
-        self.pictureVideoSwitchWidget = cameraModeControl
     }
     
     public override func viewDidLoad() {
@@ -183,7 +173,8 @@ public class DJIDashboardViewController: UIViewController {
         menuButton.addTarget(self, action: #selector(onMenu(sender:)), for: .touchUpInside)
         view.addSubview(menuButton)
         
-        initializeCustomComponents()
+        view.addSubview(pictureVideoSwitchWidget)
+        view.addSubview(captureWidget)
         
         exposureButton.tintColor = UIColor.white
         exposureButton.setImage(DronelinkDJIUI.loadImage(named: "baseline_tune_white_36pt"), for: .normal)
@@ -492,11 +483,11 @@ public class DJIDashboardViewController: UIViewController {
         captureBackgroundView.snp.remakeConstraints { make in
             make.top.equalTo(menuButton.snp.top)
             make.right.equalTo(primaryView.safeAreaLayoutGuide.snp.right).offset(-defaultPadding)
-            make.left.equalTo(captureWidget!.snp.left).offset(-defaultPadding)
+            make.left.equalTo(captureWidget.snp.left).offset(-defaultPadding)
             make.bottom.equalTo((offsetsButtonEnabled ? offsetsButton : exposureButton).snp.bottom).offset(15)
         }
         
-        captureWidget!.snp.remakeConstraints { make in
+        captureWidget.snp.remakeConstraints { make in
             if (portrait || tablet) {
                 make.centerY.equalTo(primaryView.snp.centerY).offset(4)
             }
@@ -504,27 +495,27 @@ public class DJIDashboardViewController: UIViewController {
                 make.top.equalTo(cameraConfigInfoWidget.snp.bottom).offset(128)
             }
             make.right.equalTo(captureBackgroundView.snp.right).offset(-defaultPadding)
-            make.height.equalTo(50)
-            make.width.equalTo(50)
+            make.height.equalTo(60)
+            make.width.equalTo(49)
         }
         
-        pictureVideoSwitchWidget!.snp.remakeConstraints { make in
-            make.bottom.equalTo(captureWidget!.snp.top).offset(-12)
-            make.centerX.equalTo(captureWidget!.snp.centerX)
+        pictureVideoSwitchWidget.snp.remakeConstraints { make in
+            make.bottom.equalTo(captureWidget.snp.top).offset(-12)
+            make.centerX.equalTo(captureWidget.snp.centerX)
             make.height.equalTo(45)
             make.width.equalTo(56)
         }
         
         menuButton.snp.remakeConstraints { make in
-            make.bottom.equalTo(pictureVideoSwitchWidget!.snp.top)
-            make.centerX.equalTo(captureWidget!.snp.centerX)
+            make.bottom.equalTo(pictureVideoSwitchWidget.snp.top)
+            make.centerX.equalTo(captureWidget.snp.centerX)
             make.height.equalTo(48)
             make.width.equalTo(48)
         }
         
         exposureButton.snp.remakeConstraints { make in
-            make.top.equalTo(captureWidget!.snp.bottom).offset(defaultPadding)
-            make.centerX.equalTo(captureWidget!.snp.centerX)
+            make.top.equalTo(captureWidget.snp.bottom).offset(defaultPadding)
+            make.centerX.equalTo(captureWidget.snp.centerX)
             make.height.equalTo(28)
             make.width.equalTo(28)
         }
@@ -533,7 +524,7 @@ public class DJIDashboardViewController: UIViewController {
         offsetsButton.tintColor = droneOffsetsViewController1 == nil ? UIColor.white : DronelinkUI.Constants.secondaryColor
         offsetsButton.snp.remakeConstraints { make in
             make.top.equalTo(exposureButton.snp.bottom).offset(15)
-            make.centerX.equalTo(captureWidget!.snp.centerX)
+            make.centerX.equalTo(captureWidget.snp.centerX)
             make.height.equalTo(28)
             make.width.equalTo(28)
         }

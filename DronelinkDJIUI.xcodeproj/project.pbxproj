@@ -9,12 +9,9 @@
 /* Begin PBXBuildFile section */
 		245975352367A32D008CAB6B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 245975322367A32D008CAB6B /* Localizable.strings */; };
 		245975362367A32D008CAB6B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 245975332367A32D008CAB6B /* Images.xcassets */; };
-		245975382367A3A7008CAB6B /* DJIDashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245975372367A3A7008CAB6B /* DJIDashboardViewController.swift */; };
+		2490A7A3257EDE3900253F11 /* DJIRTKManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2490A7A2257EDE3900253F11 /* DJIRTKManager.swift */; };
 		249EBFBE236867F7002946E1 /* DronelinkDJIUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249EBFBD236867F7002946E1 /* DronelinkDJIUI.swift */; };
 		249EBFC023686836002946E1 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249EBFBF23686836002946E1 /* Extensions.swift */; };
-		4A74DCDD253D7C1A00D67747 /* RTKConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A74DCDC253D7C1A00D67747 /* RTKConfiguration.swift */; };
-		4A74DCE1253D7CFC00D67747 /* RTKStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A74DCE0253D7CFC00D67747 /* RTKStatus.swift */; };
-		4AE5DCD8253EB8870025BAF2 /* DJIRTKManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AE5DCD7253EB8860025BAF2 /* DJIRTKManager.swift */; };
 		55275A839F87BE3AFF93F87B /* Pods_DronelinkDJIUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 808B6907992B4437B375858E /* Pods_DronelinkDJIUI.framework */; };
 /* End PBXBuildFile section */
 
@@ -23,13 +20,10 @@
 		245975272367A17E008CAB6B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		245975322367A32D008CAB6B /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		245975332367A32D008CAB6B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		245975372367A3A7008CAB6B /* DJIDashboardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DJIDashboardViewController.swift; sourceTree = "<group>"; };
+		2490A7A2257EDE3900253F11 /* DJIRTKManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DJIRTKManager.swift; sourceTree = "<group>"; };
 		249EBFBD236867F7002946E1 /* DronelinkDJIUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DronelinkDJIUI.swift; sourceTree = "<group>"; };
 		249EBFBF23686836002946E1 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		3A25A0223381E20F3A4AD672 /* Pods-DronelinkDJIUI.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DronelinkDJIUI.release.xcconfig"; path = "Target Support Files/Pods-DronelinkDJIUI/Pods-DronelinkDJIUI.release.xcconfig"; sourceTree = "<group>"; };
-		4A74DCDC253D7C1A00D67747 /* RTKConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RTKConfiguration.swift; sourceTree = "<group>"; };
-		4A74DCE0253D7CFC00D67747 /* RTKStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RTKStatus.swift; sourceTree = "<group>"; };
-		4AE5DCD7253EB8860025BAF2 /* DJIRTKManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DJIRTKManager.swift; sourceTree = "<group>"; };
 		808B6907992B4437B375858E /* Pods_DronelinkDJIUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DronelinkDJIUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E97FA109E5F37B7B34834F53 /* Pods-DronelinkDJIUI.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DronelinkDJIUI.debug.xcconfig"; path = "Target Support Files/Pods-DronelinkDJIUI/Pods-DronelinkDJIUI.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -76,12 +70,9 @@
 		245975252367A17E008CAB6B /* DronelinkDJIUI */ = {
 			isa = PBXGroup;
 			children = (
-				245975372367A3A7008CAB6B /* DJIDashboardViewController.swift */,
-				4AE5DCD7253EB8860025BAF2 /* DJIRTKManager.swift */,
+				2490A7A2257EDE3900253F11 /* DJIRTKManager.swift */,
 				249EBFBD236867F7002946E1 /* DronelinkDJIUI.swift */,
 				249EBFBF23686836002946E1 /* Extensions.swift */,
-				4A74DCDC253D7C1A00D67747 /* RTKConfiguration.swift */,
-				4A74DCE0253D7CFC00D67747 /* RTKStatus.swift */,
 				245975302367A32D008CAB6B /* Resources */,
 				245975272367A17E008CAB6B /* Info.plist */,
 			);
@@ -213,11 +204,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				249EBFBE236867F7002946E1 /* DronelinkDJIUI.swift in Sources */,
-				4A74DCE1253D7CFC00D67747 /* RTKStatus.swift in Sources */,
 				249EBFC023686836002946E1 /* Extensions.swift in Sources */,
-				245975382367A3A7008CAB6B /* DJIDashboardViewController.swift in Sources */,
-				4A74DCDD253D7C1A00D67747 /* RTKConfiguration.swift in Sources */,
-				4AE5DCD8253EB8870025BAF2 /* DJIRTKManager.swift in Sources */,
+				2490A7A3257EDE3900253F11 /* DJIRTKManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

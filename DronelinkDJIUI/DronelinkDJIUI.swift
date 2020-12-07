@@ -6,6 +6,7 @@
 //  Copyright © 2019 Dronelink. All rights reserved.
 //
 import UIKit
+import DronelinkCore
 import DronelinkCoreUI
 import DronelinkDJI
 import DJIUXSDK
@@ -22,6 +23,10 @@ public class DronelinkDJIUI: NSObject {
 }
 
 extension DJIDroneSessionManager: WidgetFactory {
+    public func createExecutorWidget(current: ExecutorWidget? = nil) -> ExecutorWidget? {
+        GenericWidgetFactory.shared.createExecutorWidget(current: current)
+    }
+    
     public func createMainMenuWidget(current: Widget? = nil) -> Widget? {
         (current as? WrapperWidget)?.viewController is DUXPreflightChecklistController ? current : DUXPreflightChecklistController().createWidget()
     }
@@ -82,18 +87,38 @@ extension DJIDroneSessionManager: WidgetFactory {
         current?.view.subviews.first is DUXBatteryWidget ? current : DUXBatteryWidget().createWidget()
     }
     
-    public func createDistanceUserWidget(current: Widget? = nil) -> Widget? { nil }
-    
-    public func createDistanceHomeWidget(current: Widget? = nil) -> Widget? { nil }
-    
-    public func createAltitudeWidget(current: Widget? = nil) -> Widget? { nil }
-    
-    public func createHorizontalSpeedWidget(current: Widget? = nil) -> Widget? { nil }
-    
-    public func createVerticalSpeedWidget(current: Widget? = nil) -> Widget? { nil }
+    public func createDistanceUserWidget(current: Widget? = nil) -> Widget? { GenericWidgetFactory.shared.createDistanceUserWidget(current: current) }
+
+    public func createDistanceHomeWidget(current: Widget? = nil) -> Widget? { GenericWidgetFactory.shared.createDistanceHomeWidget(current: current) }
+
+    public func createAltitudeWidget(current: Widget? = nil) -> Widget? { GenericWidgetFactory.shared.createAltitudeWidget(current: current) }
+
+    public func createHorizontalSpeedWidget(current: Widget? = nil) -> Widget? { GenericWidgetFactory.shared.createHorizontalSpeedWidget(current: current) }
+
+    public func createVerticalSpeedWidget(current: Widget? = nil) -> Widget? { GenericWidgetFactory.shared.createVerticalSpeedWidget(current: current) }
     
     public func createCameraGeneralSettingsWidget(current: Widget? = nil) -> Widget? {
         (current as? WrapperWidget)?.viewController is DUXCameraSettingsController ? current : DUXCameraSettingsController().createWidget()
+    }
+    
+    public func createCameraExposureWidget(current: Widget? = nil) -> Widget? {
+        current?.view.subviews.first is DUXCameraConfigInfoWidget ? current : DUXCameraConfigInfoWidget().createWidget()
+    }
+    
+    public func createCameraStorageWidget(current: Widget? = nil) -> Widget? {
+        current?.view.subviews.first is DUXCameraConfigStorageWidget ? current : DUXCameraConfigStorageWidget().createWidget()
+    }
+    
+    public func createCameraAutoExposureWidget(current: Widget? = nil) -> Widget? {
+        current?.view.subviews.first is DUXAutoExposureSwitchWidget ? current : DUXAutoExposureSwitchWidget().createWidget()
+    }
+    
+    public func createCameraExposureFocusWidget(current: Widget? = nil) -> Widget? {
+        current?.view.subviews.first is DUXExposureFocusSwitchWidget ? current : DUXExposureFocusSwitchWidget().createWidget()
+    }
+    
+    public func createCameraFocusModeWidget(current: Widget? = nil) -> Widget? {
+        current?.view.subviews.first is DUXFocusModeWidget ? current : DUXFocusModeWidget().createWidget()
     }
     
     public func createCameraModeWidget(current: Widget? = nil) -> Widget? {
@@ -114,5 +139,27 @@ extension DJIDroneSessionManager: WidgetFactory {
         }
         
         return DUXCompassWidget().createWidget()
+    }
+    
+    public func createTelemetryWidget(current: Widget? = nil) -> Widget? { GenericWidgetFactory.shared.createTelemetryWidget(current: current) }
+    
+    public func createRTKStatusWidget(current: Widget? = nil) -> Widget? {
+        if let session = session as? DJIDroneSession {
+            let widget = RTKStatusWidget()
+            widget.set(manager: DJIRTKManager(session.adapter.drone))
+            return widget
+        }
+        
+        return nil
+    }
+    
+    public func createRTKSettingsWidget(current: Widget? = nil) -> Widget? {
+        if let session = session as? DJIDroneSession {
+            let widget = RTKSettingsWidget()
+            widget.set(manager: DJIRTKManager(session.adapter.drone))
+            return widget
+        }
+        
+        return nil
     }
 }

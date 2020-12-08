@@ -103,9 +103,9 @@ open class DJIWidgetFactory: WidgetFactory {
         current?.view.subviews.first is DUXFocusModeWidget ? current : DUXFocusModeWidget().createWidget()
     }
 
-    open override func createCameraModeWidget(current: Widget? = nil) -> Widget? {
-        current?.view.subviews.first is DUXPictureVideoSwitchWidget ? current : DUXPictureVideoSwitchWidget().createWidget()
-    }
+//    open override func createCameraModeWidget(current: Widget? = nil) -> Widget? {
+//        current?.view.subviews.first is DUXPictureVideoSwitchWidget ? current : DUXPictureVideoSwitchWidget().createWidget()
+//    }
 
 //    open override func createCameraCaptureWidget(current: Widget? = nil) -> Widget? {
 //        GenericWidgetFactory.shared.createCameraCaptureWidget(current: current)

@@ -55,9 +55,9 @@ open class DJIWidgetFactory: WidgetFactory {
         current?.view.subviews.first is DUXRemainingFlightTimeWidget ? current : DUXRemainingFlightTimeWidget().createWidget()
     }
 
-    open override func createFlightModeWidget(current: Widget? = nil) -> Widget? {
-        current?.view.subviews.first is DUXFlightModeWidget ? current : DUXFlightModeWidget().createWidget()
-    }
+//    open override func createFlightModeWidget(current: Widget? = nil) -> Widget? {
+//        current?.view.subviews.first is DUXFlightModeWidget ? current : DUXFlightModeWidget().createWidget()
+//    }
 
     open override func createGPSWidget(current: Widget? = nil) -> Widget? {
         current?.view.subviews.first is DUXGPSSignalWidget ? current : DUXGPSSignalWidget().createWidget()

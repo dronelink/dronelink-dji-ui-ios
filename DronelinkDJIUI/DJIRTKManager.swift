@@ -8,8 +8,9 @@
 import os
 import Foundation
 import DJISDK
-import SwiftyUserDefaults
 import DronelinkCore
+import DronelinkCoreUI
+import SwiftyUserDefaults
 
 extension DefaultsKeys {
     var rtkAutoConnect: DefaultsKey<Bool> { .init("rtkAutoConnect", defaultValue: false) }
@@ -20,34 +21,9 @@ extension DefaultsKeys {
     var rtkPassword: DefaultsKey<String?> { .init("rtkPassword") }
 }
 
-public struct RTKConfigurationRecord {
-    var enabled: Bool
-    let autoConnect: Bool
-    let serverAddress: String?
-    let port: Int?
-    let mountPoint: String?
-    let userName: String?
-    let password: String?
-}
-
-public enum NetworkRTKStatus {
-    case notSupported
-    case disabled
-    case connecting
-    case connected
-    case error
-}
-public struct RTKState {
-    let networkRTKEnabled: Bool
-    let networkRTKConnected: Bool
-    let networkRTKStatus: NetworkRTKStatus
-    let networkServiceStateText: String
-    let configurationStatus: String
-}
-
-public class DJIRTKManager : NSObject {
+public class DJIRTKManager: NSObject, RTKManager {
     private var config: RTKConfigurationRecord!
-    private let log = OSLog(subsystem: "DronelinkDJIUI", category: "DJIRTKManager")
+    private let log = OSLog(subsystem: "DronelinkDJI", category: "RTKManager")
     
     private var networkState: DJIRTKNetworkServiceState?
     private var listners: [String: (_ update:RTKState) -> Void] = [:]
@@ -63,6 +39,7 @@ public class DJIRTKManager : NSObject {
         
         initRTK()
     }
+    
     public func initRTK() {
         guard aircraft.flightController?.rtk != nil else {
             os_log(.info, "Connected to drone; RTK not supported")
@@ -80,7 +57,7 @@ public class DJIRTKManager : NSObject {
         
         os_log(.info, log: log, "Connecting to drone; RTK supported: %{public}s", self.isRtkSupported() ? "yes" : "no")
         
-        DJISDKManager.rtkNetworkServiceProvider().addNetworkServiceStateListener("DJIRTKManager", queue: nil) { (state: DJIRTKNetworkServiceState) in
+        DJISDKManager.rtkNetworkServiceProvider().addNetworkServiceStateListener("RTKManager", queue: nil) { (state: DJIRTKNetworkServiceState) in
             self.networkState = state
             if self.waitForConnection {
                 if state.channelState != .connecting {
@@ -106,20 +83,22 @@ public class DJIRTKManager : NSObject {
             }
         })
     }
+    
     public func close() {
-        DJISDKManager.rtkNetworkServiceProvider().removeNetworkServiceStateListener("DJIRTKManager")
+        DJISDKManager.rtkNetworkServiceProvider().removeNetworkServiceStateListener("RTKManager")
         self.aircraft = nil
         listners.removeAll()
     }
     
-    public func getConfiguration() -> RTKConfigurationRecord! {
-        return config
-    }
-    public func setConfiguration(_ config: RTKConfigurationRecord) {
-        self.config = config
+
+    public var configuration: RTKConfigurationRecord? { config }
+    
+    public func set(configuration: RTKConfigurationRecord) {
+        self.config = configuration
         configure()
         saveConfiguration()
     }
+    
     private func saveConfiguration() {
         guard self.config != nil else { return }
         
@@ -282,7 +261,6 @@ class ConfigureRtkHelper {
     let withError: (_ error: Error?, _ action: String) -> Void
     let withSuccess: () -> Void
 
-    
     private init(_ rtk: DJIRTK, _ config: RTKConfigurationRecord, _ withError: @escaping (_ error: Error?, _ action: String) -> Void, _ withSuccess: @escaping () -> Void) {
         
         self.rtk = rtk
@@ -292,6 +270,7 @@ class ConfigureRtkHelper {
         
         stopNetwork()
     }
+    
     private func stopNetwork() {
         DJISDKManager.rtkNetworkServiceProvider().stopNetworkService() { (error: Error?) in
             if self.noError(error: error, action: "Stop RTK Network Service") {
@@ -299,6 +278,7 @@ class ConfigureRtkHelper {
             }
         }
     }
+    
     private func enableRtk() {
         rtk.setEnabled(true) { (error: Error?) in
             if self.noError(error: error, action: "Enable RTK") {
@@ -306,6 +286,7 @@ class ConfigureRtkHelper {
             }
         }
     }
+    
     private func setSettings() {
         let settings = DJIMutableRTKNetworkServiceSettings()
         settings.mountpoint = config.mountPoint
@@ -318,6 +299,7 @@ class ConfigureRtkHelper {
         
         setReferenceStation()
     }
+    
     private func setReferenceStation() {
         rtk.setReferenceStationSource(.customNetworkService) { (error: Error?) in
             if self.noError(error: error, action: "Set reference station custom") {
@@ -325,6 +307,7 @@ class ConfigureRtkHelper {
             }
         }
     }
+    
     private func startNetwork() {
         DJISDKManager.rtkNetworkServiceProvider().startNetworkService { (error: Error?) in
             if self.noError(error: error, action: "Start network") {

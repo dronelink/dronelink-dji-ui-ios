@@ -78,8 +78,10 @@ open class DJIWidgetFactory: WidgetFactory {
     open override func createBatteryWidget(current: Widget? = nil) -> Widget? {
         current?.view.subviews.first is DUXBatteryWidget ? current : DUXBatteryWidget().createWidget()
     }
+    
+    open override var cameraMenuWidgetEnabled: Bool { true }
 
-    open override func createCameraGeneralSettingsWidget(current: Widget? = nil) -> Widget? {
+    open override func createCameraMenuWidget(current: Widget? = nil) -> Widget? {
         (current as? WrapperWidget)?.viewController is DUXCameraSettingsController ? current : DUXCameraSettingsController().createWidget()
     }
 
@@ -111,7 +113,9 @@ open class DJIWidgetFactory: WidgetFactory {
 //        GenericWidgetFactory.shared.createCameraCaptureWidget(current: current)
 //    }
 
-    open override func createCameraExposureSettingsWidget(current: Widget? = nil) -> Widget? {
+    open override var cameraExposureMenuWidgetEnabled: Bool { true }
+    
+    open override func createCameraExposureMenuWidget(current: Widget? = nil) -> Widget? {
         (current as? WrapperWidget)?.viewController is DUXExposureSettingsController ? current : DUXExposureSettingsController().createWidget()
     }
 
@@ -133,7 +137,7 @@ open class DJIWidgetFactory: WidgetFactory {
         return nil
     }
 
-    open override func createRTKSettingsWidget(current: Widget? = nil) -> Widget? {
+    open override func createRTKMenuWidget(current: Widget? = nil) -> Widget? {
         if let session = session as? DJIDroneSession {
             let widget = RTKSettingsWidget()
             widget.set(manager: DJIRTKManager(session.adapter.drone))

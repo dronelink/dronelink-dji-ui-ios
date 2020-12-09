@@ -59,21 +59,21 @@ open class DJIWidgetFactory: WidgetFactory {
 //        current?.view.subviews.first is DUXFlightModeWidget ? current : DUXFlightModeWidget().createWidget()
 //    }
 
-    open override func createGPSWidget(current: Widget? = nil) -> Widget? {
-        current?.view.subviews.first is DUXGPSSignalWidget ? current : DUXGPSSignalWidget().createWidget()
-    }
+//    open override func createGPSWidget(current: Widget? = nil) -> Widget? {
+//        current?.view.subviews.first is DUXGPSSignalWidget ? current : DUXGPSSignalWidget().createWidget()
+//    }
 
     open override func createVisionWidget(current: Widget? = nil) -> Widget? {
         current?.view.subviews.first is DUXVisionWidget ? current : DUXVisionWidget().createWidget()
     }
 
-    open override func createUplinkWidget(current: Widget? = nil) -> Widget? {
-        current?.view.subviews.first is DUXRemoteControlSignalWidget ? current : DUXRemoteControlSignalWidget().createWidget()
-    }
-
-    open override func createDownlinkWidget(current: Widget? = nil) -> Widget? {
-        current?.view.subviews.first is DUXVideoSignalWidget ? current : DUXVideoSignalWidget().createWidget()
-    }
+//    open override func createUplinkWidget(current: Widget? = nil) -> Widget? {
+//        current?.view.subviews.first is DUXRemoteControlSignalWidget ? current : DUXRemoteControlSignalWidget().createWidget()
+//    }
+//
+//    open override func createDownlinkWidget(current: Widget? = nil) -> Widget? {
+//        current?.view.subviews.first is DUXVideoSignalWidget ? current : DUXVideoSignalWidget().createWidget()
+//    }
 
     open override func createBatteryWidget(current: Widget? = nil) -> Widget? {
         current?.view.subviews.first is DUXBatteryWidget ? current : DUXBatteryWidget().createWidget()

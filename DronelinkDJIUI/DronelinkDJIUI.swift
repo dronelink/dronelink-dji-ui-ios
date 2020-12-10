@@ -55,29 +55,9 @@ open class DJIWidgetFactory: WidgetFactory {
         current?.view.subviews.first is DUXRemainingFlightTimeWidget ? current : DUXRemainingFlightTimeWidget().createWidget()
     }
 
-//    open override func createFlightModeWidget(current: Widget? = nil) -> Widget? {
-//        current?.view.subviews.first is DUXFlightModeWidget ? current : DUXFlightModeWidget().createWidget()
-//    }
-
-//    open override func createGPSWidget(current: Widget? = nil) -> Widget? {
-//        current?.view.subviews.first is DUXGPSSignalWidget ? current : DUXGPSSignalWidget().createWidget()
-//    }
-
     open override func createVisionWidget(current: Widget? = nil) -> Widget? {
         current?.view.subviews.first is DUXVisionWidget ? current : DUXVisionWidget().createWidget()
     }
-
-//    open override func createUplinkWidget(current: Widget? = nil) -> Widget? {
-//        current?.view.subviews.first is DUXRemoteControlSignalWidget ? current : DUXRemoteControlSignalWidget().createWidget()
-//    }
-//
-//    open override func createDownlinkWidget(current: Widget? = nil) -> Widget? {
-//        current?.view.subviews.first is DUXVideoSignalWidget ? current : DUXVideoSignalWidget().createWidget()
-//    }
-
-//    open override func createBatteryWidget(current: Widget? = nil) -> Widget? {
-//        current?.view.subviews.first is DUXBatteryWidget ? current : DUXBatteryWidget().createWidget()
-//    }
     
     open override var cameraMenuWidgetEnabled: Bool { true }
 
@@ -104,14 +84,6 @@ open class DJIWidgetFactory: WidgetFactory {
     open override func createCameraFocusModeWidget(current: Widget? = nil) -> Widget? {
         current?.view.subviews.first is DUXFocusModeWidget ? current : DUXFocusModeWidget().createWidget()
     }
-
-//    open override func createCameraModeWidget(current: Widget? = nil) -> Widget? {
-//        current?.view.subviews.first is DUXPictureVideoSwitchWidget ? current : DUXPictureVideoSwitchWidget().createWidget()
-//    }
-
-//    open override func createCameraCaptureWidget(current: Widget? = nil) -> Widget? {
-//        GenericWidgetFactory.shared.createCameraCaptureWidget(current: current)
-//    }
 
     open override var cameraExposureMenuWidgetEnabled: Bool { true }
     

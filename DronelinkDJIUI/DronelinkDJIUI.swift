@@ -75,9 +75,9 @@ open class DJIWidgetFactory: WidgetFactory {
 //        current?.view.subviews.first is DUXVideoSignalWidget ? current : DUXVideoSignalWidget().createWidget()
 //    }
 
-    open override func createBatteryWidget(current: Widget? = nil) -> Widget? {
-        current?.view.subviews.first is DUXBatteryWidget ? current : DUXBatteryWidget().createWidget()
-    }
+//    open override func createBatteryWidget(current: Widget? = nil) -> Widget? {
+//        current?.view.subviews.first is DUXBatteryWidget ? current : DUXBatteryWidget().createWidget()
+//    }
     
     open override var cameraMenuWidgetEnabled: Bool { true }
 

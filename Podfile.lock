@@ -187,7 +187,7 @@ PODS:
 
 DEPENDENCIES:
   - DJI-UXSDK-iOS (~> 4.13)
-  - DronelinkCore (from `../../private/dronelink-core-ios`)
+  - DronelinkCore (from `../private/dronelink-core-ios`)
   - DronelinkCoreUI (from `../dronelink-core-ui-ios`)
   - DronelinkDJI (from `../dronelink-dji-ios`)
   - MaterialComponents/Palettes (~> 119.0.0)
@@ -216,7 +216,7 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   DronelinkCore:
-    :path: "../../private/dronelink-core-ios"
+    :path: "../private/dronelink-core-ios"
   DronelinkCoreUI:
     :path: "../dronelink-core-ui-ios"
   DronelinkDJI:
@@ -231,7 +231,7 @@ SPEC CHECKSUMS:
   DronelinkDJI: 0ece14e02c3ac621e8d5f99d875e0b91e8613199
   IQKeyboardManager: 2a6e97afdafc7becf0cb17a9a8d795e3a980717f
   Kingfisher: a3c03d702433fa6cfedabb2bddbe076fb8f2e902
-  Mapbox-iOS-SDK: 6a67397df2bcafe5d2851604192aa8de6f8d6c89
+  Mapbox-iOS-SDK: 2563ed87ead6ec08f1c2090873977b8a7be335a8
   MapboxMobileEvents: d0a581dedd8f47411cc65ea520b965e83914316e
   MarqueeLabel: 00cc0bcd087111dca575878b3531af980559707d
   MaterialComponents: 69a725e28406a97816441dea4ec6ec38265a08bb
@@ -244,6 +244,6 @@ SPEC CHECKSUMS:
   SwiftyGif: e466e86c660d343357ab944a819a101c4127cb40
   SwiftyUserDefaults: 33fcb42bd1feb53a37d873feb62c82967db5f7f6
 
-PODFILE CHECKSUM: 2a8288549e2f9f8872bfe7187ba67cc3925ed314
+PODFILE CHECKSUM: c81efde3581a0317314b23c0da3f400862d1e03f
 
 COCOAPODS: 1.10.0

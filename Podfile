@@ -3,7 +3,7 @@ inhibit_all_warnings!
 use_frameworks!
 
 target 'DronelinkDJIUI' do
-  pod 'DronelinkCore', :path => '../../private/dronelink-core-ios'
+  pod 'DronelinkCore', :path => '../private/dronelink-core-ios'
   pod 'DronelinkCoreUI', :path => '../dronelink-core-ui-ios'
   pod 'DronelinkDJI', :path => '../dronelink-dji-ios'
   pod 'DJI-UXSDK-iOS', '~> 4.13'

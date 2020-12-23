@@ -1059,10 +1059,6 @@ extension DJIDashboardViewController: DronelinkDelegate {
 extension DJIDashboardViewController: DroneSessionManagerDelegate {
     public func onOpened(session: DroneSession) {
         self.session = session
-        if let djiDrone = session.drone as? DJIDroneAdapter {
-            self.rtkManager = DJIRTKManager(djiDrone.drone)
-            rtkStatus.setRTK(rtk: rtkManager)
-        }
         session.add(delegate: self)
         DispatchQueue.main.async {
             if !self.primaryViewToggled {
@@ -1085,6 +1081,10 @@ extension DJIDashboardViewController: DroneSessionManagerDelegate {
 
 extension DJIDashboardViewController: DroneSessionDelegate {
     public func onInitialized(session: DroneSession) {
+        if let djiDrone = session.drone as? DJIDroneAdapter {
+            self.rtkManager = DJIRTKManager(djiDrone.drone)
+            rtkStatus.setRTK(rtk: rtkManager)
+        }
         if let cameraState = session.cameraState(channel: 0), !cameraState.value.isSDCardInserted {
             DronelinkUI.shared.showDialog(title: "DJIDashboardViewController.camera.noSDCard.title".localized, details: "DJIDashboardViewController.camera.noSDCard.details".localized)
         }

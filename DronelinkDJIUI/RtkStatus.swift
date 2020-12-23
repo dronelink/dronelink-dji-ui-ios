@@ -47,13 +47,15 @@ class RTKStatus : UIViewController {
         
         if rtk != nil {
             rtk!.addUpdateListner(key: "RtkStatus") { (state: RTKState) in
-                if (state.networkRTKStatus != .notSupported)
-                {
-                    self.updateLabel(state)
-                    self.view.isHidden = false
-                }
-                else {
-                    self.view.isHidden = true
+                DispatchQueue.main.async {
+                    if (state.networkRTKStatus != .notSupported)
+                    {
+                        self.updateLabel(state)
+                        self.view.isHidden = false
+                    }
+                    else {
+                        self.view.isHidden = true
+                    }
                 }
             }
         }

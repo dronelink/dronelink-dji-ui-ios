@@ -76,6 +76,9 @@ class RTKStatus : UIViewController {
         else if (state.networkRTKStatus == .connected) {
             statusLabel.text = "DJIDashboardViewController.rtk.status.connected".localized
         }
+        else if (state.networkRTKStatus == .timeout) {
+            statusLabel.text = "DJIDashboardViewController.rtk.status.timeout".localized
+        }
         else {
             statusLabel.text = state.networkServiceStateText
         }

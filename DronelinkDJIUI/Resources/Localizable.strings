@@ -35,6 +35,7 @@
 "DJIDashboardViewController.rtk.status.disabled" = "Disabled";
 "DJIDashboardViewController.rtk.status.connected" = "Connected";
 "DJIDashboardViewController.rtk.status.connecting" = "Connecting";
+"DJIDashboardViewController.rtk.status.timeout" = "Timeout";
 "RTK.channelstate.accounterror" = "Account error";
 "RTK.channelstate.airecraftdisconnected" = "Aircraft Disconnected";
 "RTK.channelstate.connecting" = "Connecting";

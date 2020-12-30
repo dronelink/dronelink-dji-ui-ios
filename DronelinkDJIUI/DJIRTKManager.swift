@@ -36,6 +36,7 @@ public enum NetworkRTKStatus {
     case connecting
     case connected
     case error
+    case timeout
 }
 public struct RTKState {
     let networkRTKEnabled: Bool
@@ -56,6 +57,7 @@ public class DJIRTKManager : NSObject {
     private var configurationState: String?
     private var configuring: Bool = false
     private var waitForConnection: Bool = false
+    private var timeout: Bool = false
     private var initialized: Bool = false
     private var initializationAttempt: Int = 0
     private var managerIsConnected: Bool = false
@@ -105,7 +107,12 @@ public class DJIRTKManager : NSObject {
         os_log(.info, log: log, "Initialize; RTK supported: %@; AutoConnect: %@", self.isRtkSupported() ? "yes" : "no", config.autoConnect ? "Yes" : "No")
         
         DJISDKManager.rtkNetworkServiceProvider().addNetworkServiceStateListener("DJIRTKManager", queue: nil) { (state: DJIRTKNetworkServiceState) in
+            if self.networkState != state {
+                os_log(.info, log: self.log, "Network state listner: %@, connecting: %@", self.mapNetworkState(state.channelState), self.waitForConnection ? "waiting" : "no")
+            }
+            
             self.networkState = state
+            
             if self.waitForConnection {
                 if state.channelState != .connecting {
                     self.waitForConnection = false
@@ -114,6 +121,7 @@ public class DJIRTKManager : NSObject {
             self.update()
         }
         initialized = true
+        timeout = false
         
         self.update()
         let rtk = aircraft.flightController!.rtk!
@@ -181,6 +189,10 @@ public class DJIRTKManager : NSObject {
             return .disabled
         }
         else if configuring || waitForConnection {
+            if !configuring && timeout {
+                return .timeout
+            }
+            
             // There is a delay between finishing the RTK configuration and network RTK actually connecting,
             // waitForConnection tracks this and keeps the status in connecting.
             return .connecting
@@ -225,10 +237,18 @@ public class DJIRTKManager : NSObject {
             self.configurationState = "RTK.configstate.notsupported".localized
             return
         }
+        
         let rtk = self.aircraft!.flightController!.rtk!
+        timeout = false
         
         if config == nil || config?.enabled == false {
+            
+            if(managerIsConnected) {
+                // Attempt to stop the network service if it was previously started.
+                DJISDKManager.rtkNetworkServiceProvider().stopNetworkService()
+            }
             managerIsConnected = false
+            
             rtk.setEnabled(false, withCompletion: { (error: Error?) in
                 if (error == nil) {
                     self.configurationState = "RTK.configstate.disabled".localized
@@ -268,7 +288,16 @@ public class DJIRTKManager : NSObject {
             self.configuring = false
             self.waitForConnection = true
             self.configurationState = "RTK.configstate.ok".localized
+            
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 30) {
+                if self.waitForConnection {
+                    self.timeout = true
+                    self.update()
+                }
+            }
             self.update()
+            
         }
     }
     

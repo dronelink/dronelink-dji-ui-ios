@@ -47,13 +47,15 @@ class RTKStatus : UIViewController {
         
         if rtk != nil {
             rtk!.addUpdateListner(key: "RtkStatus") { (state: RTKState) in
-                if (state.networkRTKStatus != .notSupported)
-                {
-                    self.updateLabel(state)
-                    self.view.isHidden = false
-                }
-                else {
-                    self.view.isHidden = true
+                DispatchQueue.main.async {
+                    if (state.networkRTKStatus != .notSupported)
+                    {
+                        self.updateLabel(state)
+                        self.view.isHidden = false
+                    }
+                    else {
+                        self.view.isHidden = true
+                    }
                 }
             }
         }
@@ -73,6 +75,9 @@ class RTKStatus : UIViewController {
         }
         else if (state.networkRTKStatus == .connected) {
             statusLabel.text = "DJIDashboardViewController.rtk.status.connected".localized
+        }
+        else if (state.networkRTKStatus == .timeout) {
+            statusLabel.text = "DJIDashboardViewController.rtk.status.timeout".localized
         }
         else {
             statusLabel.text = state.networkServiceStateText

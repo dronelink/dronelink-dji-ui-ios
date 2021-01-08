@@ -21,6 +21,9 @@
 "RTK.configstate.unknown" = "Unknown";
 "RTK.configstate.notsupported" = "RTK not supported";
 "RTK.configstate.disabled" = "RTK disabled";
+"RTK.configstate.enabled" = "Configured";
+"RTK.configstate.configuring" = "Configuring";
 "RTK.configstate.disablefailed" = "RTK disable failed";
 "RTK.configstate.incomplete" = "Configuration incomplete";
+"RTK.configstate.loaded" = "Loaded";
 "RTK.configstate.ok" = "OK";

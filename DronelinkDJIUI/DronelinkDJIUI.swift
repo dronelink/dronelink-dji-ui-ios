@@ -100,22 +100,21 @@ open class DJIWidgetFactory: WidgetFactory {
     }
 
     open override func createRTKStatusWidget(current: Widget? = nil) -> Widget? {
-        if let session = session as? DJIDroneSession {
-            let widget = RTKStatusWidget()
-            widget.set(manager: DJIRTKManager(session.adapter.drone))
-            return widget
+        if (current is RTKStatusWidget) {
+            return current
         }
-
-        return nil
+        
+        let widget = RTKStatusWidget()
+        widget.createManager = {
+            if let session = self.session as? DJIDroneSession {
+                return DJIRTKManager(session.adapter.drone)
+            }
+            return nil
+        }
+        return widget
     }
 
     open override func createRTKMenuWidget(current: Widget? = nil) -> Widget? {
-        if let session = session as? DJIDroneSession {
-            let widget = RTKSettingsWidget()
-            widget.set(manager: DJIRTKManager(session.adapter.drone))
-            return widget
-        }
-
-        return nil
+        RTKSettingsWidget()
     }
 }

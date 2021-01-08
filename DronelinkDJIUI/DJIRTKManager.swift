@@ -23,7 +23,8 @@ extension DefaultsKeys {
 
 public class DJIRTKManager: NSObject, RTKManager {
     private var config: RTKConfigurationRecord!
-    private let log = OSLog(subsystem: "DronelinkDJI", category: "RTKManager")
+    public var configuration: RTKConfigurationRecord? { get { config } }
+    private let log = OSLog(subsystem: "DronelinkDJIUI", category: "DJIRTKManager")
     
     private var networkState: DJIRTKNetworkServiceState?
     private var listners: [String: (_ update:RTKState) -> Void] = [:]
@@ -32,6 +33,10 @@ public class DJIRTKManager: NSObject, RTKManager {
     private var configurationState: String?
     private var configuring: Bool = false
     private var waitForConnection: Bool = false
+    private var timeout: Bool = false
+    private var initialized: Bool = false
+    private var initializationAttempt: Int = 0
+    private var managerIsConnected: Bool = false
     
     public init(_ drone: DJIAircraft!) {
         super.init()
@@ -40,9 +45,28 @@ public class DJIRTKManager: NSObject, RTKManager {
         initRTK()
     }
     
-    public func initRTK() {
+    private func initRTK() {
         guard aircraft.flightController?.rtk != nil else {
-            os_log(.info, "Connected to drone; RTK not supported")
+            // In this state the RTK manager is not fully configured and will not detect RTK state changes
+            // flightController.rtk may be initialized a little later so a few rechecks are scheduled
+            if (initializationAttempt < 5) {
+                os_log(.debug, log: self.log, "Initialize; Flightcontroller.RTK not set, scheduling recheck (%d)", initializationAttempt)
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    self.initializationAttempt += 1
+                    self.initRTK()
+                }
+            }
+            else {
+                os_log(.info, log: self.log, "Initialize; RTK not supported")
+            }
+            return
+        }
+        
+        //Initialization should only happen once
+        if (initialized) {
+            os_log(.debug, log: self.log, "Initialize; RTK already initialized")
+            self.update()
             return
         }
         
@@ -55,10 +79,15 @@ public class DJIRTKManager: NSObject, RTKManager {
             userName: Defaults[\.rtkUsername],
             password: Defaults[\.rtkPassword])
         
-        os_log(.info, log: log, "Connecting to drone; RTK supported: %{public}s", self.isRtkSupported() ? "yes" : "no")
+        os_log(.info, log: log, "Initialize; RTK supported: %@; AutoConnect: %@", self.isRtkSupported() ? "yes" : "no", config.autoConnect ? "Yes" : "No")
         
-        DJISDKManager.rtkNetworkServiceProvider().addNetworkServiceStateListener("RTKManager", queue: nil) { (state: DJIRTKNetworkServiceState) in
+        DJISDKManager.rtkNetworkServiceProvider().addNetworkServiceStateListener("DJIRTKManager", queue: nil) { (state: DJIRTKNetworkServiceState) in
+            if self.networkState != state {
+                os_log(.info, log: self.log, "Network state listner: %@, connecting: %@", self.mapNetworkState(state.channelState), self.waitForConnection ? "waiting" : "no")
+            }
+            
             self.networkState = state
+            
             if self.waitForConnection {
                 if state.channelState != .connecting {
                     self.waitForConnection = false
@@ -66,6 +95,8 @@ public class DJIRTKManager: NSObject, RTKManager {
             }
             self.update()
         }
+        initialized = true
+        timeout = false
         
         self.update()
         let rtk = aircraft.flightController!.rtk!
@@ -73,8 +104,12 @@ public class DJIRTKManager: NSObject, RTKManager {
         rtk.getEnabledWithCompletion({ (enabled: Bool, error: Error?) in
             if (error == nil) {
                 self.config.enabled = enabled
+
+                os_log(.debug, log: self.log, "RTK init enabled check: %@", enabled ? "yes" : "no")
                 
-                if (self.config.autoConnect && !enabled) {
+                if self.config.autoConnect && (!enabled || !self.managerIsConnected) {
+                    self.config.enabled = true
+                    os_log(.info, log: self.log, "Starting auto connect")
                     self.configure()
                 }
             }
@@ -83,15 +118,11 @@ public class DJIRTKManager: NSObject, RTKManager {
             }
         })
     }
-    
     public func close() {
-        DJISDKManager.rtkNetworkServiceProvider().removeNetworkServiceStateListener("RTKManager")
+        DJISDKManager.rtkNetworkServiceProvider().removeNetworkServiceStateListener("DJIRTKManager")
         self.aircraft = nil
         listners.removeAll()
     }
-    
-
-    public var configuration: RTKConfigurationRecord? { config }
     
     public func set(configuration: RTKConfigurationRecord) {
         self.config = configuration
@@ -131,6 +162,10 @@ public class DJIRTKManager: NSObject, RTKManager {
             return .disabled
         }
         else if configuring || waitForConnection {
+            if !configuring && timeout {
+                return .timeout
+            }
+            
             // There is a delay between finishing the RTK configuration and network RTK actually connecting,
             // waitForConnection tracks this and keeps the status in connecting.
             return .connecting
@@ -151,15 +186,20 @@ public class DJIRTKManager: NSObject, RTKManager {
     }
     
     private func update() {
+        let status = self.getNetworkRTKStatus()
+        
         lastState = RTKState(
             networkRTKEnabled: config?.enabled ?? false,
             networkRTKConnected: networkState?.channelState == .transmitting,
-            networkRTKStatus: getNetworkRTKStatus(),
-            networkServiceStateText: self.mapNetworkState(networkState?.channelState),
-            configurationStatus: self.configurationState ?? "")
+            networkRTKStatus: status,
+            networkServiceStateText: status == .disabled
+                ? "RTK.channelstate.disabled".localized
+                : self.mapNetworkState(networkState?.channelState),
+            configurationStatus: self.configurationState ?? "RTK.configstate.loaded".localized)
         
-        for (_, listner) in listners {
-            listner(lastState)
+        
+        for (_, listner) in self.listners {
+            listner(self.lastState)
         }
     }
     
@@ -170,10 +210,18 @@ public class DJIRTKManager: NSObject, RTKManager {
             self.configurationState = "RTK.configstate.notsupported".localized
             return
         }
-        self.configuring = true
+        
         let rtk = self.aircraft!.flightController!.rtk!
+        timeout = false
         
         if config == nil || config?.enabled == false {
+            
+            if(managerIsConnected) {
+                // Attempt to stop the network service if it was previously started.
+                DJISDKManager.rtkNetworkServiceProvider().stopNetworkService()
+            }
+            managerIsConnected = false
+            
             rtk.setEnabled(false, withCompletion: { (error: Error?) in
                 if (error == nil) {
                     self.configurationState = "RTK.configstate.disabled".localized
@@ -187,14 +235,20 @@ public class DJIRTKManager: NSObject, RTKManager {
             
             return
         }
-        
         let config = self.config!
         guard (config.serverAddress?.count ?? 0 >= 0) else {
+            self.managerIsConnected = false
             self.configurationState = "RTK.configstate.incomplete".localized
             self.update()
             return
         }
+        
+        if (self.configuring) {
+            return
+        }
         self.configuring = true
+        
+        self.managerIsConnected = true
         self.configurationState = "Configuring"
         self.update()
         
@@ -202,16 +256,38 @@ public class DJIRTKManager: NSObject, RTKManager {
             self.configuring = false
             self.configurationState = msg
             self.update()
+            self.managerIsConnected = false
         } withSuccess: {
             self.configuring = false
             self.waitForConnection = true
             self.configurationState = "RTK.configstate.ok".localized
+            
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 30) {
+                if self.waitForConnection {
+                    self.timeout = true
+                    self.update()
+                }
+            }
             self.update()
+            
         }
     }
     
     private func mapNetworkState(_ state: DJIRTKNetworkServiceChannelState?) -> String
     {
+        if (state == nil) {
+            if (self.configuring) {
+                return "RTK.configstate.configuring".localized
+            }
+            else if (self.config.enabled) {
+                return "RTK.configstate.enabled".localized
+            }
+            else {
+                return "RTK.configstate.disabled".localized
+            }
+        }
+        
         switch (state) {
         case .accountError:
             return "RTK.channelstate.accounterror".localized
@@ -260,34 +336,57 @@ class ConfigureRtkHelper {
     let config: RTKConfigurationRecord
     let withError: (_ error: Error?, _ action: String) -> Void
     let withSuccess: () -> Void
-
+    var last = 0
+    
     private init(_ rtk: DJIRTK, _ config: RTKConfigurationRecord, _ withError: @escaping (_ error: Error?, _ action: String) -> Void, _ withSuccess: @escaping () -> Void) {
         
         self.rtk = rtk
         self.config = config
         self.withError = withError
         self.withSuccess = withSuccess
+        self.last = 0
         
         stopNetwork()
     }
-    
+    private func shouldRun(_ step: Int) -> Bool
+    {
+        // the DJI competion blocks are called multiple times. This method ensure
+        // each action is only executed once
+        if last != step {
+            return false
+        }
+        last = step + 1
+        return true
+    }
     private func stopNetwork() {
+        if !shouldRun(0){
+            return
+        }
+        
+        os_log(.debug, log: self.log, "Stop network")
         DJISDKManager.rtkNetworkServiceProvider().stopNetworkService() { (error: Error?) in
             if self.noError(error: error, action: "Stop RTK Network Service") {
                 self.enableRtk()
             }
         }
     }
-    
     private func enableRtk() {
+        if !shouldRun(1){
+            return
+        }
+        os_log(.debug, log: self.log, "Enabled RTK")
+        
         rtk.setEnabled(true) { (error: Error?) in
-            if self.noError(error: error, action: "Enable RTK") {
-                self.setSettings()
-            }
+            // For enable: report the error but try to continue even if it fails
+            self.noError(error: error, action: "Enable RTK")
+            self.setSettings()
         }
     }
-    
     private func setSettings() {
+        if !shouldRun(2){
+            return
+        }
+        os_log(.debug, log: self.log, "Set Settings")
         let settings = DJIMutableRTKNetworkServiceSettings()
         settings.mountpoint = config.mountPoint
         settings.password = config.password
@@ -299,16 +398,22 @@ class ConfigureRtkHelper {
         
         setReferenceStation()
     }
-    
     private func setReferenceStation() {
+        if !shouldRun(3){
+            return
+        }
+        os_log(.debug, log: self.log, "Set Reference station")
         rtk.setReferenceStationSource(.customNetworkService) { (error: Error?) in
             if self.noError(error: error, action: "Set reference station custom") {
                 self.startNetwork()
             }
         }
     }
-    
     private func startNetwork() {
+        if !shouldRun(4){
+            return
+        }
+        os_log(.debug, log: self.log, "Start network")
         DJISDKManager.rtkNetworkServiceProvider().startNetworkService { (error: Error?) in
             if self.noError(error: error, action: "Start network") {
                 self.withSuccess()
@@ -324,6 +429,7 @@ class ConfigureRtkHelper {
             os_log(.error, log: self.log, "Failed to %@: %@", action, msg)
             return false
         }
+        os_log(.debug, log: self.log, "Success: %@", action)
         
         return true
     }

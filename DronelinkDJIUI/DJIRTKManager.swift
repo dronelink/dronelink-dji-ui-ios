@@ -8,8 +8,9 @@
 import os
 import Foundation
 import DJISDK
-import SwiftyUserDefaults
 import DronelinkCore
+import DronelinkCoreUI
+import SwiftyUserDefaults
 
 extension DefaultsKeys {
     var rtkAutoConnect: DefaultsKey<Bool> { .init("rtkAutoConnect", defaultValue: false) }
@@ -20,34 +21,9 @@ extension DefaultsKeys {
     var rtkPassword: DefaultsKey<String?> { .init("rtkPassword") }
 }
 
-public struct RTKConfigurationRecord {
-    var enabled: Bool
-    let autoConnect: Bool
-    let serverAddress: String?
-    let port: Int?
-    let mountPoint: String?
-    let userName: String?
-    let password: String?
-}
-
-public enum NetworkRTKStatus {
-    case notSupported
-    case disabled
-    case connecting
-    case connected
-    case error
-    case timeout
-}
-public struct RTKState {
-    let networkRTKEnabled: Bool
-    let networkRTKConnected: Bool
-    let networkRTKStatus: NetworkRTKStatus
-    let networkServiceStateText: String
-    let configurationStatus: String
-}
-
-public class DJIRTKManager : NSObject {
+public class DJIRTKManager: NSObject, RTKManager {
     private var config: RTKConfigurationRecord!
+    public var configuration: RTKConfigurationRecord? { get { config } }
     private let log = OSLog(subsystem: "DronelinkDJIUI", category: "DJIRTKManager")
     
     private var networkState: DJIRTKNetworkServiceState?
@@ -73,7 +49,6 @@ public class DJIRTKManager : NSObject {
         guard aircraft.flightController?.rtk != nil else {
             // In this state the RTK manager is not fully configured and will not detect RTK state changes
             // flightController.rtk may be initialized a little later so a few rechecks are scheduled
-
             if (initializationAttempt < 5) {
                 os_log(.debug, log: self.log, "Initialize; Flightcontroller.RTK not set, scheduling recheck (%d)", initializationAttempt)
                 
@@ -149,14 +124,12 @@ public class DJIRTKManager : NSObject {
         listners.removeAll()
     }
     
-    public func getConfiguration() -> RTKConfigurationRecord! {
-        return config
-    }
-    public func setConfiguration(_ config: RTKConfigurationRecord) {
-        self.config = config
+    public func set(configuration: RTKConfigurationRecord) {
+        self.config = configuration
         configure()
         saveConfiguration()
     }
+    
     private func saveConfiguration() {
         guard self.config != nil else { return }
         

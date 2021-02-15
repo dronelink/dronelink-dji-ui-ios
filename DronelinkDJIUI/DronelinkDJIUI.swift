@@ -115,9 +115,9 @@ open class DJIWidgetFactory: WidgetFactory {
         }
         
         let widget = RTKStatusWidget()
-        widget.createManager = {
-            if let session = self.session as? DJIDroneSession {
-                return DJIRTKManager(session.adapter.drone)
+        widget.createManager = {(session) in
+            if let djiSession = session as? DJIDroneSession {
+                return DJIRTKManager(djiSession.adapter.drone)
             }
             return nil
         }

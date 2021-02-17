@@ -75,10 +75,6 @@ open class DJIWidgetFactory: WidgetFactory {
         (current as? WrapperWidget)?.viewController is DUXCameraSettingsController ? current : DUXCameraSettingsController().createWidget()
     }
 
-    open override func createCameraExposureWidget(current: Widget? = nil) -> Widget? {
-        current?.view.subviews.first is DUXCameraConfigInfoWidget ? current : DUXCameraConfigInfoWidget().createWidget()
-    }
-
     open override func createCameraStorageWidget(current: Widget? = nil) -> Widget? {
         current?.view.subviews.first is DUXCameraConfigStorageWidget ? current : DUXCameraConfigStorageWidget().createWidget()
     }

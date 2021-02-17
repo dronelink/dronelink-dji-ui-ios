@@ -52,13 +52,7 @@ open class DJIWidgetFactory: WidgetFactory {
     }
     
     open override func createBatteryWidget(current: Widget? = nil) -> Widget? {
-        if current?.view.subviews.first is DUXBatteryWidget {
-            return current
-        }
-        
-        let widget = DUXBatteryWidget()
-        widget.addShadow()
-        return widget.createWidget()
+        current?.view.subviews.first is DUXBatteryWidget ? current : DUXBatteryWidget().createWidget(shadow: true)
     }
 
     open override func createRemainingFlightTimeWidget(current: Widget? = nil) -> Widget? {
@@ -66,7 +60,7 @@ open class DJIWidgetFactory: WidgetFactory {
     }
 
     open override func createVisionWidget(current: Widget? = nil) -> Widget? {
-        current?.view.subviews.first is DUXVisionWidget ? current : DUXVisionWidget().createWidget()
+        current?.view.subviews.first is DUXVisionWidget ? current : DUXVisionWidget().createWidget(shadow: true)
     }
     
     open override var cameraMenuWidgetEnabled: Bool { true }
@@ -102,11 +96,7 @@ open class DJIWidgetFactory: WidgetFactory {
     }
 
     open override func createCompassWidget(current: Widget?) -> Widget? {
-        if current?.view.subviews.first is DUXCompassWidget {
-            return current
-        }
-
-        return DUXCompassWidget().createWidget()
+        current?.view.subviews.first is DUXCompassWidget ? current : DUXCompassWidget().createWidget()
     }
 
     open override func createRTKStatusWidget(current: Widget? = nil) -> Widget? {

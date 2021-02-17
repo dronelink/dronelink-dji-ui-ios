@@ -69,10 +69,6 @@ open class DJIWidgetFactory: WidgetFactory {
         (current as? WrapperWidget)?.viewController is DUXCameraSettingsController ? current : DUXCameraSettingsController().createWidget()
     }
 
-    open override func createCameraExposureWidget(current: Widget? = nil) -> Widget? {
-        current?.view.subviews.first is DUXCameraConfigInfoWidget ? current : DUXCameraConfigInfoWidget().createWidget()
-    }
-
     open override func createCameraStorageWidget(current: Widget? = nil) -> Widget? {
         current?.view.subviews.first is DUXCameraConfigStorageWidget ? current : DUXCameraConfigStorageWidget().createWidget()
     }
@@ -105,9 +101,9 @@ open class DJIWidgetFactory: WidgetFactory {
         }
         
         let widget = RTKStatusWidget()
-        widget.createManager = {
-            if let session = self.session as? DJIDroneSession {
-                return DJIRTKManager(session.adapter.drone)
+        widget.createManager = {(session) in
+            if let djiSession = session as? DJIDroneSession {
+                return DJIRTKManager(djiSession.adapter.drone)
             }
             return nil
         }

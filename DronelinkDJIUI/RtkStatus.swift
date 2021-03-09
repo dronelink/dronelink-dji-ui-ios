@@ -47,14 +47,14 @@ class RTKStatus : UIViewController {
         
         if rtk != nil {
             rtk!.addUpdateListner(key: "RtkStatus") { (state: RTKState) in
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
                     if (state.networkRTKStatus != .notSupported)
                     {
-                        self.updateLabel(state)
-                        self.view.isHidden = false
+                        self?.updateLabel(state)
+                        self?.view.isHidden = false
                     }
                     else {
-                        self.view.isHidden = true
+                        self?.view.isHidden = true
                     }
                 }
             }
@@ -88,13 +88,13 @@ class RTKStatus : UIViewController {
         super.updateViewConstraints()
         let defaultPadding = 8
         
-        rtkLabel.snp.remakeConstraints { make in
+        rtkLabel.snp.remakeConstraints { [weak self] make in
             make.left.equalToSuperview().offset(defaultPadding)
             make.right.equalToSuperview().offset(-defaultPadding)
             make.top.equalToSuperview().offset(2)
         }
         
-        statusLabel.snp.remakeConstraints { make in
+        statusLabel.snp.remakeConstraints { [weak self] make in
             make.left.equalToSuperview().offset(defaultPadding)
             make.right.equalToSuperview().offset(-defaultPadding)
             make.top.equalTo(rtkLabel.snp.bottom)

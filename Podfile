@@ -3,10 +3,10 @@ inhibit_all_warnings!
 use_frameworks!
 
 target 'DronelinkDJIUI' do
-  pod 'DronelinkCore', '~> 2.1.0'
-  pod 'DronelinkCoreUI', '~> 2.1.0'
-  pod 'DronelinkDJI', '~> 2.1.0'
-  pod 'DJI-UXSDK-iOS', '~> 4.13'
+  pod 'DronelinkCore', '~> 2.2.0'
+  pod 'DronelinkCoreUI', '~> 2.2.0'
+  pod 'DronelinkDJI', '~> 2.2.0'
+  pod 'DJI-UXSDK-iOS', '~> 4.14'
   pod 'SwiftyUserDefaults', '~> 5.0.0'
   pod 'SnapKit', '~> 5.0.1'
   pod 'MaterialComponents/Palettes', '~> 119.0.0'

@@ -65,10 +65,6 @@ open class DJIWidgetFactory: WidgetFactory {
     
     open override var cameraMenuWidgetEnabled: Bool { true }
 
-    open override func createCameraMenuWidget(current: Widget? = nil) -> Widget? {
-        (current as? WrapperWidget)?.viewController is DUXCameraSettingsController ? current : DUXCameraSettingsController().createWidget()
-    }
-
     open override func createCameraStorageWidget(current: Widget? = nil) -> Widget? {
         current?.view.subviews.first is DUXCameraConfigStorageWidget ? current : DUXCameraConfigStorageWidget().createWidget()
     }

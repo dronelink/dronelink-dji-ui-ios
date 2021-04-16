@@ -82,10 +82,6 @@ open class DJIWidgetFactory: WidgetFactory {
     }
 
     open override var cameraExposureMenuWidgetEnabled: Bool { true }
-    
-    open override func createCameraExposureMenuWidget(current: Widget? = nil) -> Widget? {
-        (current as? WrapperWidget)?.viewController is DUXExposureSettingsController ? current : DUXExposureSettingsController().createWidget()
-    }
 
     open override func createCompassWidget(current: Widget?) -> Widget? {
         current?.view.subviews.first is DUXCompassWidget ? current : DUXCompassWidget().createWidget()

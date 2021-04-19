@@ -38,6 +38,7 @@ public class DJIRTKManager: NSObject, RTKManager {
     private var initialized: Bool = false
     private var initializationAttempt: Int = 0
     private var managerIsConnected: Bool = false
+    private var configHelper: ConfigureRtkHelper?
     
     public init(_ drone: DJIAircraft!) {
         super.init()
@@ -261,11 +262,12 @@ public class DJIRTKManager: NSObject, RTKManager {
         self.configurationState = "Configuring"
         self.update()
         
-        ConfigureRtkHelper.configureRtk(aircraft: aircraft!, config: config) {  [weak self] (error: Error?, msg: String) in
+        self.configHelper = ConfigureRtkHelper.configureRtk(aircraft: aircraft!, config: config) {  [weak self] (error: Error?, msg: String) in
             guard let manager = self else {
                 return
             }
             
+            os_log(.info, log: DJIRTKManager.log, "RTK error: %@", error.debugDescription)
             manager.configuring = false
             manager.configurationState = msg
             manager.update()
@@ -275,10 +277,10 @@ public class DJIRTKManager: NSObject, RTKManager {
                 return
             }
             
+            os_log(.info, log: DJIRTKManager.log, "Configure OK" )
             manager.configuring = false
             manager.waitForConnection = true
             manager.configurationState = "RTK.configstate.ok".localized
-            
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 30) {
                 if manager.waitForConnection {
@@ -337,15 +339,18 @@ public class DJIRTKManager: NSObject, RTKManager {
 }
 
 class ConfigureRtkHelper {
+
     public static func configureRtk(
         aircraft: DJIAircraft,
         config: RTKConfigurationRecord,
         withError: @escaping (_ error: Error?, _ action: String) -> Void,
         withSuccess: @escaping () -> Void
-    ) {
-        guard aircraft.flightController?.rtk != nil else { return }
+    ) -> ConfigureRtkHelper? {
+        guard aircraft.flightController?.rtk != nil else { return nil }
         
-        ConfigureRtkHelper(aircraft.flightController!.rtk!, config, withError, withSuccess).stopNetwork()
+        let helper = ConfigureRtkHelper(aircraft.flightController!.rtk!, config, withError, withSuccess)
+        helper.stopNetwork()
+        return helper
     }
     
     private static let log = OSLog(subsystem: "DronelinkDJIUI", category: "ConfigureRtkHelper")

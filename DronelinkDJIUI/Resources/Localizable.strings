@@ -5,15 +5,25 @@
 //  Created by Jim McAndrew on 1/21/19.
 //  Copyright © 2019 Dronelink. All rights reserved.
 //
-"DJIDashboardViewController.menu" = "MENU";
-"DJIDashboardViewController.settings.camera" = "Camera Settings";
-"DJIDashboardViewController.settings.exposure" = "Exposure Settings";
-"DJIDashboardViewController.settings.histogram" = "Histogram";
-"DJIDashboardViewController.settings.cancel" = "Cancel";
-"DJIDashboardViewController.camera.noSDCard.title" = "SD Card Missing";
-"DJIDashboardViewController.camera.noSDCard.details" = "Please make sure to insert an SD card before running a mission with data capture.";
-"DJIDashboardViewController.map.mapbox" = "2D (Satellite)";
-"DJIDashboardViewController.map.microsoft" = "3D (Beta)";
-"DJIDashboardViewController.device.legacy.title" = "Low Performance Device";
-"DJIDashboardViewController.device.legacy.details" = "Using this device may result in poor flight performance or other unexpected issues. Please consider upgrading to a modern device for a more reliable experience.";
-"DJIDashboardViewController.device.legacy.confirm" = "I Understand";
+"RTK.channelstate.accounterror" = "Account error";
+"RTK.channelstate.airecraftdisconnected" = "Aircraft Disconnected";
+"RTK.channelstate.connecting" = "Connecting";
+"RTK.channelstate.disabled" = "Disabled";
+"RTK.channelstate.disconnected" = "Disconnected";
+"RTK.channelstate.invalidrequest" = "Invalid request";
+"RTK.channelstate.loginfailure" = "Login failure";
+"RTK.channelstate.networknotreachable" = "Network not reachable";
+"RTK.channelstate.ready" = "Ready";
+"RTK.channelstate.servernotreachable" = "Server not reachable";
+"RTK.channelstate.servicesuspension" = "Service suspension";
+"RTK.channelstate.transmitting" = "Transmitting";
+"RTK.channelstate.unknown" = "Unknown";
+"RTK.configstate.unknown" = "Unknown";
+"RTK.configstate.notsupported" = "RTK not supported";
+"RTK.configstate.disabled" = "RTK disabled";
+"RTK.configstate.enabled" = "Configured";
+"RTK.configstate.configuring" = "Configuring";
+"RTK.configstate.disablefailed" = "RTK disable failed";
+"RTK.configstate.incomplete" = "Configuration incomplete";
+"RTK.configstate.loaded" = "Loaded";
+"RTK.configstate.ok" = "OK";

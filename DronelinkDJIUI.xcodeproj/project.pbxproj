@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		245975352367A32D008CAB6B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 245975322367A32D008CAB6B /* Localizable.strings */; };
 		245975362367A32D008CAB6B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 245975332367A32D008CAB6B /* Images.xcassets */; };
-		245975382367A3A7008CAB6B /* DJIDashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245975372367A3A7008CAB6B /* DJIDashboardViewController.swift */; };
+		2490A7A3257EDE3900253F11 /* DJIRTKManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2490A7A2257EDE3900253F11 /* DJIRTKManager.swift */; };
 		249EBFBE236867F7002946E1 /* DronelinkDJIUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249EBFBD236867F7002946E1 /* DronelinkDJIUI.swift */; };
 		249EBFC023686836002946E1 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249EBFBF23686836002946E1 /* Extensions.swift */; };
 		55275A839F87BE3AFF93F87B /* Pods_DronelinkDJIUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 808B6907992B4437B375858E /* Pods_DronelinkDJIUI.framework */; };
@@ -20,7 +20,7 @@
 		245975272367A17E008CAB6B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		245975322367A32D008CAB6B /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		245975332367A32D008CAB6B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		245975372367A3A7008CAB6B /* DJIDashboardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DJIDashboardViewController.swift; sourceTree = "<group>"; };
+		2490A7A2257EDE3900253F11 /* DJIRTKManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DJIRTKManager.swift; sourceTree = "<group>"; };
 		249EBFBD236867F7002946E1 /* DronelinkDJIUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DronelinkDJIUI.swift; sourceTree = "<group>"; };
 		249EBFBF23686836002946E1 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		3A25A0223381E20F3A4AD672 /* Pods-DronelinkDJIUI.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DronelinkDJIUI.release.xcconfig"; path = "Target Support Files/Pods-DronelinkDJIUI/Pods-DronelinkDJIUI.release.xcconfig"; sourceTree = "<group>"; };
@@ -70,7 +70,7 @@
 		245975252367A17E008CAB6B /* DronelinkDJIUI */ = {
 			isa = PBXGroup;
 			children = (
-				245975372367A3A7008CAB6B /* DJIDashboardViewController.swift */,
+				2490A7A2257EDE3900253F11 /* DJIRTKManager.swift */,
 				249EBFBD236867F7002946E1 /* DronelinkDJIUI.swift */,
 				249EBFBF23686836002946E1 /* Extensions.swift */,
 				245975302367A32D008CAB6B /* Resources */,
@@ -134,7 +134,7 @@
 		2459751A2367A17E008CAB6B /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1110;
+				LastUpgradeCheck = 1210;
 				ORGANIZATIONNAME = Dronelink;
 				TargetAttributes = {
 					245975222367A17E008CAB6B = {
@@ -205,7 +205,7 @@
 			files = (
 				249EBFBE236867F7002946E1 /* DronelinkDJIUI.swift in Sources */,
 				249EBFC023686836002946E1 /* Extensions.swift in Sources */,
-				245975382367A3A7008CAB6B /* DJIDashboardViewController.swift in Sources */,
+				2490A7A3257EDE3900253F11 /* DJIRTKManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -238,6 +238,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -302,6 +303,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -354,7 +356,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.4.2;
+				MARKETING_VERSION = 2.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.dronelink.DronelinkDJIUI;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -385,7 +387,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.4.2;
+				MARKETING_VERSION = 2.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.dronelink.DronelinkDJIUI;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;

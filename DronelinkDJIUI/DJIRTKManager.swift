@@ -400,7 +400,7 @@ class ConfigureRtkHelper {
         
         rtk.setEnabled(true) { (error: Error?) in
             // For enable: report the error but try to continue even if it fails
-            self.noError(error: error, action: "Enable RTK")
+            _ = self.noError(error: error, action: "Enable RTK")
             self.setSettings()
         }
     }

@@ -3,10 +3,10 @@ PODS:
     - SwiftyGif
   - DJI-SDK-iOS (4.14)
   - DJI-UXSDK-iOS (4.14)
-  - DronelinkCore (2.3.0)
-  - DronelinkCoreUI (2.3.0):
+  - DronelinkCore (2.4.0)
+  - DronelinkCoreUI (2.4.0):
     - Agrume (~> 5.6.10)
-    - DronelinkCore (~> 2.3.0)
+    - DronelinkCore (~> 2.4.0)
     - IQKeyboardManager (~> 6.5.6)
     - Kingfisher (~> 5.15.7)
     - Mapbox-iOS-SDK (~> 6.3.0)
@@ -23,9 +23,9 @@ PODS:
     - MicrosoftMapsSDK (~> 1.1.4)
     - SnapKit (~> 5.0.1)
     - SwiftyUserDefaults (~> 5.0.0)
-  - DronelinkDJI (2.3.0):
+  - DronelinkDJI (2.4.0):
     - DJI-SDK-iOS (~> 4.14)
-    - DronelinkCore (~> 2.3.0)
+    - DronelinkCore (~> 2.4.0)
   - IQKeyboardManager (6.5.6)
   - Kingfisher (5.15.8):
     - Kingfisher/Core (= 5.15.8)
@@ -187,9 +187,9 @@ PODS:
 
 DEPENDENCIES:
   - DJI-UXSDK-iOS (~> 4.14)
-  - DronelinkCore (~> 2.3.0)
-  - DronelinkCoreUI (~> 2.3.0)
-  - DronelinkDJI (~> 2.3.0)
+  - DronelinkCore (~> 2.4.0)
+  - DronelinkCoreUI (~> 2.4.0)
+  - DronelinkDJI (~> 2.4.0)
   - MaterialComponents/Palettes (~> 119.0.0)
   - SnapKit (~> 5.0.1)
   - SwiftyUserDefaults (~> 5.0.0)
@@ -221,9 +221,9 @@ SPEC CHECKSUMS:
   Agrume: 21b96a1138abc0f890211bfcb12f8b1e3464b4c1
   DJI-SDK-iOS: db08fad65cfb9fecddb34b38851af105bd4133db
   DJI-UXSDK-iOS: 13bcf4ed89db6ea19fd125b1392613153f0c96b9
-  DronelinkCore: 00be99fa3a6102036f82feb223c6f007a12bd055
-  DronelinkCoreUI: 7ae1e3a89bb040c2ff256b3830e1dd394c87aa44
-  DronelinkDJI: 5ae31aa90fa547c43d8632466bf1403b7600d870
+  DronelinkCore: e852afde1f3f1fd90f75511020f9303ef5553626
+  DronelinkCoreUI: e17cb2d5e27af3978004225132283af93e8345dc
+  DronelinkDJI: f2eef178f86c08b4e22b55e88e11652f0779c975
   IQKeyboardManager: 2a6e97afdafc7becf0cb17a9a8d795e3a980717f
   Kingfisher: a3c03d702433fa6cfedabb2bddbe076fb8f2e902
   Mapbox-iOS-SDK: 2563ed87ead6ec08f1c2090873977b8a7be335a8
@@ -239,6 +239,6 @@ SPEC CHECKSUMS:
   SwiftyGif: 5d4af95df24caf1c570dbbcb32a3b8a0763bc6d7
   SwiftyUserDefaults: 33fcb42bd1feb53a37d873feb62c82967db5f7f6
 
-PODFILE CHECKSUM: 7b9e21b91e1b714576380c01d067fe37c82b3364
+PODFILE CHECKSUM: 6870e1611ca1d32bedbaca7c655c51c7726a1228
 
 COCOAPODS: 1.10.1

@@ -3,9 +3,9 @@ inhibit_all_warnings!
 use_frameworks!
 
 target 'DronelinkDJIUI' do
-  pod 'DronelinkCore', '~> 2.6.0'
-  pod 'DronelinkCoreUI', '~> 2.6.0'
-  pod 'DronelinkDJI', '~> 2.6.0'
+  pod 'DronelinkCore', '~> 3.0.0'
+  pod 'DronelinkDJI', '~> 3.0.0'
+  pod 'DronelinkCoreUI', :git => 'https://github.com/dronelink/dronelink-core-ui-ios.git', :tag => '3.0.0'
   pod 'DJI-UXSDK-iOS', '~> 4.14'
   pod 'SwiftyUserDefaults', '~> 5.3.0'
   pod 'SnapKit', '~> 5.0.1'

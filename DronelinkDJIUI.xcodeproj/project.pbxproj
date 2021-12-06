@@ -12,6 +12,8 @@
 		2490A7A3257EDE3900253F11 /* DJIRTKManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2490A7A2257EDE3900253F11 /* DJIRTKManager.swift */; };
 		249EBFBE236867F7002946E1 /* DronelinkDJIUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249EBFBD236867F7002946E1 /* DronelinkDJIUI.swift */; };
 		249EBFC023686836002946E1 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249EBFBF23686836002946E1 /* Extensions.swift */; };
+		24E94CF32722070E00EC19A0 /* DecodeImageCalibrateLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E94CF12722070E00EC19A0 /* DecodeImageCalibrateLogic.swift */; };
+		24E94CF42722070E00EC19A0 /* VideoPreviewerAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E94CF22722070E00EC19A0 /* VideoPreviewerAdapter.swift */; };
 		55275A839F87BE3AFF93F87B /* Pods_DronelinkDJIUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 808B6907992B4437B375858E /* Pods_DronelinkDJIUI.framework */; };
 /* End PBXBuildFile section */
 
@@ -23,6 +25,8 @@
 		2490A7A2257EDE3900253F11 /* DJIRTKManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DJIRTKManager.swift; sourceTree = "<group>"; };
 		249EBFBD236867F7002946E1 /* DronelinkDJIUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DronelinkDJIUI.swift; sourceTree = "<group>"; };
 		249EBFBF23686836002946E1 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		24E94CF12722070E00EC19A0 /* DecodeImageCalibrateLogic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DecodeImageCalibrateLogic.swift; sourceTree = "<group>"; };
+		24E94CF22722070E00EC19A0 /* VideoPreviewerAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPreviewerAdapter.swift; sourceTree = "<group>"; };
 		3A25A0223381E20F3A4AD672 /* Pods-DronelinkDJIUI.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DronelinkDJIUI.release.xcconfig"; path = "Target Support Files/Pods-DronelinkDJIUI/Pods-DronelinkDJIUI.release.xcconfig"; sourceTree = "<group>"; };
 		808B6907992B4437B375858E /* Pods_DronelinkDJIUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DronelinkDJIUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E97FA109E5F37B7B34834F53 /* Pods-DronelinkDJIUI.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DronelinkDJIUI.debug.xcconfig"; path = "Target Support Files/Pods-DronelinkDJIUI/Pods-DronelinkDJIUI.debug.xcconfig"; sourceTree = "<group>"; };
@@ -71,6 +75,8 @@
 			isa = PBXGroup;
 			children = (
 				2490A7A2257EDE3900253F11 /* DJIRTKManager.swift */,
+				24E94CF12722070E00EC19A0 /* DecodeImageCalibrateLogic.swift */,
+				24E94CF22722070E00EC19A0 /* VideoPreviewerAdapter.swift */,
 				249EBFBD236867F7002946E1 /* DronelinkDJIUI.swift */,
 				249EBFBF23686836002946E1 /* Extensions.swift */,
 				245975302367A32D008CAB6B /* Resources */,
@@ -204,7 +210,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				249EBFBE236867F7002946E1 /* DronelinkDJIUI.swift in Sources */,
+				24E94CF42722070E00EC19A0 /* VideoPreviewerAdapter.swift in Sources */,
 				249EBFC023686836002946E1 /* Extensions.swift in Sources */,
+				24E94CF32722070E00EC19A0 /* DecodeImageCalibrateLogic.swift in Sources */,
 				2490A7A3257EDE3900253F11 /* DJIRTKManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

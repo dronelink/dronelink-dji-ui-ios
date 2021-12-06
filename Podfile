@@ -7,6 +7,7 @@ target 'DronelinkDJIUI' do
   pod 'DronelinkDJI', '~> 3.0.0'
   pod 'DronelinkCoreUI', :git => 'https://github.com/dronelink/dronelink-core-ui-ios.git', :tag => '3.0.0'
   pod 'DJI-UXSDK-iOS', '~> 4.14'
+  pod 'DJIWidget', '~> 1.6.5'
   pod 'SwiftyUserDefaults', '~> 5.3.0'
   pod 'SnapKit', '~> 5.0.1'
   pod 'MaterialComponents/Palettes', '~> 124.2.0'

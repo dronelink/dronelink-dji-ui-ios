@@ -85,7 +85,7 @@ open class DJIWidgetFactory: WidgetFactory {
     }
 
     open override func createBatteryWidget(current: Widget? = nil) -> Widget? {
-        current?.view.subviews.first is DUXBatteryWidget ? current : DUXBatteryWidget().createWidget(shadow: true)
+        session == nil ? nil : current?.view.subviews.first is DUXBatteryWidget ? current : DUXBatteryWidget().createWidget(shadow: true)
     }
 
     open override func createRemainingFlightTimeWidget(current: Widget? = nil) -> Widget? {

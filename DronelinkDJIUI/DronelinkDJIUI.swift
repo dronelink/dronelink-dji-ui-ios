@@ -14,7 +14,7 @@ import DJIWidget
 
 extension DronelinkDJIUI {
     public static let shared = DronelinkDJIUI()
-    public static let bundle = Bundle.init(for: DronelinkDJIUI.self)
+    public static let bundle = Bundle(for: DronelinkDJIUI.self)
     public static func loadImage(named: String, renderingMode: UIImage.RenderingMode = .alwaysTemplate) -> UIImage? {
         return UIImage(named: named, in: DronelinkDJIUI.bundle, compatibleWith: nil)?.withRenderingMode(renderingMode)
     }
@@ -59,7 +59,7 @@ open class DJIWidgetFactory: WidgetFactory {
         }
 
         if channel == 0 {
-            if let current = current as? ViewControllerWidget, let fpvViewController = current.viewController as? DUXFPVViewController {
+            if let current = current as? ViewControllerWidget, current.viewController is DUXFPVViewController {
                 return current
             }
 
@@ -109,7 +109,7 @@ open class DJIWidgetFactory: WidgetFactory {
         let cameraModel = session?.drone.camera(channel: channel ?? session?.drone.cameraChannel(videoFeedChannel: nil) ?? 0)?.model ?? ""
         switch cameraModel {
         case DJICameraDisplayNameZenmuseH20, DJICameraDisplayNameZenmuseH20T:
-            if let widget = super.createCameraVideoStreamSourceWidget(channel: channel, current: current) as? CameraVideoStreamSourceWidget {
+            if let widget = channelWidget(channel: channel, widget: (current as? CameraVideoStreamSourceWidget) ?? CameraVideoStreamSourceWidget()) as? CameraVideoStreamSourceWidget {
                 if cameraModel == DJICameraDisplayNameZenmuseH20 {
                     widget.sources = [.wide, .zoom]
                 }
@@ -220,7 +220,7 @@ class VideoPreviewerViewController: DelegateWidget, ConfigurableWidget {
         detailsLabel.font = UIFont.systemFont(ofSize: 12, weight: .bold)
         detailsLabel.backgroundColor = DronelinkUI.Constants.overlayColor
         view.addSubview(detailsLabel)
-        detailsLabel.snp.remakeConstraints { [weak self] make in
+        detailsLabel.snp.remakeConstraints { make in
             make.bottom.equalToSuperview()
             make.left.equalToSuperview()
             make.right.equalToSuperview()

@@ -48,17 +48,37 @@ open class DJIWidgetFactory: WidgetFactory {
         if session == nil {
             return nil
         }
+        
+        var channelResolved = channel ?? 0
+        var multipleVideoFeedsEnabled = (session as? DJIDroneSession)?.adapter.drone.multipleVideoFeedsEnabled ?? false
+        if !multipleVideoFeedsEnabled && channelResolved > 0 {
+            return nil
+        }
+        
+        var defaultVideoPreviewer = multipleVideoFeedsEnabled
+        if !defaultVideoPreviewer {
+            switch session?.model ?? "" {
+            //DUXFPVViewController doesn not seem to work for these drones :(
+            case DJIAircraftModelNameDJIMini2,
+                DJIAircraftModelNameDJIAir2S,
+                "":
+                defaultVideoPreviewer = true
+                
+            default:
+                break
+            }
+        }
 
-        if (session as? DJIDroneSession)?.adapter.drone.multipleVideoFeedsEnabled ?? false {
+        if defaultVideoPreviewer {
             if let videoPreviewerViewController = current as? VideoPreviewerViewController,
-               videoPreviewerViewController.channel == channel ?? 0 {
+               videoPreviewerViewController.channel == channelResolved {
                 return current
             }
 
-            return VideoPreviewerViewController.create(channel: channel ?? 0)
+            return VideoPreviewerViewController.create(channel: channelResolved)
         }
 
-        if channel == 0 {
+        if channelResolved == 0 {
             if let current = current as? ViewControllerWidget, current.viewController is DUXFPVViewController {
                 return current
             }
@@ -216,18 +236,20 @@ class VideoPreviewerViewController: DelegateWidget, ConfigurableWidget {
         adapter?.start()
         adapter?.setupFrameControlHandler()
         
-        detailsLabel.textAlignment = .center
-        detailsLabel.font = UIFont.systemFont(ofSize: 12, weight: .bold)
-        detailsLabel.backgroundColor = DronelinkUI.Constants.overlayColor
-        view.addSubview(detailsLabel)
-        detailsLabel.snp.remakeConstraints { make in
-            make.bottom.equalToSuperview()
-            make.left.equalToSuperview()
-            make.right.equalToSuperview()
-            make.height.equalTo(30)
+        if (session as? DJIDroneSession)?.adapter.drone.multipleVideoFeedsEnabled ?? false {
+            detailsLabel.textAlignment = .center
+            detailsLabel.font = UIFont.systemFont(ofSize: 12, weight: .bold)
+            detailsLabel.backgroundColor = DronelinkUI.Constants.overlayColor
+            view.addSubview(detailsLabel)
+            detailsLabel.snp.remakeConstraints { make in
+                make.bottom.equalToSuperview()
+                make.left.equalToSuperview()
+                make.right.equalToSuperview()
+                make.height.equalTo(30)
+            }
+            
+            updateDetails()
         }
-        
-        updateDetails()
         
         if channel == 0 {
             //must do this for the M300 video feed! https://github.com/dji-sdk/Mobile-SDK-iOS/issues/407

@@ -455,6 +455,8 @@ extension VideoPreviewerAdapter {
             return ._H1_Inspire2
         } else if camera == DJICameraDisplayNameMavicAirCamera {
             return ._MavicAir
+        } else if camera == DJICameraDisplayNameDJIMini2Camera {
+            return ._DJIMini2
         }
         
         return ._unknown

@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
   s.resources = "DronelinkDJIUI/**/*.{strings,xcassets}"
   s.pod_target_xcconfig = { 'ONLY_ACTIVE_ARCH' => 'YES' }
   s.dependency "DronelinkCore", "~> 3.3.1"
-  s.dependency "DronelinkCoreUI", "~> 3.3.0"
+  s.dependency "DronelinkCoreUI", "~> 3.3.1"
   s.dependency "DronelinkDJI", "~> 3.3.1"
   s.dependency "DJI-SDK-iOS", "~> 4.16"
   s.dependency "DJIWidget", "~> 1.6.6"

@@ -237,7 +237,7 @@ public class DJIRTKManager: NSObject, RTKManager {
                     self.configurationState = "RTK.configstate.disabled".localized
                 }
                 else {
-                    self.configurationState = "\("RTK.configstate.disablefailed".localized): \(String(describing: error?.localizedDescription))"
+                    self.configurationState = "\("RTK.configstate.disablefailed".localized): \(String(describing: error?.description))"
                 }
                 self.configuring = false
                 self.update()
@@ -453,7 +453,7 @@ class ConfigureRtkHelper {
     
     private func noError(error: Error?, action: String) -> Bool {
         if error != nil {
-            let msg: String = error?.localizedDescription ?? "Unknown"
+            let msg: String = error?.description ?? "Unknown"
             
             self.withError(error, "Failed to \(action): \(msg)\n")
             os_log(.error, log: ConfigureRtkHelper.log, "Failed to %@: %@", action, msg)

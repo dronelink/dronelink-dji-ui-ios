@@ -1,13 +1,13 @@
 PODS:
   - Agrume (5.8.0):
     - SwiftyGif
-  - DJI-SDK-iOS (4.15.2)
-  - DJI-UXSDK-iOS (4.14)
-  - DJIWidget (1.6.5)
-  - DronelinkCore (3.3.0)
-  - DronelinkCoreUI (3.3.0):
+  - DJI-SDK-iOS (4.16.1)
+  - DJI-UXSDK-iOS (4.16)
+  - DJIWidget (1.6.7)
+  - DronelinkCore (4.0.0)
+  - DronelinkCoreUI (4.0.0):
     - Agrume (~> 5.8.0)
-    - DronelinkCore (~> 3.3.0)
+    - DronelinkCore (~> 4.0.0)
     - IQKeyboardManager (~> 6.5.6)
     - Kingfisher (~> 7.1.0)
     - Mapbox-iOS-SDK (~> 6.4.0)
@@ -24,10 +24,10 @@ PODS:
     - MicrosoftMapsSDK (~> 1.2.0)
     - SnapKit (~> 5.0.1)
     - SwiftyUserDefaults (~> 5.3.0)
-  - DronelinkDJI (3.3.0):
-    - DJI-SDK-iOS (~> 4.15.2)
-    - DronelinkCore (~> 3.3.0)
-  - IQKeyboardManager (6.5.9)
+  - DronelinkDJI (4.0.0):
+    - DJI-SDK-iOS (~> 4.16.1)
+    - DronelinkCore (~> 4.0.0)
+  - IQKeyboardManager (6.5.10)
   - Kingfisher (7.1.2)
   - Mapbox-iOS-SDK (6.4.1):
     - MapboxMobileEvents (~> 0.10.12)
@@ -189,10 +189,10 @@ PODS:
 
 DEPENDENCIES:
   - DJI-UXSDK-iOS (~> 4.14)
-  - DJIWidget (~> 1.6.5)
-  - DronelinkCore (~> 3.3.0)
-  - DronelinkCoreUI (from `https://github.com/dronelink/dronelink-core-ui-ios.git`, tag `3.3.0`)
-  - DronelinkDJI (~> 3.3.0)
+  - DJIWidget (~> 1.6.7)
+  - DronelinkCore (from `../../private/dronelink-core-ios`)
+  - DronelinkCoreUI (from `../dronelink-core-ui-ios`)
+  - DronelinkDJI (from `../dronelink-dji-ios`)
   - MaterialComponents/Palettes (~> 124.2.0)
   - SnapKit (~> 5.0.1)
   - SwiftyUserDefaults (~> 5.3.0)
@@ -203,8 +203,6 @@ SPEC REPOS:
     - DJI-SDK-iOS
     - DJI-UXSDK-iOS
     - DJIWidget
-    - DronelinkCore
-    - DronelinkDJI
     - IQKeyboardManager
     - Kingfisher
     - Mapbox-iOS-SDK
@@ -221,24 +219,22 @@ SPEC REPOS:
     - SwiftyUserDefaults
 
 EXTERNAL SOURCES:
+  DronelinkCore:
+    :path: "../../private/dronelink-core-ios"
   DronelinkCoreUI:
-    :git: https://github.com/dronelink/dronelink-core-ui-ios.git
-    :tag: 3.3.0
-
-CHECKOUT OPTIONS:
-  DronelinkCoreUI:
-    :git: https://github.com/dronelink/dronelink-core-ui-ios.git
-    :tag: 3.3.0
+    :path: "../dronelink-core-ui-ios"
+  DronelinkDJI:
+    :path: "../dronelink-dji-ios"
 
 SPEC CHECKSUMS:
   Agrume: 0b1a42b5bfbc3aa9f0801f2857d8df1138cf2951
-  DJI-SDK-iOS: cb382fe5c4f5d74f8333ea21ed0413a7a84b8b4f
-  DJI-UXSDK-iOS: 13bcf4ed89db6ea19fd125b1392613153f0c96b9
-  DJIWidget: c592143a31f182a7e97a894168c4363ad42c6ff2
-  DronelinkCore: fab61a229e83a3a89577fff9c18b22cdd94e8015
-  DronelinkCoreUI: 31949cc93fa75c33141b48f62d70e33ee61ecbf1
-  DronelinkDJI: 54d1a943bec9c1c05f22901317f2287206da58d2
-  IQKeyboardManager: 241cc94ccabc9deb8f8bd7d12f00d73288d13ecc
+  DJI-SDK-iOS: 0da4b3c60b12070ca18cda7bccc29fbb99977d27
+  DJI-UXSDK-iOS: d9f9b0ce3eed694254e41e078f0592b48924c59e
+  DJIWidget: b4fccba37ee1b29952d67ccaaaa4558ae9df1ca6
+  DronelinkCore: cee4bbf2523fea3ef9c1cfdde92b55b50655f027
+  DronelinkCoreUI: 455747ea65a13674c291be8d0bf7d55b94b39c8b
+  DronelinkDJI: 393ecc807c73d4b55f0b3269c8fb74bbc0c4cd21
+  IQKeyboardManager: 45a1fa55c1a5b02c61ac0fd7fd5b62bb4ad20d97
   Kingfisher: 44ed6a8504763f27bab46163adfac83f5deb240c
   Mapbox-iOS-SDK: f870f83cbdc7aa4a74afcee143aafb0dae390c82
   MapboxMobileEvents: 5a172cc9bbf8ac0e45ba86095cbee685ede248cc
@@ -253,6 +249,6 @@ SPEC CHECKSUMS:
   SwiftyGif: 6c3eafd0ce693cad58bb63d2b2fb9bacb8552780
   SwiftyUserDefaults: 63f80248cf5bfb3458825d9a78f2eb7e1293a040
 
-PODFILE CHECKSUM: d2816c5c388f7cf2ef3824e0eee1e15d531ca133
+PODFILE CHECKSUM: 7bcbb1d78dc6ef84db57cb072c17c9c8468cef2b
 
 COCOAPODS: 1.11.2

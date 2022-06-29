@@ -49,8 +49,8 @@ open class DJIWidgetFactory: WidgetFactory {
             return nil
         }
         
-        var channelResolved = channel ?? 0
-        var multipleVideoFeedsEnabled = (session as? DJIDroneSession)?.adapter.drone.multipleVideoFeedsEnabled ?? false
+        let channelResolved = channel ?? 0
+        let multipleVideoFeedsEnabled = (session as? DJIDroneSession)?.adapter.drone.multipleVideoFeedsEnabled ?? false
         if !multipleVideoFeedsEnabled && channelResolved > 0 {
             return nil
         }

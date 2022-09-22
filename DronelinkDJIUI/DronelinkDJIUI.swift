@@ -44,7 +44,7 @@ open class DJIWidgetFactory: WidgetFactory {
         return (session as? DJIDroneSession)?.adapter.drone.multipleVideoFeedsEnabled ?? false
     }
 
-    open override func createVideoFeedWidget(channel: UInt? = nil, current: Widget? = nil) -> Widget? {
+    open override func createVideoFeedWidget(channel: UInt? = nil, current: Widget? = nil, overlays: Bool = true) -> Widget? {
         if session == nil {
             return nil
         }
@@ -55,7 +55,7 @@ open class DJIWidgetFactory: WidgetFactory {
             return nil
         }
         
-        var defaultVideoPreviewer = multipleVideoFeedsEnabled
+        var defaultVideoPreviewer = !overlays || multipleVideoFeedsEnabled
         if !defaultVideoPreviewer {
             switch session?.model ?? "" {
             //DUXFPVViewController doesn not seem to work for these drones :(

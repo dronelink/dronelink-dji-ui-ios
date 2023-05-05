@@ -7,17 +7,26 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		245818162A01C36C00B3951D /* DJIDecodeImageCalibrateControlLogic.h in Headers */ = {isa = PBXBuildFile; fileRef = 245818122A01C36C00B3951D /* DJIDecodeImageCalibrateControlLogic.h */; };
+		245818172A01C36C00B3951D /* VideoPreviewerSDKAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 245818132A01C36C00B3951D /* VideoPreviewerSDKAdapter.m */; };
+		245818182A01C36C00B3951D /* DJIDecodeImageCalibrateControlLogic.m in Sources */ = {isa = PBXBuildFile; fileRef = 245818142A01C36C00B3951D /* DJIDecodeImageCalibrateControlLogic.m */; };
+		245818192A01C36C00B3951D /* VideoPreviewerSDKAdapter.h in Headers */ = {isa = PBXBuildFile; fileRef = 245818152A01C36C00B3951D /* VideoPreviewerSDKAdapter.h */; };
+		2458181B2A01C39000B3951D /* DronelinkDJIUI-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 2458181A2A01C39000B3951D /* DronelinkDJIUI-Bridging-Header.h */; };
 		245975352367A32D008CAB6B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 245975322367A32D008CAB6B /* Localizable.strings */; };
 		245975362367A32D008CAB6B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 245975332367A32D008CAB6B /* Images.xcassets */; };
 		2490A7A3257EDE3900253F11 /* DJIRTKManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2490A7A2257EDE3900253F11 /* DJIRTKManager.swift */; };
 		249EBFBE236867F7002946E1 /* DronelinkDJIUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249EBFBD236867F7002946E1 /* DronelinkDJIUI.swift */; };
 		249EBFC023686836002946E1 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249EBFBF23686836002946E1 /* Extensions.swift */; };
 		24E94CF32722070E00EC19A0 /* DecodeImageCalibrateLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E94CF12722070E00EC19A0 /* DecodeImageCalibrateLogic.swift */; };
-		24E94CF42722070E00EC19A0 /* VideoPreviewerAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E94CF22722070E00EC19A0 /* VideoPreviewerAdapter.swift */; };
 		55275A839F87BE3AFF93F87B /* Pods_DronelinkDJIUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 808B6907992B4437B375858E /* Pods_DronelinkDJIUI.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		245818122A01C36C00B3951D /* DJIDecodeImageCalibrateControlLogic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DJIDecodeImageCalibrateControlLogic.h; sourceTree = "<group>"; };
+		245818132A01C36C00B3951D /* VideoPreviewerSDKAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoPreviewerSDKAdapter.m; sourceTree = "<group>"; };
+		245818142A01C36C00B3951D /* DJIDecodeImageCalibrateControlLogic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DJIDecodeImageCalibrateControlLogic.m; sourceTree = "<group>"; };
+		245818152A01C36C00B3951D /* VideoPreviewerSDKAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoPreviewerSDKAdapter.h; sourceTree = "<group>"; };
+		2458181A2A01C39000B3951D /* DronelinkDJIUI-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DronelinkDJIUI-Bridging-Header.h"; sourceTree = "<group>"; };
 		245975232367A17E008CAB6B /* DronelinkDJIUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DronelinkDJIUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		245975272367A17E008CAB6B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		245975322367A32D008CAB6B /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
@@ -26,7 +35,6 @@
 		249EBFBD236867F7002946E1 /* DronelinkDJIUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DronelinkDJIUI.swift; sourceTree = "<group>"; };
 		249EBFBF23686836002946E1 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		24E94CF12722070E00EC19A0 /* DecodeImageCalibrateLogic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DecodeImageCalibrateLogic.swift; sourceTree = "<group>"; };
-		24E94CF22722070E00EC19A0 /* VideoPreviewerAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPreviewerAdapter.swift; sourceTree = "<group>"; };
 		3A25A0223381E20F3A4AD672 /* Pods-DronelinkDJIUI.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DronelinkDJIUI.release.xcconfig"; path = "Target Support Files/Pods-DronelinkDJIUI/Pods-DronelinkDJIUI.release.xcconfig"; sourceTree = "<group>"; };
 		808B6907992B4437B375858E /* Pods_DronelinkDJIUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DronelinkDJIUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E97FA109E5F37B7B34834F53 /* Pods-DronelinkDJIUI.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DronelinkDJIUI.debug.xcconfig"; path = "Target Support Files/Pods-DronelinkDJIUI/Pods-DronelinkDJIUI.debug.xcconfig"; sourceTree = "<group>"; };
@@ -53,6 +61,17 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		245818112A01C36C00B3951D /* VideoPreviewerAdapter */ = {
+			isa = PBXGroup;
+			children = (
+				245818122A01C36C00B3951D /* DJIDecodeImageCalibrateControlLogic.h */,
+				245818132A01C36C00B3951D /* VideoPreviewerSDKAdapter.m */,
+				245818142A01C36C00B3951D /* DJIDecodeImageCalibrateControlLogic.m */,
+				245818152A01C36C00B3951D /* VideoPreviewerSDKAdapter.h */,
+			);
+			path = VideoPreviewerAdapter;
+			sourceTree = "<group>";
+		};
 		245975192367A17E008CAB6B = {
 			isa = PBXGroup;
 			children = (
@@ -76,9 +95,10 @@
 			children = (
 				2490A7A2257EDE3900253F11 /* DJIRTKManager.swift */,
 				24E94CF12722070E00EC19A0 /* DecodeImageCalibrateLogic.swift */,
-				24E94CF22722070E00EC19A0 /* VideoPreviewerAdapter.swift */,
 				249EBFBD236867F7002946E1 /* DronelinkDJIUI.swift */,
 				249EBFBF23686836002946E1 /* Extensions.swift */,
+				2458181A2A01C39000B3951D /* DronelinkDJIUI-Bridging-Header.h */,
+				245818112A01C36C00B3951D /* VideoPreviewerAdapter */,
 				245975302367A32D008CAB6B /* Resources */,
 				245975272367A17E008CAB6B /* Info.plist */,
 			);
@@ -109,6 +129,9 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2458181B2A01C39000B3951D /* DronelinkDJIUI-Bridging-Header.h in Headers */,
+				245818162A01C36C00B3951D /* DJIDecodeImageCalibrateControlLogic.h in Headers */,
+				245818192A01C36C00B3951D /* VideoPreviewerSDKAdapter.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -210,9 +233,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				249EBFBE236867F7002946E1 /* DronelinkDJIUI.swift in Sources */,
-				24E94CF42722070E00EC19A0 /* VideoPreviewerAdapter.swift in Sources */,
 				249EBFC023686836002946E1 /* Extensions.swift in Sources */,
 				24E94CF32722070E00EC19A0 /* DecodeImageCalibrateLogic.swift in Sources */,
+				245818182A01C36C00B3951D /* DJIDecodeImageCalibrateControlLogic.m in Sources */,
+				245818172A01C36C00B3951D /* VideoPreviewerSDKAdapter.m in Sources */,
 				2490A7A3257EDE3900253F11 /* DJIRTKManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -369,6 +393,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "DronelinkDJIUI/DronelinkDJIUI-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -400,6 +425,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "DronelinkDJIUI/DronelinkDJIUI-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

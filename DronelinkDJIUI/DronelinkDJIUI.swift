@@ -210,7 +210,7 @@ class VideoPreviewerViewController: DelegateWidget, ConfigurableWidget {
     static func create(channel: UInt) -> VideoPreviewerViewController? {
         let viewController = VideoPreviewerViewController()
         viewController.channel = channel
-        viewController.feed = DJISDKManager.product()?.videoFeeder?.feed(channel: channel)
+        viewController.feed = DJISDKManager.videoFeeder()?.feed(channel: channel)
         return viewController
     }
     
@@ -219,20 +219,22 @@ class VideoPreviewerViewController: DelegateWidget, ConfigurableWidget {
     var channel: UInt?
     var feed: DJIVideoFeed?
     var videoPreviewer: DJIVideoPreviewer?
-    var adapter: VideoPreviewerAdapter?
+    var adapter: VideoPreviewerSDKAdapter?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        guard let feed = feed, let videoPreviewer = DJIVideoPreviewer() else {
+        guard let feed = feed, let videoPreviewer = DJIVideoPreviewer.instance() else {
             return
         }
         
         self.videoPreviewer = videoPreviewer
         videoPreviewer.type = .autoAdapt
         videoPreviewer.start()
+        videoPreviewer.reset()
+        videoPreviewer.enableHardwareDecode = true
         
-        adapter = VideoPreviewerAdapter(videoPreviewer: videoPreviewer, with: feed)
+        adapter = VideoPreviewerSDKAdapter(videoPreviewer: videoPreviewer, andVideoFeed: feed)
         adapter?.start()
         adapter?.setupFrameControlHandler()
         

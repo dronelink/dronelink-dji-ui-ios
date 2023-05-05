@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
   s.platform = :ios
   s.ios.deployment_target  = "12.0"
   s.source = { :git => "https://github.com/dronelink/dronelink-dji-ui-ios.git", :tag => "#{s.version}" }
-  s.source_files  = "DronelinkDJIUI/**/*.swift"
+  s.source_files  = "DronelinkDJIUI/**/*.{swift,h,m}"
   s.resources = "DronelinkDJIUI/**/*.{strings,xcassets}"
   s.pod_target_xcconfig = { 'ONLY_ACTIVE_ARCH' => 'YES' }
   s.dependency "DronelinkCore", "~> 4.5.0"

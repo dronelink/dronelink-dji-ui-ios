@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		244226B32A0A87F500200DAB /* DJIVideoPreviewerAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 244226B22A0A87F500200DAB /* DJIVideoPreviewerAdapter.swift */; };
 		245818162A01C36C00B3951D /* DJIDecodeImageCalibrateControlLogic.h in Headers */ = {isa = PBXBuildFile; fileRef = 245818122A01C36C00B3951D /* DJIDecodeImageCalibrateControlLogic.h */; };
 		245818172A01C36C00B3951D /* VideoPreviewerSDKAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 245818132A01C36C00B3951D /* VideoPreviewerSDKAdapter.m */; };
 		245818182A01C36C00B3951D /* DJIDecodeImageCalibrateControlLogic.m in Sources */ = {isa = PBXBuildFile; fileRef = 245818142A01C36C00B3951D /* DJIDecodeImageCalibrateControlLogic.m */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		244226B22A0A87F500200DAB /* DJIVideoPreviewerAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DJIVideoPreviewerAdapter.swift; sourceTree = "<group>"; };
 		245818122A01C36C00B3951D /* DJIDecodeImageCalibrateControlLogic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DJIDecodeImageCalibrateControlLogic.h; sourceTree = "<group>"; };
 		245818132A01C36C00B3951D /* VideoPreviewerSDKAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoPreviewerSDKAdapter.m; sourceTree = "<group>"; };
 		245818142A01C36C00B3951D /* DJIDecodeImageCalibrateControlLogic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DJIDecodeImageCalibrateControlLogic.m; sourceTree = "<group>"; };
@@ -97,6 +99,7 @@
 				24E94CF12722070E00EC19A0 /* DecodeImageCalibrateLogic.swift */,
 				249EBFBD236867F7002946E1 /* DronelinkDJIUI.swift */,
 				249EBFBF23686836002946E1 /* Extensions.swift */,
+				244226B22A0A87F500200DAB /* DJIVideoPreviewerAdapter.swift */,
 				2458181A2A01C39000B3951D /* DronelinkDJIUI-Bridging-Header.h */,
 				245818112A01C36C00B3951D /* VideoPreviewerAdapter */,
 				245975302367A32D008CAB6B /* Resources */,
@@ -236,6 +239,7 @@
 				249EBFC023686836002946E1 /* Extensions.swift in Sources */,
 				24E94CF32722070E00EC19A0 /* DecodeImageCalibrateLogic.swift in Sources */,
 				245818182A01C36C00B3951D /* DJIDecodeImageCalibrateControlLogic.m in Sources */,
+				244226B32A0A87F500200DAB /* DJIVideoPreviewerAdapter.swift in Sources */,
 				245818172A01C36C00B3951D /* VideoPreviewerSDKAdapter.m in Sources */,
 				2490A7A3257EDE3900253F11 /* DJIRTKManager.swift in Sources */,
 			);

@@ -1,0 +1,29 @@
+//
+// Localizable-id.strings
+// dronelink-dji-ui-ios - Locale: id
+//
+// Created by 'dronelink-translations' on Thu Jun 15 2023.
+// Copyright © 2023 Dronelink. All rights reserved.
+//
+"RTK.channelstate.accounterror" = "Kesalahan akun";
+"RTK.channelstate.airecraftdisconnected" = "Pesawat Terputus";
+"RTK.channelstate.connecting" = "Menghubungkan";
+"RTK.channelstate.disabled" = "Dengan disabilitas";
+"RTK.channelstate.disconnected" = "Terputus";
+"RTK.channelstate.invalidrequest" = "Permintaan tidak valid";
+"RTK.channelstate.loginfailure" = "Gagal masuk";
+"RTK.channelstate.networknotreachable" = "Jaringan tidak dapat dijangkau";
+"RTK.channelstate.ready" = "Siap";
+"RTK.channelstate.servernotreachable" = "Server tidak dapat dijangkau";
+"RTK.channelstate.servicesuspension" = "Penangguhan layanan";
+"RTK.channelstate.transmitting" = "Mengirimkan";
+"RTK.channelstate.unknown" = "Tidak dikenal";
+"RTK.configstate.unknown" = "Tidak dikenal";
+"RTK.configstate.notsupported" = "RTK tidak didukung";
+"RTK.configstate.disabled" = "RTK dinonaktifkan";
+"RTK.configstate.enabled" = "Dikonfigurasi";
+"RTK.configstate.configuring" = "Mengkonfigurasi";
+"RTK.configstate.disablefailed" = "Penonaktifan RTK gagal";
+"RTK.configstate.incomplete" = "Konfigurasi tidak lengkap";
+"RTK.configstate.loaded" = "Sarat";
+"RTK.configstate.ok" = "OKE";

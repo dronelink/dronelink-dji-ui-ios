@@ -1,0 +1,29 @@
+//
+// Localizable-hi.strings
+// dronelink-dji-ui-ios - Locale: hi
+//
+// Created by 'dronelink-translations' on Thu Jun 15 2023.
+// Copyright © 2023 Dronelink. All rights reserved.
+//
+"RTK.channelstate.accounterror" = "खाता त्रुटि";
+"RTK.channelstate.airecraftdisconnected" = "विमान डिस्कनेक्ट हो गया";
+"RTK.channelstate.connecting" = "कनेक्ट";
+"RTK.channelstate.disabled" = "अक्षम";
+"RTK.channelstate.disconnected" = "डिस्कनेक्ट किया गया";
+"RTK.channelstate.invalidrequest" = "अमान्य अनुरोध";
+"RTK.channelstate.loginfailure" = "लॉगिन विफलता";
+"RTK.channelstate.networknotreachable" = "नेटवर्क पहुंच योग्य नहीं है";
+"RTK.channelstate.ready" = "तैयार";
+"RTK.channelstate.servernotreachable" = "सर्वर पहुंच योग्य नहीं है";
+"RTK.channelstate.servicesuspension" = "सेवा निलंबन";
+"RTK.channelstate.transmitting" = "संचारण";
+"RTK.channelstate.unknown" = "अज्ञात";
+"RTK.configstate.unknown" = "अज्ञात";
+"RTK.configstate.notsupported" = "आरटीके समर्थित नहीं है";
+"RTK.configstate.disabled" = "आरटीके अक्षम";
+"RTK.configstate.enabled" = "कॉन्फ़िगर किया गया";
+"RTK.configstate.configuring" = "का विन्यास";
+"RTK.configstate.disablefailed" = "आरटीके बंद नहीं किया जा सका";
+"RTK.configstate.incomplete" = "कॉन्फ़िगरेशन अधूरा";
+"RTK.configstate.loaded" = "लदा हुआ";
+"RTK.configstate.ok" = "ठीक";

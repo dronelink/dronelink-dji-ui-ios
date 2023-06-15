@@ -1,0 +1,29 @@
+//
+// Localizable-ro.strings
+// dronelink-dji-ui-ios - Locale: ro
+//
+// Created by 'dronelink-translations' on Thu Jun 15 2023.
+// Copyright © 2023 Dronelink. All rights reserved.
+//
+"RTK.channelstate.accounterror" = "Eroare de cont";
+"RTK.channelstate.airecraftdisconnected" = "Aeronava deconectată";
+"RTK.channelstate.connecting" = "Conectare";
+"RTK.channelstate.disabled" = "Dezactivat";
+"RTK.channelstate.disconnected" = "Deconectat";
+"RTK.channelstate.invalidrequest" = "Cerere invalida";
+"RTK.channelstate.loginfailure" = "Eroare de conectare";
+"RTK.channelstate.networknotreachable" = "Rețeaua nu este accesibilă";
+"RTK.channelstate.ready" = "Gata";
+"RTK.channelstate.servernotreachable" = "Serverul nu este accesibil";
+"RTK.channelstate.servicesuspension" = "Suspendarea serviciului";
+"RTK.channelstate.transmitting" = "Transmiterea";
+"RTK.channelstate.unknown" = "Necunoscut";
+"RTK.configstate.unknown" = "Necunoscut";
+"RTK.configstate.notsupported" = "RTK nu este acceptat";
+"RTK.configstate.disabled" = "RTK dezactivat";
+"RTK.configstate.enabled" = "Configurat";
+"RTK.configstate.configuring" = "Configurare";
+"RTK.configstate.disablefailed" = "Dezactivarea RTK a eșuat";
+"RTK.configstate.incomplete" = "Configurație incompletă";
+"RTK.configstate.loaded" = "Încărcat";
+"RTK.configstate.ok" = "Bine";

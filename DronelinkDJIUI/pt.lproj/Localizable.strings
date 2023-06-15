@@ -1,0 +1,29 @@
+//
+// Localizable-pt.strings
+// dronelink-dji-ui-ios - Locale: pt
+//
+// Created by 'dronelink-translations' on Thu Jun 15 2023.
+// Copyright © 2023 Dronelink. All rights reserved.
+//
+"RTK.channelstate.accounterror" = "erro de conta";
+"RTK.channelstate.airecraftdisconnected" = "Aeronave Desconectada";
+"RTK.channelstate.connecting" = "Conectando";
+"RTK.channelstate.disabled" = "Desabilitado";
+"RTK.channelstate.disconnected" = "Desconectado";
+"RTK.channelstate.invalidrequest" = "Pedido inválido";
+"RTK.channelstate.loginfailure" = "Falha de login";
+"RTK.channelstate.networknotreachable" = "Rede não acessível";
+"RTK.channelstate.ready" = "Preparar";
+"RTK.channelstate.servernotreachable" = "Servidor não acessível";
+"RTK.channelstate.servicesuspension" = "Suspensão do serviço";
+"RTK.channelstate.transmitting" = "transmitindo";
+"RTK.channelstate.unknown" = "Desconhecido";
+"RTK.configstate.unknown" = "Desconhecido";
+"RTK.configstate.notsupported" = "RTK não suportado";
+"RTK.configstate.disabled" = "RTK desabilitado";
+"RTK.configstate.enabled" = "configurado";
+"RTK.configstate.configuring" = "Configurando";
+"RTK.configstate.disablefailed" = "Falha na desativação do RTK";
+"RTK.configstate.incomplete" = "Configuração incompleta";
+"RTK.configstate.loaded" = "Carregado";
+"RTK.configstate.ok" = "OK";

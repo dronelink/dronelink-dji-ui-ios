@@ -1,0 +1,65 @@
+# Account error
+RTK.channelstate.accounterror=Errore dell'account
+
+# Aircraft Disconnected
+RTK.channelstate.airecraftdisconnected=Aereo disconnesso
+
+# Connecting
+RTK.channelstate.connecting=Collegamento
+
+# Disabled
+RTK.channelstate.disabled=Disabilitato
+
+# Disconnected
+RTK.channelstate.disconnected=Disconnesso
+
+# Invalid request
+RTK.channelstate.invalidrequest=Richiesta non valida
+
+# Login failure
+RTK.channelstate.loginfailure=Login fallito
+
+# Network not reachable
+RTK.channelstate.networknotreachable=Rete non raggiungibile
+
+# Ready
+RTK.channelstate.ready=Pronto
+
+# Server not reachable
+RTK.channelstate.servernotreachable=Server non raggiungibile
+
+# Service suspension
+RTK.channelstate.servicesuspension=Sospensione del servizio
+
+# Transmitting
+RTK.channelstate.transmitting=Trasmissione
+
+# Unknown
+RTK.channelstate.unknown=Sconosciuto
+
+# Unknown
+RTK.configstate.unknown=Sconosciuto
+
+# RTK not supported
+RTK.configstate.notsupported=RTK non supportato
+
+# RTK disabled
+RTK.configstate.disabled=RTK disattivato
+
+# Configured
+RTK.configstate.enabled=Configurato
+
+# Configuring
+RTK.configstate.configuring=Configurazione
+
+# RTK disable failed
+RTK.configstate.disablefailed=Disattivazione RTK non riuscita
+
+# Configuration incomplete
+RTK.configstate.incomplete=Configurazione incompleta
+
+# Loaded
+RTK.configstate.loaded=Caricato
+
+# OK
+RTK.configstate.ok=OK

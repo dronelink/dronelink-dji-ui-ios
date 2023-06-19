@@ -1,0 +1,65 @@
+# Account error
+RTK.channelstate.accounterror=खाता त्रुटि
+
+# Aircraft Disconnected
+RTK.channelstate.airecraftdisconnected=विमान डिस्कनेक्ट हो गया
+
+# Connecting
+RTK.channelstate.connecting=कनेक्ट
+
+# Disabled
+RTK.channelstate.disabled=अक्षम
+
+# Disconnected
+RTK.channelstate.disconnected=डिस्कनेक्ट किया गया
+
+# Invalid request
+RTK.channelstate.invalidrequest=अमान्य अनुरोध
+
+# Login failure
+RTK.channelstate.loginfailure=लॉगिन विफलता
+
+# Network not reachable
+RTK.channelstate.networknotreachable=नेटवर्क पहुंच योग्य नहीं है
+
+# Ready
+RTK.channelstate.ready=तैयार
+
+# Server not reachable
+RTK.channelstate.servernotreachable=सर्वर पहुंच योग्य नहीं है
+
+# Service suspension
+RTK.channelstate.servicesuspension=सेवा निलंबन
+
+# Transmitting
+RTK.channelstate.transmitting=संचारण
+
+# Unknown
+RTK.channelstate.unknown=अज्ञात
+
+# Unknown
+RTK.configstate.unknown=अज्ञात
+
+# RTK not supported
+RTK.configstate.notsupported=आरटीके समर्थित नहीं है
+
+# RTK disabled
+RTK.configstate.disabled=आरटीके अक्षम
+
+# Configured
+RTK.configstate.enabled=कॉन्फ़िगर किया गया
+
+# Configuring
+RTK.configstate.configuring=का विन्यास
+
+# RTK disable failed
+RTK.configstate.disablefailed=आरटीके बंद नहीं किया जा सका
+
+# Configuration incomplete
+RTK.configstate.incomplete=कॉन्फ़िगरेशन अधूरा
+
+# Loaded
+RTK.configstate.loaded=लदा हुआ
+
+# OK
+RTK.configstate.ok=ठीक

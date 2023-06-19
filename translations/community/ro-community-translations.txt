@@ -1,0 +1,65 @@
+# Account error
+RTK.channelstate.accounterror=Eroare de cont
+
+# Aircraft Disconnected
+RTK.channelstate.airecraftdisconnected=Aeronava deconectată
+
+# Connecting
+RTK.channelstate.connecting=Conectare
+
+# Disabled
+RTK.channelstate.disabled=Dezactivat
+
+# Disconnected
+RTK.channelstate.disconnected=Deconectat
+
+# Invalid request
+RTK.channelstate.invalidrequest=Cerere invalida
+
+# Login failure
+RTK.channelstate.loginfailure=Eroare de conectare
+
+# Network not reachable
+RTK.channelstate.networknotreachable=Rețeaua nu este accesibilă
+
+# Ready
+RTK.channelstate.ready=Gata
+
+# Server not reachable
+RTK.channelstate.servernotreachable=Serverul nu este accesibil
+
+# Service suspension
+RTK.channelstate.servicesuspension=Suspendarea serviciului
+
+# Transmitting
+RTK.channelstate.transmitting=Transmiterea
+
+# Unknown
+RTK.channelstate.unknown=Necunoscut
+
+# Unknown
+RTK.configstate.unknown=Necunoscut
+
+# RTK not supported
+RTK.configstate.notsupported=RTK nu este acceptat
+
+# RTK disabled
+RTK.configstate.disabled=RTK dezactivat
+
+# Configured
+RTK.configstate.enabled=Configurat
+
+# Configuring
+RTK.configstate.configuring=Configurare
+
+# RTK disable failed
+RTK.configstate.disablefailed=Dezactivarea RTK a eșuat
+
+# Configuration incomplete
+RTK.configstate.incomplete=Configurație incompletă
+
+# Loaded
+RTK.configstate.loaded=Încărcat
+
+# OK
+RTK.configstate.ok=Bine

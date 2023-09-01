@@ -83,7 +83,7 @@ open class DJIWidgetFactory: WidgetFactory {
                 return current
             }
 
-            //FIXME seems to have issues displaying the video feed if using after VideoPreviewerViewController...
+            //TODO seems to have issues displaying the video feed if using after VideoPreviewerViewController...
             let fpvViewController = DUXFPVViewController()
             let widget = fpvViewController.createWidget()
             fpvViewController.isHUDInteractionEnabled = true
